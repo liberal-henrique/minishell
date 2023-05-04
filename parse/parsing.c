@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 15:22:05 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/04 17:04:20 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ t_cmd	*create_args(char *new)
 	arr = ft_split(new, 3);
 	while (arr[++i])
 		end = insert_end(&begin, arr[i], end);
+	if (end)
+	{
+		close(end->fd[0]);
+		close(end->fd[1]);
+		end->fd[0] = STDIN_FILENO;
+		end->fd[1] = STDIN_FILENO;
+	}
 	free(new);
 	free_2d(arr);
 	return (begin);
@@ -66,19 +73,19 @@ t_cmd	*create_args(char *new)
 
 void	tokens(const char *line)
 {
-	t_cmd	*list;
 	char	*new;
+	t_cmd	*list;
 
-	list = NULL;
 	new = malloc_ob(ft_strlen((char *)line) * 2);
 	if (!new)
 		return ;
 	create_str(new, (char *)line, 0, 0);
 	list = create_args(new);
+	g_terminal.begin = list;
 	if (!list)
-	{
 		return ;
-	}
-	print_linked(list);
+	execute_main(list, 0);
+	ft_wait(list);
+	// print_linked(list);
 	deallocate(list);
 }

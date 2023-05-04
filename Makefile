@@ -1,5 +1,5 @@
-CC			=	gcc -g3 -fsanitize=address
-# CC			=	gcc
+# CC			=	cc -g3 -fsanitize=address
+CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
 LDFLAGS		=	-lreadline
 RM			=	/bin/rm -f
@@ -14,6 +14,7 @@ SRCS		=	main.c \
 				parse/parsing.c \
 				parse/path.c \
 				tools/calloc.c \
+				tools/ft_substring.c \
 				tools/ft_replace.c \
 				tools/ft_split.c \
 				tools/helpers.c \
