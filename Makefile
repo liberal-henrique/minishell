@@ -8,9 +8,6 @@ INCLUDES	=	./includes
 
 
 SRCS		=	main.c \
-				builtin/ft_echo.c \
-				execute/execute.c \
-				execute/utils_exe.c \
 				parse/parsing.c \
 				parse/path.c \
 				tools/calloc.c \
