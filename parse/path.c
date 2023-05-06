@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 14:51:35 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/06 12:53:03 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,16 @@ char	*path_join(char *s1, char *s2)
 char	*get_path(char **env)
 {
 	int	i;
-	// int	length;
 
 	i = -1;
-	// length = ft_strlen(env[i]) - 1;
 	while (env[++i])
 	{
 		if (env[i][0] == 'P' && env[i][1] == 'A' \
 		&& env[i][2] == 'T' && env[i][3] == 'H')
-			return (env[i]);
+			return (ft_substring(env[i], 5, ft_strlen(env[i])));
 	}
 	return (NULL);
 }
-// return (ft_substring(env[i], 5, length));
 
 char	*get_gpath(char **env, char **args)
 {

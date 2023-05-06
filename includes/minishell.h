@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 15:16:46 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/06 17:33:31 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@
 # include<stddef.h>
 # include<readline/readline.h>
 # include<readline/history.h>
+
+// Signal libraries
+# include<signal.h>
+# include<stdarg.h>
+# include<sys/types.h>
+
+
+
+
+
 
 # define STATUS_SUCCESS 0
 
@@ -49,6 +59,8 @@ struct s_cmd
 	t_cmd			*next;
 };
 
+void					sighandler();
+
 //-----------parsing----------------------//
 void					tokens(const char *line);
 //path
@@ -76,7 +88,7 @@ int						is_quote(char c);
 int						is_separator(const char *s, int *j);
 int						is_space(char c);
 void					put_str(char *s);
-
+extern t_terminal			g_terminal;
 //----------linked_list----------//
 int						cnt_rec(t_cmd *node);
 void					deallocate(t_cmd *curr);

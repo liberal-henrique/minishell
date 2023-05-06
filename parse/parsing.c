@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 17:04:20 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/06 13:44:01 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_cmd	*create_args(char *new)
 		close(end->fd[0]);
 		close(end->fd[1]);
 		end->fd[0] = STDIN_FILENO;
-		end->fd[1] = STDIN_FILENO;
+		end->fd[1] = STDOUT_FILENO;
 	}
 	free(new);
 	free_2d(arr);

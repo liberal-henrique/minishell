@@ -44,6 +44,6 @@ r:
 # --track-fds=yes --tool=memcheck --leak-check=full --show-leak-kinds=all
 
 v:
-	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline --trace-children=yes ./minishell
+	make re && clear && valgrind -s --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline --trace-children=yes ./minishell
 
 .PHONY: all re clean fclean m
