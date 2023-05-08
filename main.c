@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/06 18:05:30 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:48:21 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	g_terminal.env = env;
+	g_terminal.env = clone_env(env);
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
@@ -36,6 +36,9 @@ int	main(int ac, char **av, char **env)
 		line = readline("Minishell$ ");
 		if (!line)
 		{
+			// Caso eu tente realizar a limpeza da memoria
+			//eu causarei um segmentation fault;
+			// deallocate(g_terminal.begin);
 			exit(0);
 		}
 		add_history(line);

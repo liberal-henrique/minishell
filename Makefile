@@ -8,7 +8,12 @@ INCLUDES	=	./includes
 
 
 SRCS		=	main.c \
+				builtin/ft_cd.c \
 				builtin/ft_echo.c \
+				builtin/ft_env.c \
+				builtin/ft_export.c \
+				builtin/ft_pwd.c \
+				execute/execute_redirections.c \
 				execute/execute.c \
 				execute/utils_exe.c \
 				parse/parsing.c \

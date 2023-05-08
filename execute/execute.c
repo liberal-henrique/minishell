@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/06 13:48:35 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/08 12:02:15 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 int	execute_main(t_cmd *cmd, int in)
 {
+	if (!cmd->next && ft_compare(cmd->args[0], "cd"))
+		execute_cd(cmd);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{

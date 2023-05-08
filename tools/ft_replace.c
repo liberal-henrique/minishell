@@ -6,36 +6,11 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:07:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 15:08:10 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/08 17:48:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// verify a string
-int	check_contain(char *origin, char *set)
-{
-	int	i;
-	int	j;
-	int	position;
-
-	i = -1;
-	position = 0;
-	while (origin[++i])
-	{
-		j = 0;
-		while (origin[i] == set[j] && origin[i])
-		{
-			if (j == 0)
-				position = i;
-			i++;
-			j++;
-		}
-		if (!set[j])
-			return (position);
-	}
-	return (0);
-}
 
 // verify a char
 int	contain_char(char *s, char c)
@@ -64,6 +39,31 @@ int	ft_compare(const char *s1, const char *s2)
 	return (*s1 == *s2);
 }
 
+// verify a string
+int	check_contain(char *origin, char *set)
+{
+	int	i;
+	int	j;
+	int	position;
+
+	i = -1;
+	position = 0;
+	while (origin[++i])
+	{
+		j = 0;
+		while (origin[i] == set[j] && origin[i])
+		{
+			if (j == 0)
+				position = i;
+			i++;
+			j++;
+		}
+		if (!set[j])
+			return (position);
+	}
+	return (-1);
+}
+
 char	*ft_replace(char *dst, char *to, char *rep)
 {
 	char	*new;
@@ -72,9 +72,9 @@ char	*ft_replace(char *dst, char *to, char *rep)
 	int		j;
 
 	start = check_contain(dst, to);
-	if (start == 0)
+	if (start < 0)
 		return (NULL);
-	new = malloc((ft_strlen(dst) - ft_strlen(to) + ft_strlen(rep) + 1));
+	new = malloc_ob(((ft_strlen(dst) - ft_strlen(to)) + ft_strlen(rep) + 1));
 	if (!new)
 		return (NULL);
 	j = -1;
@@ -89,6 +89,5 @@ char	*ft_replace(char *dst, char *to, char *rep)
 		else
 			new[i++] = dst[j];
 	}
-	new[j] = 0;
 	return (new);
 }

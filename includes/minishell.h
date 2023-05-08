@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/06 17:33:31 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/08 18:59:06 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@
 # include<stdarg.h>
 # include<sys/types.h>
 
-
-
-
-
-
+# define STATUS_ERROR 1 //tmp
 # define STATUS_SUCCESS 0
 
 # define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
@@ -88,7 +84,7 @@ int						is_quote(char c);
 int						is_separator(const char *s, int *j);
 int						is_space(char c);
 void					put_str(char *s);
-extern t_terminal			g_terminal;
+
 //----------linked_list----------//
 int						cnt_rec(t_cmd *node);
 void					deallocate(t_cmd *curr);
@@ -107,15 +103,25 @@ char					*ft_strdup(const char	*s1);
 //          Execution
 
 //----------Builtin----------------------//
+int						execute_cd(t_cmd *cmd);
 int						execute_echo(t_cmd *cmd);
+int						execute_env(t_cmd *cmd);
+int						execute_export(t_cmd *cmd);
+int						execute_pwd(t_cmd *cmd);
 
 //-----------execute----------------------------//
+int						execute_redirection_out(t_cmd *cmd);
+int						execute_redirection_append_out(t_cmd *cmd);
 int						execute_main(t_cmd *cmd, int in);
 int						execute_default(t_cmd *cmd);
 void					ft_wait(t_cmd *cmd);
 
 // --------utils_exe---------------------//
 char					**clone_env(char **env);
+char					**increase_env(char **env);
+int						ft_strncmp(char *s1, char *s2, int n);
+char					*str_join(char *old, char *seg, char c);
 
 extern t_terminal			g_terminal;
+
 #endif
