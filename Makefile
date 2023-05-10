@@ -13,6 +13,7 @@ SRCS		=	main.c \
 				builtin/ft_env.c \
 				builtin/ft_export.c \
 				builtin/ft_pwd.c \
+				builtin/ft_unset.c \
 				execute/execute_redirections.c \
 				execute/execute.c \
 				execute/utils_exe.c \

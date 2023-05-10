@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/08 18:48:21 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 18:09:13 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,17 @@ int	main(int ac, char **av, char **env)
 {
 	char	*line;
 
+
+	clone_env(env);
 	(void) ac;
 	(void) av;
-	g_terminal.env = clone_env(env);
 	signal(SIGINT, sighandler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		// int i = -1;
+		// while (g_terminal.env[++i])
+		// 	printf("AUI: %s\n", g_terminal.env[i]);
 		line = readline("Minishell$ ");
 		if (!line)
 		{

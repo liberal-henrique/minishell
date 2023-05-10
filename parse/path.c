@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/06 12:53:03 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:18:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ char	*path_join(char *s1, char *s2)
 	int		len2;
 	char	*new;
 
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
+	len1 = ft_strlen(s1, 0);
+	len2 = ft_strlen(s2, 0);
 	new = (char *)malloc(len1 + len2 + 2);
 	if (!new)
 		return (NULL);
@@ -45,7 +45,7 @@ char	*get_path(char **env)
 	{
 		if (env[i][0] == 'P' && env[i][1] == 'A' \
 		&& env[i][2] == 'T' && env[i][3] == 'H')
-			return (ft_substring(env[i], 5, ft_strlen(env[i])));
+			return (ft_substring(env[i], 5, ft_strlen(env[i], 0)));
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/08 15:36:37 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:17:36 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	execute_redirection_out(t_cmd *cmd)
 
 	if (!cmd->args[1])
 	{
-		length = ft_strlen("zsh: parse error near `\n'");
+		length = ft_strlen("zsh: parse error near `\n'", 0);
 		write(2, "zsh: parse error near `\n'", length);
 		return (1);
 	}
@@ -54,7 +54,7 @@ int	execute_redirection_append_out(t_cmd *cmd)
 
 	if (!cmd->args[1])
 	{
-		length = ft_strlen("zsh: parse error near `\n'");
+		length = ft_strlen("zsh: parse error near `\n'", 0);
 		write(2, "zsh: parse error near `\n'", length);
 		return (1);
 	}

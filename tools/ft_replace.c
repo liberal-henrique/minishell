@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:07:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/08 17:48:43 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:20:15 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ char	*ft_replace(char *dst, char *to, char *rep)
 	start = check_contain(dst, to);
 	if (start < 0)
 		return (NULL);
-	new = malloc_ob(((ft_strlen(dst) - ft_strlen(to)) + ft_strlen(rep) + 1));
+	new = malloc_ob(((ft_strlen(dst, 0) - \
+	ft_strlen(to, 0)) + ft_strlen(rep, 0) + 1));
 	if (!new)
 		return (NULL);
 	j = -1;
@@ -82,7 +83,7 @@ char	*ft_replace(char *dst, char *to, char *rep)
 	while (dst[++j])
 	{
 		if (i == start)
-			j += (ft_strlen(to) - 1);
+			j += (ft_strlen(to, 0) - 1);
 		if (i == start)
 			while (*rep)
 				new[i++] = *rep++;

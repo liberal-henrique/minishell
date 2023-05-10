@@ -6,13 +6,13 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/08 18:22:08 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 17:17:44 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	**clone_env(char **env)
+void	clone_env(char **env)
 {
 	char	**clone;
 	int		i;
@@ -21,16 +21,14 @@ char	**clone_env(char **env)
 	i = 0;
 	i_c = 0;
 	if (!env)
-		return (NULL);
+		return ;
 	while (env[i])
 		i++;
 	clone = malloc_ob(sizeof(char *) * (i + 1));
-	if (!clone)
-		return (NULL);
 	i = -1;
 	while (env[++i])
 		clone[i_c++] = ft_strdup(env[i]);
-	return (clone);
+	g_terminal.env = clone;
 }
 
 char	**increase_env(char **env)
@@ -50,7 +48,6 @@ char	**increase_env(char **env)
 	i = -1;
 	while (env[++i])
 		clone[i_c++] = ft_strdup(env[i]);
-	free(env);
 	return (clone);
 }
 
@@ -70,7 +67,6 @@ char	**decrease_env(char **env)
 	i = -1;
 	while (env[++i])
 		clone[i_c++] = ft_strdup(env[i]);
-	free(env);
 	return (clone);
 }
 
@@ -96,8 +92,8 @@ char	*str_join(char *old, char *seg, char c)
 	int		j;
 	char	*new;
 
-	old_len = ft_strlen(old);
-	seg_len = ft_strlen(seg);
+	old_len = ft_strlen(old, 0);
+	seg_len = ft_strlen(seg, 0);
 	new = (char *)malloc(old_len + seg_len + 2);
 	i = -1;
 	while (++i < old_len)

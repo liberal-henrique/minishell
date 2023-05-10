@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/08 17:55:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:16:35 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	*get_function(char *name)
 		return (execute_env);
 	if (ft_compare("export", name))
 		return (execute_export);
+	if (ft_compare("unset", name))
+		return (execute_unset);
 	if (ft_compare(">>", name))
 		return (execute_redirection_append_out);
 	return (execute_default);

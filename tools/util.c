@@ -6,13 +6,13 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:05:45 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 13:40:33 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:24:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-size_t	ft_strlen(const char *a)
+size_t	ft_strlen(const char *a, char set)
 {
 	int	i;
 
@@ -20,7 +20,11 @@ size_t	ft_strlen(const char *a)
 	if (!a)
 		return (0);
 	while (a[i])
+	{
+		if (a[i] == set)
+			break ;
 		i++;
+	}
 	return (i);
 }
 
@@ -59,7 +63,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (0);
-	length = (ft_strlen(s1) + ft_strlen(s2));
+	length = (ft_strlen(s1, 0) + ft_strlen(s2, 0));
 	dest = malloc(length + 1);
 	if (!dest)
 		return (0);
@@ -79,7 +83,7 @@ char	*ft_strdup(const char	*s1)
 		return (NULL);
 	str1 = (char *)s1;
 	i = -1;
-	size_s1 = ft_strlen(str1) + 1;
+	size_s1 = ft_strlen(str1, 0) + 1;
 	dup = malloc_ob(size_s1);
 	if (!dup)
 		return (NULL);

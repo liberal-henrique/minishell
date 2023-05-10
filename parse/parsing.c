@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/06 13:44:01 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/10 17:31:28 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,18 @@ void	separator_cmd(char **new, char **s, int *i, int j)
 	*i = 1;
 }
 
-void	create_str(char *new, char *s, int i, char set)
+int	create_str(char *new, char *s, int i, char set)
 {
 	int	j;
+	int	flag_quotes;
 
+	flag_quotes = 0;
 	while (*s)
 	{
 		if (!set && is_quote(*s))
 			set = *s;
+		else if (*s == '\"')
+			flag_quotes += 1;
 		else if (set == *s && *s)
 			set = 0;
 		else if (!set && is_space(*s))
@@ -44,6 +48,7 @@ void	create_str(char *new, char *s, int i, char set)
 		}
 	}
 	*new = 0;
+	return (flag_quotes);
 }
 
 t_cmd	*create_args(char *new)
@@ -74,14 +79,16 @@ t_cmd	*create_args(char *new)
 void	tokens(const char *line)
 {
 	char	*new;
+	int		flag;
 	t_cmd	*list;
 
-	new = malloc_ob(ft_strlen((char *)line) * 2);
+	new = malloc_ob(ft_strlen((char *)line, 0) * 2);
 	if (!new)
 		return ;
-	create_str(new, (char *)line, 0, 0);
+	flag = create_str(new, (char *)line, 0, 0);
 	list = create_args(new);
 	g_terminal.begin = list;
+	list->flag_quotes = flag;
 	if (!list)
 		return ;
 	execute_main(list, 0);
