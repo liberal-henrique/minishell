@@ -26,6 +26,8 @@ SRCS		=	main.c \
 				tools/helpers.c \
 				tools/linked_list.c \
 				tools/util.c \
+				gnl/get_next_line.c \
+				gnl/get_next_line_utils.c
 
 OBJS		=	$(SRCS:.c=.o)
 

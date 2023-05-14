@@ -55,6 +55,10 @@ void	*get_function(char *name)
 		return (execute_unset);
 	if (ft_compare(">>", name))
 		return (execute_redirection_append_out);
+	if (ft_compare("<", name))
+		return (execute_redirection_in);
+	if (ft_compare("<<", name))
+		return (execute_redirection_heredoc);
 	return (execute_default);
 }
 

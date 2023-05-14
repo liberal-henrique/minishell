@@ -31,6 +31,10 @@
 
 # define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+
 typedef struct s_cmd		t_cmd;
 typedef struct s_env		t_env;
 typedef struct s_terminal	t_terminal;
@@ -113,8 +117,10 @@ int						execute_pwd(t_cmd *cmd);
 int						execute_unset(t_cmd *cmd);
 
 //-----------execute----------------------------//
-int						execute_redirection_out(t_cmd *cmd);
-int						execute_redirection_append_out(t_cmd *cmd);
+int						execute_redirection_out(t_cmd *cmd, int in);
+int						execute_redirection_in(t_cmd *cmd, int in);
+int						execute_redirection_heredoc(t_cmd *cmd, int in);
+int						execute_redirection_append_out(t_cmd *cmd, int in);
 int						execute_main(t_cmd *cmd, int in);
 int						execute_default(t_cmd *cmd);
 void					ft_wait(t_cmd *cmd);
@@ -124,6 +130,11 @@ void					clone_env(char **env);
 char					**increase_env(char **env);
 int						ft_strncmp(char *s1, char *s2, int n);
 char					*str_join(char *old, char *seg, char c);
+
+//-------gnl-------------------------//
+char					*get_next_line(int fd);
+int						ft_strlen_gnl(char *str);
+char					*ft_strjoin_gnl(char *line, char *buf);
 
 extern t_terminal			g_terminal;
 
