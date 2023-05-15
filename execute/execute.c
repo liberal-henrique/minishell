@@ -16,6 +16,7 @@
 
 int	execute_main(t_cmd *cmd, int in)
 {
+	printf("cmd: %s\n", cmd->args[0]);
 	if (!cmd->next && (ft_compare(cmd->args[0], "cd")))
 		return execute_cd(cmd);
 	if (!cmd->next && (ft_compare(cmd->args[0], "export")))

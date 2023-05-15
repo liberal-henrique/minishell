@@ -79,11 +79,10 @@ int	execute_redirection_in(t_cmd *cmd, int in)
 
 int	execute_redirection_heredoc(t_cmd *cmd, int in)
 {
-	//char	buf[1025];
-	//int		n_bytes;
 	int		length;
 	char	*del;
 	char	*line;
+	char	*total;
 	(void)in;
 
 	if (!cmd->args[1])
@@ -92,26 +91,27 @@ int	execute_redirection_heredoc(t_cmd *cmd, int in)
 		write(2, "zsh: parse error near `\n'", length);
 		return (1);
 	}
-	del = ft_strjoin(cmd->args[1], "\n");
-	//line = ft_malloc(1);
+	del = cmd->args[1];
+	total = malloc(1);
+	total[0] = 0;
 	while (1)
 	{
-		line = get_next_line(0);
-		if (!ft_strncmp(line, del, ft_strlen(del, 0) + 1))
+		line = readline("> ");
+		if (!ft_strncmp(line, del, ft_strlen(del, 0)))
 		{
 			free(line);
 			break ;
 		}
-		write(in, line, ft_strlen(line, 0));
+		line = ft_strjoin(line, "\n");
+		total = ft_strjoin(total, line);
 		free(line);
 	}
-	free(del);
+	//printf("total: %s\n", total);
+	write(cmd->fd[1], total, ft_strlen(total, 0));
 	close(cmd->fd[1]);
 	close(cmd->fd[0]);
 	deallocate(g_terminal.begin);
 	return (STATUS_SUCCESS);
-	
-
 }
 
 int	execute_redirection_append_out(t_cmd *cmd, int in)
