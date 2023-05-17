@@ -6,13 +6,13 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 17:17:44 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:10:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	clone_env(char **env)
+char	**clone_env(char **env)
 {
 	char	**clone;
 	int		i;
@@ -21,14 +21,14 @@ void	clone_env(char **env)
 	i = 0;
 	i_c = 0;
 	if (!env)
-		return ;
+		return (NULL);
 	while (env[i])
 		i++;
 	clone = malloc_ob(sizeof(char *) * (i + 1));
 	i = -1;
 	while (env[++i])
 		clone[i_c++] = ft_strdup(env[i]);
-	g_terminal.env = clone;
+	return (clone);
 }
 
 char	**increase_env(char **env)

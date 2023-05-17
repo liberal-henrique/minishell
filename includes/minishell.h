@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 19:20:51 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:07:06 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,16 @@
 
 # define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
-
 typedef struct s_cmd		t_cmd;
 typedef struct s_env		t_env;
 typedef struct s_terminal	t_terminal;
+typedef struct s_expo		t_expo;
 
 struct s_terminal
 {
 	char			**env;
-	char			**expo;
+	t_expo			*expo;
+	// t_expo			*end;
 	char			*path;
 	int				status;
 	t_cmd			*begin;
@@ -59,6 +57,13 @@ struct s_cmd
 	int				status;
 	int				(*execute)(t_cmd *cmd, int in);
 	t_cmd			*next;
+};
+
+struct s_expo
+{
+	char			*variable;
+	char			*value;
+	t_expo			*next;
 };
 
 void					sighandler();
@@ -96,6 +101,7 @@ int						cnt_rec(t_cmd *node);
 void					deallocate(t_cmd *curr);
 void					*get_function(char *name);
 t_cmd					*insert_end(t_cmd **root, char *s, t_cmd *end);
+void					insert_end_list(t_expo **root, char *value);
 void					print_linked(t_cmd *curr);
 
 //----------utils----------//
@@ -117,24 +123,25 @@ int						execute_pwd(t_cmd *cmd);
 int						execute_unset(t_cmd *cmd);
 
 //-----------execute----------------------------//
-int						execute_redirection_out(t_cmd *cmd, int in);
-int						execute_redirection_in(t_cmd *cmd, int in);
-int						execute_redirection_heredoc(t_cmd *cmd, int in);
-int						execute_redirection_append_out(t_cmd *cmd, int in);
+int						execute_redirection_out(t_cmd *cmd);
+int						execute_redirection_append_out(t_cmd *cmd);
 int						execute_main(t_cmd *cmd, int in);
 int						execute_default(t_cmd *cmd);
 void					ft_wait(t_cmd *cmd);
 
 // --------utils_exe---------------------//
-void					clone_env(char **env);
+char					**clone_env(char **env);
 char					**increase_env(char **env);
 int						ft_strncmp(char *s1, char *s2, int n);
 char					*str_join(char *old, char *seg, char c);
 
-//-------gnl-------------------------//
-char					*get_next_line(int fd);
-int						ft_strlen_gnl(char *str);
-char					*ft_strjoin_gnl(char *line, char *buf);
+void					print_list(t_expo *node);
+int						ft_strcmp(const char *s1, const char *s2);
+void					swap_content(char **node, char **node1);
+void					bubblesort(t_expo *root);
+t_expo					*insert_end_expo_list(t_expo **root, char *s, t_expo **end);
+t_expo					*create_expo(char **env);
+char					**synchronize_env(char **env, char *cmd);
 
 extern t_terminal			g_terminal;
 

@@ -186,11 +186,6 @@ alocar memoria para entao criar um novo argumento que sera
 deverei liberar a memoria do argumento.
 
 
-
-
-
-Mandar e-mail para o Pedro: pbc@42lisboa.com;
-
 //    se o argumento do export nao existir no env teremos de criar um novo topico
 // dentro de env.
 //    se o argumento do export existir no env teremos de alterar o valor com o
@@ -202,4 +197,100 @@ Mandar e-mail para o Pedro: pbc@42lisboa.com;
 //com o declare x- na frente.
 // Export com argumento apenas atualiza a variavel de ambiente respectiva
 //ou a cria caso nao exista. Mas nao imprimi o resultado.
+
+
+Dia 16 de Maio de 2023
+Mandar e-mail para o Pedro: pbc@42lisboa.com;
+
+O Rodrigo reparou que a nossa regra de execucao nao esta completamente certa.
+Por exemplo:
+Quando executamos a seguinte linha de comando:
+$ cat infile > outfile
+--> A execucao corre bem e o conteudo do infile eh
+empurrado para o outfile.
+Contudo quando invertemos a ordem, o que nao faz diferenca para o bash,
+deixa a nossa execucao em pausa aguardando travada. Eu acredito que o programa
+fique a aguardar o outfile. Entretanto, nao estou totalmente certo disso.
+$ > outfile cat infile
+Em teste percebi que o programa fica a aguardar a escrita. Eu nao consigo perceber
+bem mas acho que caso nao recebamos o infile na execucao, teremos de usar o O_TRUNC
+e retornar o prompt. Apenas realizando o close em no fd aberto.
+
+Talvez a solucao de tudo esteja em voltar ao parse e alterar a forma como construo
+os comandos. Para que a construcao dos meus argumentos seja feita na mao. Vou criar
+3 listas uma de comandos, uma de infiles e outra de outfile que ficara dentro da minha global.
+Vou percorrer a minha lista de comandos, quando encontrar um outfile crio um novo node que
+ira alterar outra variavel dentro da minha global. Quando encontrar um infile criarei uma novo
+node na lista infile. Quando for criar meus comandos de execucao vou usar o infile e o outfile
+da minha global.
+Meus comandos serao executados em outra momento usando os infile e outifile dentro da minha global.
+
+Quanto ao export ha algumas outras coisas a serem feitas. Como, por exemplo,
+o "declare -x" e o fato dos valores dentro das variaveis virem entre double quotes.
+Dessa forma, vou seguir os conselhos do Vasco e vou criar uma nova variavel dentro
+da minha struct global. Assim poderei criar todo o export em uma bloco diferente.
+*Quanto a ordenacao alfabetica teremos de comparar cada um dos elementos com todos os
+demais elementos da lista a seguir dele. Por exemplo: o primeiro com o segundo e em diante.
+O segundo como terceiro e em diante. Dessa forma, a palavra com as letras de menor valor da
+tabela ascii sera empurradas para cima a medida que o programa eh executado.
+O Primeiro ficara em sua posicao e o elemento que ocupava essa posicao no array 2d sera copiado
+para a antiga posicao do prime
+
+
+- criar uma nova variavel dentro da minha struct global
+- clonar a env para essa nossa variavel.
+
+    se o argumento do export existir no env teremos de alterar o valor com o
+valor poisterior ao '='; (O Vasco apontou que ha um erro no ft_strncmp, pois
+elecompara o manor ate o =)
+
+    se o argumento do export nao existir no env teremos de criar um novo topico
+dentro de env.
+
+    se o export nao tiver nenhum argumento precisaremos retornar o env em ordem
+alfabetica e com o declare -x antes das variaveis.
+	 Contudo, para evitar de termos de fazer MULTIPLAS alteracoes no env para
+	 quando formos retornar o export. O Vasco sugeriu que criassemos um segundo
+	 array bidimensional dentro da nossa variavel global. Assim poderiamos armazenar
+	 o retorno do nosso export com suas peculiaridades e dentro do nosso env as coisas
+	 como recebemos. Teremos de tomar atencao para caso tenhamos de alterar algo, pois
+	 assim teremos de alterar em dois lugares.
+
+	Export sem argumentos apenas imprimi toda a env em ordem alfabetica e
+com o declare x- na frente.
+	Export com argumento apenas atualiza a variavel de ambiente respectiva
+ou a cria caso nao exista. Mas nao imprimi o resultado.
+	Export so aceitara o '_' como elemento para criacao de variaveis.
+
+
+
+Dia 17 de maio
+Consegui ordenar as variaveis que recebemos no env alfabeticamente. Contudo, realizei
+isso armazenando essas variaveis dentro de uma linked list. Isso quebrou tudo que havia
+desenvolvido no export. O que nao foi demasiado danoso pois esse Builtin eh um cado corner case
+e nao esta envolvido com atividades da execucao.
+Tentei fazer o mesmo ao env e ao inves de armazena-lo dentro de um array bidimensional, coloca-lo
+dentro de uma linked list. Contudo, isso nao foi possivel tendo em vista que as variaveis de ambiente
+estao envolvidas em um array 2d e precisam estar no formade de array_2d.
+Portanto, agora, dentro da minha variavel global, estou a guardar um pointer para o inicio da minha
+linked list, que armazena as variaveis dentro do meu export, e uma variavel que armazena o meu env.
+Para colocar o meu export em funcionamento novamente precisarei recriar minha variavel execute_export.
+
+Para fazer isso:
+--> Primeiro precisarei criar minha lista a partir das variaveis de ambiente e ordena a lista
+criada. Isso sera armazenado na minha variavel global. Dessa forma, terei acesso a partir de
+toda a aplicacao.
+--> caso o export nao possua nenhum argumento, terei de percorrer a lista e printar os elementos armazenados.
+Ou seja, fazer a funcao print_list funcionar como deve ser. (CHECK)
+--> caso o export tenha argumento e esse argumento ja esteja contido dentro das variaveis deverei
+alterar o valor dessa variavel para o constante do argumento.(CHECK)
+--> caso o export tenha argumento e esse argumento nao esteja contido dentro das variaveis deverei
+adicionar a variavel e o valor ao fim da lista. (CHECK)
+
+Agora preciso:
+- add as novas variaveis ou as alteracoes das existentes tambem ao env.
+- Bloquear a criacao de variaveis com chars nao desejados.
+
+Para fazer o Unset:
+-->
 

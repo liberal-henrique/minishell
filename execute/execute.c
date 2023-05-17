@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 19:18:23 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:08:30 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 int	execute_main(t_cmd *cmd, int in)
 {
-	printf("cmd: %s\n", cmd->args[0]);
 	if (!cmd->next && (ft_compare(cmd->args[0], "cd")))
 		return execute_cd(cmd);
 	if (!cmd->next && (ft_compare(cmd->args[0], "export")))
