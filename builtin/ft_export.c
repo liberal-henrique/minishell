@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 22:04:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:40:56 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	env_variable_replaced(char *cmd, int flag)
 			tmp->variable = ft_replace(tmp->variable, tmp->variable, \
 			ft_substring(cmd, 0, ft_strlen(cmd, '=')));
 			tmp->value = ft_replace(tmp->value, tmp->value, \
-			ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0)));
+			put_quotes(ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0))));
 			flag += 1;
 		}
 		tmp = tmp->next;
@@ -51,7 +51,7 @@ void	insert_end_list(t_expo **root, char *value)
 		return ;
 	new_node->next = NULL;
 	new_node->variable = ft_substring(value, 0, ft_strlen(value, '='));
-	new_node->value = ft_substring(value, (ft_strlen(value, '=') + 1), ft_strlen(value, 0));
+	new_node->value = put_quotes(ft_substring(value, (ft_strlen(value, '=') + 1), ft_strlen(value, 0)));
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_node;

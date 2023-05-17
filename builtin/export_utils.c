@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:23:21 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 20:28:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:41:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ void	print_list(t_expo *node)
 	{
 		write(1, "declare -x ", ft_strlen("declare -x ", 0));
 		write(1, tmp->variable, ft_strlen(tmp->variable, 0));
-		write(1, "\"", 1);
 		write(1, tmp->value, ft_strlen(tmp->value, 0));
-		write(1, "\"", 1);
 		write(1, "\n", 1);
 		tmp = tmp->next;
 	}
@@ -63,6 +61,22 @@ void	bubblesort(t_expo *root)
 	}
 }
 
+char	*put_quotes(char *str)
+{
+	char	*new;
+	int		i;
+
+	i = 1;
+	new = malloc(ft_strlen(str, 0) + 2);
+	if (!new)
+		return (NULL);
+	new[0] = '\"';
+	while (*str)
+		new[i++] = *str++;
+	new[i] = '\"';
+	return (new);
+}
+
 t_expo	*insert_end_expo_list(t_expo **root, char *s, t_expo **end)
 {
 	t_expo	*new_node;
@@ -72,7 +86,7 @@ t_expo	*insert_end_expo_list(t_expo **root, char *s, t_expo **end)
 		return (NULL);
 	new_node->next = NULL;
 	new_node->variable = ft_substring(s, 0, ft_strlen(s, '='));
-	new_node->value = ft_substring(s, (ft_strlen(s, '=') + 1), ft_strlen(s, 0));
+	new_node->value = put_quotes(ft_substring(s, (ft_strlen(s, '=') + 1), ft_strlen(s, 0)));
 	if (!(*root))
 	{
 		*root = new_node;
