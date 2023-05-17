@@ -6,105 +6,88 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 18:58:24 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:04:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-
-size_t	ft_strlen_2d(char **a)
-{
-	int	i;
-
-	i = 0;
-	if (!a)
-		return (0);
-	while (a[i])
-		i++;
-	return (i);
-}
-
-//    se o argumento do export existir no env teremos de alterar o valor com o
-// valor poisterior ao '='; (O Vasco apontou que ha um erro no ft_strncmp, pois
-// elecompara o manor ate o =)
-
-//    se o argumento do export nao existir no env teremos de criar um novo topico
-// dentro de env.
-
-//    se o export nao tiver nenhum argumento precisaremos retornar o env em ordem
-// alfabetica e com o declare -x antes das variaveis.
-	// Contudo, para evitar de termos de fazer MULTIPLAS alteracoes no env para
-	// quando formos retornar o export. O Vasco sugeriu que criassemos um segundo
-	// array bidimensional dentro da nossa variavel global. Assim poderiamos armazenar
-	// o retorno do nosso export com suas peculiaridades e dentro do nosso env as coisas
-	// como recebemos. Teremos de tomar atencao para caso tenhamos de alterar algo, pois
-	// assim teremos de alterar em dois lugares.
-
-// Export sem argumentos apenas imprimi toda a env em ordem alfabetica e
-//com o declare x- na frente.
-// Export com argumento apenas atualiza a variavel de ambiente respectiva
-//ou a cria caso nao exista. Mas nao imprimi o resultado.
-
 int	env_variable_replaced(char *cmd, int flag)
 {
-	int		length;
-	size_t	len_name;
-	int		len_variable;
+	t_expo	*tmp;
+	size_t		len_variable;
+	size_t		len_name;
 
-	length = -1;
-	len_name = ft_strlen(cmd, '=');
 	len_variable = 0;
-	while (g_terminal.env[++length] && cmd)
+	len_name = ft_strlen(cmd, '=');
+	tmp = g_terminal.expo;
+	while (tmp && cmd)
 	{
-		if (ft_strlen(g_terminal.env[length], '=') > len_name)
-			len_variable = ft_strlen(g_terminal.env[length], '=');
+		if (ft_strlen(tmp->variable, '=') > len_name)
+			len_variable = ft_strlen(tmp->variable, '=');
 		else
 			len_variable = len_name;
-		if (ft_strncmp(g_terminal.env[length], cmd, len_variable) == 0)
+		if (ft_strncmp(tmp->variable, cmd, len_name) == 0)
 		{
-			g_terminal.env[length] = ft_replace(g_terminal.env[length], g_terminal.env[length], cmd);
+			tmp->variable = ft_replace(tmp->variable, tmp->variable, \
+			ft_substring(cmd, 0, ft_strlen(cmd, '=')));
+			tmp->value = ft_replace(tmp->value, tmp->value, \
+			ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0)));
 			flag += 1;
 		}
+		tmp = tmp->next;
 	}
 	return (flag);
 }
 
-// Eu nao estou a fazer a limpeza da conteudo anterior
-//da variavel global pois recebi uma mensagem de
-//double free()
-void	create_variable(char *cmd)
+void	insert_end_list(t_expo **root, char *value)
 {
-	char	**new_env;
-	int		i;
+	t_expo	*new_node;
+	t_expo	*tmp;
 
-	new_env = increase_env(g_terminal.env);
-	i = -1;
-	while (new_env[++i])
-		new_env[i] = g_terminal.env[i];
-	new_env[i] = ft_strdup(cmd);
-	// free_2d(g_terminal.env);
-	g_terminal.env = new_env;
-}
-
-void	print_2d(char **env)
-{
-	int	i;
-
-	i = -1;
-	while (env[++i])
-		printf("%s\n", env[i]);
+	tmp = *root;
+	new_node = malloc(sizeof(t_expo));
+	if (!new_node)
+		return ;
+	new_node->next = NULL;
+	new_node->variable = ft_substring(value, 0, ft_strlen(value, '='));
+	new_node->value = ft_substring(value, (ft_strlen(value, '=') + 1), ft_strlen(value, 0));
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_node;
 }
 
 int	execute_export(t_cmd *cmd)
 {
 	int	flag;
 
-	// No futuro vamos imprimir aqui o g_terminal.expo
+	flag = 0;
 	if (!cmd->args[1])
-		print_2d(g_terminal.env);
+	{
+		print_list(g_terminal.expo);
+		return (STATUS_SUCCESS);
+	}
 	flag = env_variable_replaced(cmd->args[1], 0);
 	if (flag == 0)
-		create_variable(cmd->args[1]);
+	{
+		insert_end_list(&g_terminal.expo, cmd->args[1]);
+		g_terminal.env = synchronize_env(g_terminal.env, cmd->args[1]);
+	}
 	return (STATUS_SUCCESS);
+}
+
+t_expo	*create_expo(char **env)
+{
+	t_expo	*begin;
+	t_expo	*end;
+	int		i;
+
+	begin = NULL;
+	end = NULL;
+	i = 0;
+	while (env[++i])
+		end = insert_end_expo_list(&begin, env[i], &end);
+	// g_terminal.end = end;
+	bubblesort(begin);
+	return (begin);
 }
