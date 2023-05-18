@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 22:09:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/18 10:06:16 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,3 +76,5 @@ int	execute_redirection_append_out(t_cmd *cmd)
 	deallocate(g_terminal.begin);
 	return (STATUS_SUCCESS);
 }
+
+

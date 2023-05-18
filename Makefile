@@ -11,6 +11,7 @@ SRCS		=	main.c \
 				builtin/ft_cd.c \
 				builtin/ft_echo.c \
 				builtin/ft_env.c \
+				builtin/export_utils.c \
 				builtin/ft_export.c \
 				builtin/ft_pwd.c \
 				builtin/ft_unset.c \
@@ -25,9 +26,8 @@ SRCS		=	main.c \
 				tools/ft_split.c \
 				tools/helpers.c \
 				tools/linked_list.c \
+				tools/tokens.c \
 				tools/util.c \
-				gnl/get_next_line.c \
-				gnl/get_next_line_utils.c
 
 OBJS		=	$(SRCS:.c=.o)
 

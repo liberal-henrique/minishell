@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 22:07:06 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:21:03 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ typedef struct s_cmd		t_cmd;
 typedef struct s_env		t_env;
 typedef struct s_terminal	t_terminal;
 typedef struct s_expo		t_expo;
+typedef struct s_token		t_token;
 
 struct s_terminal
 {
 	char			**env;
 	t_expo			*expo;
-	// t_expo			*end;
 	char			*path;
 	int				status;
 	t_cmd			*begin;
@@ -49,9 +49,11 @@ struct s_terminal
 struct s_cmd
 {
 	char			*str;
+	t_token			*tokens;
 	char			**args;
 	int				flag_quotes;
 	char			*gpath;
+	int				fd_master[2];
 	int				fd[2];
 	int				pid;
 	int				status;
@@ -66,14 +68,31 @@ struct s_expo
 	t_expo			*next;
 };
 
+struct s_token
+{
+	char			*str;
+	t_token			*next;
+};
+
 void					sighandler();
 
 //-----------parsing----------------------//
-void					tokens(const char *line);
+void					ft_phrases(const char *line);
+void					ft_tokens(t_token **token, char *phrase);
+t_cmd					*create_cmds(char **arr);
+void					cmd_redirect(t_cmd *cmd);
+void					clean_redirect_tokens(t_token **list);
 //path
 char					*path_join(char *s1, char *s2);
 char					*get_path(char **env);
 char					*get_gpath(char **env, char **args);
+
+
+//-----------tokens----------------------//
+void					token_print(t_token *curr);
+void					token_remove(t_token **root, t_token *elem);
+void					token_add_back(t_token **root, char *str);
+
 
 //----------calloc-----//
 void					*malloc_ob(size_t length);
@@ -93,6 +112,7 @@ char					*ft_substring(const char *str, int start, int end);
 //----------helpers------//
 int						is_quote(char c);
 int						is_separator(const char *s, int *j);
+int						is_redirect(const char *s);
 int						is_space(char c);
 void					put_str(char *s);
 
@@ -141,7 +161,9 @@ void					swap_content(char **node, char **node1);
 void					bubblesort(t_expo *root);
 t_expo					*insert_end_expo_list(t_expo **root, char *s, t_expo **end);
 t_expo					*create_expo(char **env);
-char					**synchronize_env(char **env, char *cmd);
+char					**synchronize_env(char *cmd);
+char					**synchronize_env_adding(char **env, char *cmd);
+char					*put_quotes(char *str);
 
 extern t_terminal			g_terminal;
 

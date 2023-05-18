@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 19:16:35 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:33:56 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@ void	*get_function(char *name)
 		return (execute_pwd);
 	/* if (ft_compare("cd", name))
 		return (execute_cd); */
-	if (ft_compare(">", name))
-		return (execute_redirection_out);
+	// if (ft_compare(">", name))
+	// 	return (execute_redirection_out);
 	if (ft_compare("env", name))
 		return (execute_env);
 	if (ft_compare("export", name))
 		return (execute_export);
 	if (ft_compare("unset", name))
 		return (execute_unset);
-	if (ft_compare(">>", name))
-		return (execute_redirection_append_out);
-	if (ft_compare("<", name))
+	/* if (ft_compare("<", name))
 		return (execute_redirection_in);
 	if (ft_compare("<<", name))
-		return (execute_redirection_heredoc);
+		return (execute_redirection_heredoc); */
+	// if (ft_compare(">>", name))
+	// 	return (execute_redirection_append_out);
 	return (execute_default);
 }
 
@@ -70,9 +70,10 @@ t_cmd	*insert_end(t_cmd **root, char *s, t_cmd *end)
 	if (!new_node)
 		return (NULL);
 	new_node->next = NULL;
-	new_node->args = ft_split(s, 2);
-	new_node->execute = get_function(new_node->args[0]);
-	new_node->gpath = get_gpath(g_terminal.env, new_node->args);
+	// new_node->args = ft_split(s, 2);
+	// new_node->execute = get_function(new_node->args[0]);
+	// new_node->gpath = get_gpath(g_terminal.env, new_node->args);
+	ft_tokens(&new_node->tokens, s);
 	pipe(new_node->fd);
 	if (!(*root))
 		*root = new_node;
@@ -91,7 +92,7 @@ void	print_linked(t_cmd *curr)
 		printf("------------------------------------\n");
 		i = -1;
 		while (curr->args[++i])
-			printf("%s\n", curr->args[i]);
+			printf("Argumento: %i, %s\n", i, curr->args[i]);
 		printf("path: %s\n", curr->gpath);
 		curr = curr->next;
 	}

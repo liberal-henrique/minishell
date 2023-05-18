@@ -6,13 +6,13 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 22:40:56 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/18 10:48:59 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	env_variable_replaced(char *cmd, int flag)
+int	env_variable_replaced(char *cmd, int *flag)
 {
 	t_expo	*tmp;
 	size_t		len_variable;
@@ -33,11 +33,11 @@ int	env_variable_replaced(char *cmd, int flag)
 			ft_substring(cmd, 0, ft_strlen(cmd, '=')));
 			tmp->value = ft_replace(tmp->value, tmp->value, \
 			put_quotes(ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0))));
-			flag += 1;
+			*flag += 1;
 		}
 		tmp = tmp->next;
 	}
-	return (flag);
+	return (*flag);
 }
 
 void	insert_end_list(t_expo **root, char *value)
@@ -57,21 +57,23 @@ void	insert_end_list(t_expo **root, char *value)
 	tmp->next = new_node;
 }
 
+// Falta perceber pq o meu env nao esta a atualizar conforme o export;
 int	execute_export(t_cmd *cmd)
 {
 	int	flag;
 
-	flag = 0;
 	if (!cmd->args[1])
 	{
 		print_list(g_terminal.expo);
 		return (STATUS_SUCCESS);
 	}
-	flag = env_variable_replaced(cmd->args[1], 0);
+	env_variable_replaced(cmd->args[1], &flag);
+	if (flag != 0)
+		g_terminal.env = synchronize_env(cmd->args[1]);
 	if (flag == 0)
 	{
 		insert_end_list(&g_terminal.expo, cmd->args[1]);
-		g_terminal.env = synchronize_env(g_terminal.env, cmd->args[1]);
+		g_terminal.env = synchronize_env_adding(g_terminal.env, cmd->args[1]);
 	}
 	return (STATUS_SUCCESS);
 }

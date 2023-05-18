@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 19:25:22 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 23:05:05 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,3 +39,28 @@ int	execute_unset(t_cmd *cmd)
 	}
 	return (STATUS_SUCCESS);
 }
+
+// int	execute_unset(t_cmd *cmd)
+// {
+// 	t_expo	*tmp;
+// 	size_t	length;
+// 	int		len_variable;
+
+// 	len_variable = 0;
+// 	g_terminal.expo = tmp;
+// 	length = ft_strlen(cmd->args[1], '=');
+// 	while (tmp)
+// 	{
+// 		if (ft_strlen(tmp->variable, '=') > length)
+// 			len_variable = ft_strlen(tmp->variable, '=');
+// 		else
+// 			len_variable = length;
+// 		if (ft_strncmp(tmp->variable, cmd->args[1], len_variable) == 0)
+// 		{
+// 			tmp->variable = NULL;
+// 			free(tmp->variable);
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (STATUS_SUCCESS);
+// }

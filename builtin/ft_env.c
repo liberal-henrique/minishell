@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 22:05:57 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/17 23:16:24 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_strlen_2d(char **a)
 	return (i);
 }
 
-char	**synchronize_env(char **env, char *cmd)
+char	**synchronize_env_adding(char **env, char *cmd)
 {
 	char	**new_env;
 	int		i;
@@ -45,6 +45,30 @@ char	**synchronize_env(char **env, char *cmd)
 	new_env[i] = ft_strdup(cmd);
 	free(env);
 	return (new_env);
+}
+
+char	**synchronize_env(char *cmd)
+{
+	char	**new;
+	int		i;
+	size_t	length;
+	int		len_variable;
+
+	i = -1;
+	len_variable = 0;
+	length = ft_strlen(cmd, 0);
+	new = clone_env(g_terminal.env);
+	while (new[++i])
+	{
+		if (ft_strlen(new[i], '=') > length)
+			len_variable = ft_strlen(g_terminal.expo->variable, '=');
+		else
+			len_variable = length;
+		if (ft_strncmp(new[i], cmd, len_variable) == 0)
+			new[i] = ft_replace(new[i], new[i], cmd);
+	}
+	free_2d(g_terminal.env);
+	return (new);
 }
 
 int	execute_env(t_cmd *cmd)

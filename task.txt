@@ -292,5 +292,7 @@ Agora preciso:
 - Bloquear a criacao de variaveis com chars nao desejados.
 
 Para fazer o Unset:
--->
+--> 
 
+*para pensar amanha no cd. Caso alteremos a pasta onde esta sendo executado o minishell
+nossa variavel path dentro do env devera se alterada.
