@@ -1,0 +1,32 @@
+
+Parsing Testes
+- echo "Ola, mundo" CHECK (Estou a tirar as aspas duplas)
+- echo "Ola, mundo" > outfile CHECK (Escreve a msg como deve ser dentro do file)
+- < outfile wc > test CHECK (Estou a apanhar o outfile anterior e empurrar tudo para o test)
+- ls < Makefile -l | wc >outfile2 -l CHECK
+- ls < Makefile > outfile -l | wc >outfile2 -l CHECK
+
+Redirecoes
+- ls | wc CHECK
+- cat < infile | wc > outfile CHECK
+- < infile cat | wc > outfile > outfile5 > outfile4 > outfile6 > outfile9 > outfile90 CHECK
+- < infile cat | wc | echo "henrique" | > outfile > outfile5 > outfile4 | ls | > outfile6 > outfile9 > outfile90 CHECK
+(Teste para lidar com as redirecoes in and out. Contudo, a funcao precisa ser refatorada para para menos de 25 linhas)
+
+
+Testes para  Pipes
+- cat | ls --> Estou em loop infinito e a execucao so eh encerrada com ctrl + c; (Se resolver esse resolvo o de baixo)
+- cat /dev/random | head
+
+
+Testes para Export e env
+
+--> export name=1234 && env
+--> export name=luiz && env
+--> export name="luiz Henrique" && env
+-->
+
+_
+
+Export
+!, @, #, $, %, ^, &, *, (, ), [, ], {, }, <, >, ?, |,

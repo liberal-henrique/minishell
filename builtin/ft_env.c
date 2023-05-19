@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 23:16:24 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/19 14:07:07 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ char	**synchronize_env(char *cmd)
 
 	i = -1;
 	len_variable = 0;
-	length = ft_strlen(cmd, 0);
+	length = ft_strlen(cmd, '=');
 	new = clone_env(g_terminal.env);
 	while (new[++i])
 	{
 		if (ft_strlen(new[i], '=') > length)
-			len_variable = ft_strlen(g_terminal.expo->variable, '=');
+			len_variable = ft_strlen(new[i], '=');
 		else
 			len_variable = length;
 		if (ft_strncmp(new[i], cmd, len_variable) == 0)

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/18 15:21:03 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:11:04 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ struct s_terminal
 	t_expo			*expo;
 	char			*path;
 	int				status;
+	int				fquotes;
 	t_cmd			*begin;
 };
 
@@ -51,7 +52,6 @@ struct s_cmd
 	char			*str;
 	t_token			*tokens;
 	char			**args;
-	int				flag_quotes;
 	char			*gpath;
 	int				fd_master[2];
 	int				fd[2];
@@ -78,8 +78,7 @@ void					sighandler();
 
 //-----------parsing----------------------//
 void					ft_phrases(const char *line);
-void					ft_tokens(t_token **token, char *phrase);
-t_cmd					*create_cmds(char **arr);
+t_cmd					*create_list_tokens(char **arr);
 void					cmd_redirect(t_cmd *cmd);
 void					clean_redirect_tokens(t_token **list);
 //path
@@ -89,13 +88,21 @@ char					*get_gpath(char **env, char **args);
 
 
 //-----------tokens----------------------//
-void					token_print(t_token *curr);
-void					token_remove(t_token **root, t_token *elem);
 void					token_add_back(t_token **root, char *str);
+void					token_remove(t_token **root, t_token *elem);
+void					ft_tokens(t_token **token, char *phrase);
+t_cmd					*insert_end_tokens(t_cmd **root, char *s, t_cmd *end);
+void					token_print(t_token *curr);
 
 
 //----------calloc-----//
 void					*malloc_ob(size_t length);
+
+//---------comands-----//
+char					**create_array_cmds(t_token *list);
+void					build_cmds_list(t_cmd **list);
+void					cmd_redirect(t_cmd *cmd);
+void					clean_redirect_tokens(t_token **list);
 
 //---------ft_replace---------------//
 int						check_contain(char *origin, char *set);
@@ -115,12 +122,14 @@ int						is_separator(const char *s, int *j);
 int						is_redirect(const char *s);
 int						is_space(char c);
 void					put_str(char *s);
+int						ft_isalpha(char c);
+int						ft_isnum(char c);
 
 //----------linked_list----------//
-int						cnt_rec(t_cmd *node);
+int						cnt_rec(t_token *node);
 void					deallocate(t_cmd *curr);
 void					*get_function(char *name);
-t_cmd					*insert_end(t_cmd **root, char *s, t_cmd *end);
+t_cmd					*insert_end(t_cmd **root, t_cmd *end);
 void					insert_end_list(t_expo **root, char *value);
 void					print_linked(t_cmd *curr);
 

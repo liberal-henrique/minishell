@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/18 14:50:54 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:11:13 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	is_separator(const char *s, int *j)
 
 int	is_redirect(const char *s)
 {
+
 	if (s[0] == '<')
 		return (1);
 	else if (s[0] == '>')
@@ -53,4 +54,14 @@ void	put_str(char *s)
 	while (*s)
 		write(1, s++, 1);
 	write(1, "\n", 1);
+}
+
+int	ft_isalpha(char c)
+{
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+}
+
+int	ft_isnum(char c)
+{
+	return (c >= '0' && c <= '9');
 }

@@ -292,7 +292,31 @@ Agora preciso:
 - Bloquear a criacao de variaveis com chars nao desejados.
 
 Para fazer o Unset:
---> 
+-->
 
 *para pensar amanha no cd. Caso alteremos a pasta onde esta sendo executado o minishell
 nossa variavel path dentro do env devera se alterada.
+
+dia 18 de Maio
+Estive a refazer o parsing com o Rodrigo. Foi um dia bue produtivo, porem
+preciso terminar a atividade de hoje para que eu possa seguir em frente.
+
+Agora, eu tenho uma link list composta de strings.
+Posso contar o tamanho dessa minha lista dessa forma saberei
+quantas strings terei dentro dos meus args. Depois percorrer
+minha lista de tokens realizando um strdup para dentro da minha
+lista de comandos.
+Estou a ter dificuldades na hora de criar meus argumentos pois
+estou a cria-los apartir do split de 2. Contudo, terei de esperar
+os tokens serem fomados para depois recolher os argumentos.
+
+Dia 19 de maio
+
+Estou a conectar o parsing com a lista de tokens formada, com a formacao de
+argumentos de comando e com a execucao.
+Primeiramente, sao criados os tokens para que possamos executar as execucoes
+e o restante serao os argumentos de comando. A partir dai, terei de percorrer
+minha lista de tokens dentro de cada node da minha lista de comandos existente
+, que contem a lista de tokens, com isso poderei construir meu array multidimen-
+sional para a execucao.
+A execucao existente recebera esse array e o executara como antes.

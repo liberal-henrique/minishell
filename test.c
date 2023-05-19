@@ -91,3 +91,32 @@ char	**create_expo(char **env)
 	}
 	return (expo);
 }
+
+
+	// while (list)
+	// {
+	// 	token_print(list->tokens);
+	// 	// printf("in: %d\n", list->fd_master[0]);
+	// 	// printf("out: %d\n", list->fd_master[1]);
+	// 	list = list->next;
+	// }
+
+
+// t_cmd	*insert_end(t_cmd **root, char *s, t_cmd *end)
+// {
+// 	t_cmd	*new_node;
+
+// 	new_node = malloc_ob(sizeof(t_cmd));
+// 	if (!new_node)
+// 		return (NULL);
+// 	new_node->next = NULL;
+// 	new_node->args = ft_split(s, 2);
+// 	new_node->execute = get_function(new_node->args[0]);
+// 	new_node->gpath = get_gpath(g_terminal.env, new_node->args);
+// 	pipe(new_node->fd);
+// 	if (!(*root))
+// 		*root = new_node;
+// 	else
+// 		end->next = new_node;
+// 	return (new_node);
+// }

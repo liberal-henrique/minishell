@@ -21,6 +21,7 @@ SRCS		=	main.c \
 				parse/parsing.c \
 				parse/path.c \
 				tools/calloc.c \
+				tools/comands.c \
 				tools/ft_substring.c \
 				tools/ft_replace.c \
 				tools/ft_split.c \
