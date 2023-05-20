@@ -78,6 +78,7 @@ int	env_variable_replaced(char *cmd, int *flag)
 		}
 		tmp = tmp->next;
 	}
+	(void)len_variable;
 	return (*flag);
 }
 

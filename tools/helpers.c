@@ -37,10 +37,15 @@ int	is_separator(const char *s, int *j)
 int	is_redirect(const char *s)
 {
 
-	if (s[0] == '<')
+	if (s[0] == '<' && s[1] == '<')
+		return (3);
+	else if (s[0] == '>' && s[1] == '>')
+		return (4);
+	else if (s[0] == '<')
 		return (1);
 	else if (s[0] == '>')
 		return (2);
+	
 	return (0);
 }
 

@@ -70,6 +70,8 @@ void	cmd_redirect(t_cmd *cmd)
 			cmd->fd_master[0] = open(tmp->next->str, O_RDONLY, 0444);
 		else if (f == 2)
 			cmd->fd_master[1] = open(tmp->next->str, O_CREAT | O_TRUNC | O_RDWR, 0644);
+		else if (f == 4)
+			cmd->fd_master[1] = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		tmp = tmp->next;
 		i++;
 	}

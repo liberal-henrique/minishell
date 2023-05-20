@@ -1,4 +1,4 @@
- dia 19 de Abril
+dia 19 de Abril
 echo "luiz Henrique " > test.txt | wc -l | ls
 	1 -> dividir toda a command line em palavras separadas por
 	espaco. Tendo em vista que ha a possibilidade de usarmos
