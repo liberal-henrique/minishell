@@ -6,13 +6,33 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 18:44:44 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 19:11:33 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <sys/wait.h>
 #include <fcntl.h>
+
+
+void	close_shit(t_cmd *cmd)
+{
+	t_cmd *temp = cmd;
+
+	while (temp)
+	{
+		if (temp->fd[0] > 2)
+			close(temp->fd[0]);
+		if (temp->fd[1] > 2)
+			close(temp->fd[1]);
+		if (temp->fd_master[0] > 2)
+			close(temp->fd_master[0]);
+		if (temp->fd_master[1] > 2)
+			close(temp->fd_master[1]);
+		temp = temp->next;
+	}
+	cmd = temp;
+}
 
 int	execute_main(t_cmd *cmd, int in, int out)
 {
@@ -62,6 +82,7 @@ int	execute_main(t_cmd *cmd, int in, int out)
 			dup2(cmd->fd[1], STDOUT_FILENO) /* && cmd->fd[1] > 2 && !close(cmd->fd[1]) && fprintf(stderr, "fd: %d, %s\n", cmd->fd[1], cmd->args[0]) */;
 		//g_terminal.status = cmd->execute(cmd, in);
 		//exit(g_terminal.status);
+		close_shit(cmd);
 		exit(cmd->execute(cmd, in));
 	}
 	//printf("%s fd[0]: %d\n", cmd->args[0], cmd->fd[0]);
@@ -111,14 +132,14 @@ void	ft_wait(t_cmd *cmd)
 	}
 	while (temp)
 	{
-		/* if (temp->fd[0] > 2)
+		if (temp->fd[0] > 2)
 			close(temp->fd[0]);
 		if (temp->fd[1] > 2)
 			close(temp->fd[1]);
 		if (temp->fd_master[0] > 2)
 			close(temp->fd_master[0]);
 		if (temp->fd_master[1] > 2)
-			close(temp->fd_master[1]); */
+			close(temp->fd_master[1]);
 		temp = temp->next;
 	}
 

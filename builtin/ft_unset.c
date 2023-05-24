@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/23 22:54:50 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 19:02:49 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,11 @@ void	destroy_node(t_expo **list, char *str)
 	}
 }
 
+// export ola=hello adeus=goodbye cya=telogo
+// unset ola adeus cya
 int	execute_unset(t_cmd *cmd)
 {
+	H;
 	int		i;
 	int		length;
 	int		len_variable;
@@ -82,21 +85,24 @@ int	execute_unset(t_cmd *cmd)
 	length = -1;
 	len_variable = 0;
 	i = 1;
+	printf("a: %s\n", cmd->args[1]);
 	while (g_terminal.env[++length] && cmd->args[i])
 	{
 		len_variable = ft_strlen(g_terminal.env[length], '=');
 		if (ft_strncmp(g_terminal.env[length], cmd->args[i], len_variable) == 0)
 		{
-			printf("%i\n", ft_strlen_2d(g_terminal.env));
+			printf("AQUI: %i\n", ft_strlen_2d(g_terminal.env));
+			T;
 			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
 			destroy_node(&g_terminal.expo, cmd->args[i]);
-			if (cmd->args[i + 1] != NULL)
+			if (cmd->args[i + 1])
 			{
 				length = -1;
 				i++;
 			}
 			else
 				break ;
+			length = -1;
 		}
 	}
 	return (STATUS_SUCCESS);
