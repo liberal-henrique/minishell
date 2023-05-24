@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/16 11:47:18 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:00:50 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ char	**clone_env(char **env)
 	while (env[i])
 		i++;
 	clone = malloc_ob(sizeof(char *) * (i + 1));
+	if (!clone)
+		return (NULL);
 	i = -1;
 	while (env[++i])
 		clone[i_c++] = ft_strdup(env[i]);
@@ -42,25 +44,6 @@ char	**increase_env(char **env)
 	while (env[i])
 		i++;
 	i += 1;
-	clone = malloc_ob(sizeof(char *) * (i + 1));
-	if (!clone)
-		return (NULL);
-	i = -1;
-	while (env[++i])
-		clone[i_c++] = ft_strdup(env[i]);
-	return (clone);
-}
-
-char	**decrease_env(char **env)
-{
-	char	**clone;
-	int		i;
-	int		i_c;
-
-	i = 0;
-	i_c = 0;
-	while (env[i])
-		i++;
 	clone = malloc_ob(sizeof(char *) * (i + 1));
 	if (!clone)
 		return (NULL);
@@ -103,7 +86,7 @@ char	*str_join(char *old, char *seg, char c)
 	while (++j < seg_len)
 		new[i++] = seg[j];
 	new[i] = 0;
-	if (old)
-		free(old);
+	/* if (old)
+		free(old); */
 	return (new);
 }

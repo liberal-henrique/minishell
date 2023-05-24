@@ -1,4 +1,4 @@
-dia 19 de Abril
+ dia 19 de Abril
 echo "luiz Henrique " > test.txt | wc -l | ls
 	1 -> dividir toda a command line em palavras separadas por
 	espaco. Tendo em vista que ha a possibilidade de usarmos
@@ -320,3 +320,42 @@ minha lista de tokens dentro de cada node da minha lista de comandos existente
 , que contem a lista de tokens, com isso poderei construir meu array multidimen-
 sional para a execucao.
 A execucao existente recebera esse array e o executara como antes.
+
+
+Dia 22 de Maio
+
+Estou mesmo a acabar com a expansao e com o unset.
+- Para o unset eu preciso apenas sincronizar a atuallizacao
+do env com o expo. Precisarei apenas percorrer minha lista
+e comparar a string em questao com a string variavel de cada
+node. A primeira sera analisada antes do loop e depois analisarei
+o restante. Assim, mantenho me no previous para poder apontar o
+next do node em que estou para o next do next.
+
+--> O meu export so cria as variaveis caso possua o '=' no nome;
+--> Caso eu tente definir uma variavel, nao estou a conseguir usar
+o meu unset. Pois, a minha variavel esta a ser introduzida sem o '='.
+
+- Ja a expansao precisara de mais atencao. Ja consigo criar
+a string com acrescimo do length do value da variavel encontrada.
+Tambem, ja substitui o $ dentro da double quotes por 5. Entao, agora,
+precisarei apenas percorrer a string e procurar pelo 5 e substituir
+tanto o 5 quanto o valor pelo correspondente valor da variavel.
+
+- Para fazer o heredoc terei de criar um loop infinito com a funcao
+readline la dentro. Toda line criada pelo user sera tratada como devido.
+Essa funcao so sera interrompida quando a palavra selecionada for igual a
+line digitada pelo usuario. Apos isso, todo o ficheiro sera analisado a
+procura do $, caso seja encontrado, sera substituido pelo valor da variavel
+correspondente.
+
+
+dia 23 de Maio de Noite
+Teremos de fazer nossa execucao voltar a funcionar devidamente. Estive a
+executar qualquer coisa com o pipe e nao esta como deve ser.
+-> env | wc -l (apenas o env eh executado e nada do wc -l);
+
+--> Estive a tentar recompor meu unset. Para que realize multiplas execucoes
+e continue a operar. Contudo, ele esta a decrementar demasiado as minhas variaveis
+globais. Portanto, precisarei perceber como a funcao destroy_row esta a se comportar arg.
+Tendo em vista que tirei a busca por posicao e estou a iterar a compara nomes.

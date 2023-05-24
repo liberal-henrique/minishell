@@ -1,4 +1,4 @@
-# CC			=	cc -g3 -fsanitize=address
+# CC			=	cc -g -fsanitize=address
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
 LDFLAGS		=	-lreadline
@@ -18,6 +18,7 @@ SRCS		=	main.c \
 				execute/execute_redirections.c \
 				execute/execute.c \
 				execute/utils_exe.c \
+				parse/expander.c \
 				parse/parsing.c \
 				parse/path.c \
 				tools/calloc.c \

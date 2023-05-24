@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 18:11:04 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:36:06 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@
 
 # define STATUS_ERROR 1 //tmp
 # define STATUS_SUCCESS 0
-
+# define H printf("HERE\n")
+# define T printf("THERE\n")
 # define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
 
 typedef struct s_cmd		t_cmd;
@@ -81,11 +82,14 @@ void					ft_phrases(const char *line);
 t_cmd					*create_list_tokens(char **arr);
 void					cmd_redirect(t_cmd *cmd);
 void					clean_redirect_tokens(t_token **list);
+char					*expander(char **env, char *str);
+char					*putraska(char *str);
+char					*ft_strjoin_expansion(char *line, char *buf);
+char					*ft_strjoin_char(char *line, char c);
 //path
 char					*path_join(char *s1, char *s2);
 char					*get_path(char **env);
 char					*get_gpath(char **env, char **args);
-
 
 //-----------tokens----------------------//
 void					token_add_back(t_token **root, char *str);
@@ -93,7 +97,6 @@ void					token_remove(t_token **root, t_token *elem);
 void					ft_tokens(t_token **token, char *phrase);
 t_cmd					*insert_end_tokens(t_cmd **root, char *s, t_cmd *end);
 void					token_print(t_token *curr);
-
 
 //----------calloc-----//
 void					*malloc_ob(size_t length);
@@ -154,7 +157,9 @@ int						execute_unset(t_cmd *cmd);
 //-----------execute----------------------------//
 int						execute_redirection_out(t_cmd *cmd);
 int						execute_redirection_append_out(t_cmd *cmd);
-int						execute_main(t_cmd *cmd, int in);
+int						ft_heredoc(t_cmd *cmd, char *delimiter);
+char					*ft_strjoin_rodraska(char *line, char *buf);
+int						execute_main(t_cmd *cmd, int in, int out);
 int						execute_default(t_cmd *cmd);
 void					ft_wait(t_cmd *cmd);
 
@@ -163,12 +168,16 @@ char					**clone_env(char **env);
 char					**increase_env(char **env);
 int						ft_strncmp(char *s1, char *s2, int n);
 char					*str_join(char *old, char *seg, char c);
+int						ft_strlen_2d(char **a);
+char					*find_var(char *var);
 
 void					print_list(t_expo *node);
+void					print_list2(t_expo *node, t_cmd *cmd);
 int						ft_strcmp(const char *s1, const char *s2);
 void					swap_content(char **node, char **node1);
 void					bubblesort(t_expo *root);
-t_expo					*insert_end_expo_list(t_expo **root, char *s, t_expo **end);
+t_expo					*insert_end_expo_list(t_expo **root, \
+char *s, t_expo **end);
 t_expo					*create_expo(char **env);
 char					**synchronize_env(char *cmd);
 char					**synchronize_env_adding(char **env, char *cmd);

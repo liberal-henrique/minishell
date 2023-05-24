@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 14:07:07 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:41:41 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ int	ft_strlen_2d(char **a)
 	int	i;
 
 	i = 0;
-	if (!a)
-		return (0);
-	while (a[i])
+	while (a && a[i])
 		i++;
 	return (i);
 }
@@ -74,10 +72,47 @@ char	**synchronize_env(char *cmd)
 int	execute_env(t_cmd *cmd)
 {
 	int	i;
+	int	fd[2];
 
 	i = -1;
+	pipe(fd);
 	(void) cmd;
-	while (g_terminal.env[++i])
-		printf("%s\n", g_terminal.env[i]);
+	if(!cmd->next)
+	{
+		while (g_terminal.env[++i])
+			printf("%s\n", g_terminal.env[i]);
+	}
+	else
+	{
+		while (g_terminal.env[++i])
+		{
+			write(fd[1], g_terminal.env[i], ft_strlen(g_terminal.env[i], 0));
+			write(fd[1], "\n", 1);
+		}
+		close(fd[1]);
+		cmd->next->fd_master[0] = fd[0];
+	}
 	return (STATUS_SUCCESS);
+}
+
+char	*find_var(char *var)
+{
+	t_expo		*tmp;
+	int			len_var;
+	char		*exp;
+
+	tmp = g_terminal.expo;
+	len_var = 0;
+	exp = NULL;
+	while (tmp)
+	{
+		len_var = ft_strlen(tmp->variable, '=');
+		if (ft_strncmp(tmp->variable, var, len_var) == 0 && tmp->variable[len_var] == '=')
+		{
+			exp = tmp->value;
+			break ;
+		}
+		tmp = tmp->next;
+	}
+	return (exp);
 }

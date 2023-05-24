@@ -6,61 +6,98 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/17 23:05:05 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:54:50 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// Ainda esta em testes. Ja consigo apagar a variavel contudo
-// acredito que seja legal criar um novo array_2d menor sem essa
-// string especifica
+char	**destroy_row(char **env, char *str)
+{
+	char	**new;
+	int		i;
+	int		i_c;
+
+	new = malloc_ob(sizeof(char *) * (ft_strlen_2d(env)));
+	i = 0;
+	i_c = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], str, (ft_strlen(env[i], '='))) != 0)
+			new[i_c] = ft_strdup(env[i]);
+		i++;
+		i_c++;
+	}
+	free_2d(env);
+	return (new);
+}
+
+void	destroy_first_node(t_expo **list)
+{
+	t_expo	*tmp;
+
+	tmp = (*list);
+	(*list) = (*list)->next;
+	free(tmp);
+	tmp = NULL;
+}
+
+void	destroy_node(t_expo **list, char *str)
+{
+	t_expo	*tmp;
+	t_expo	*aux;
+	size_t	len;
+	int		i;
+
+	i = 0;
+	tmp = (*list);
+	len = ft_strlen((*list)->variable, '=');
+	if (ft_strncmp((*list)->variable, str, len) == 0)
+	{
+		destroy_first_node(list);
+		return ;
+	}
+	while (tmp->next)
+	{
+		len = ft_strlen(tmp->next->variable, '=');
+		if (ft_strncmp(tmp->next->variable, str, len) == 0)
+		{
+			aux = tmp->next;
+			if (tmp->next)
+				tmp->next = tmp->next->next;
+			free(aux);
+			aux = NULL;
+			return ;
+		}
+		tmp = tmp->next;
+	}
+}
+
 int	execute_unset(t_cmd *cmd)
 {
-
+	int		i;
 	int		length;
-	size_t	len_name;
 	int		len_variable;
 
 	length = -1;
-	len_name = ft_strlen(cmd->args[1], '=');
 	len_variable = 0;
-	while (g_terminal.env[++length] && cmd->args[1])
+	i = 1;
+	while (g_terminal.env[++length] && cmd->args[i])
 	{
-		if (ft_strlen(g_terminal.env[length], '=') > len_name)
-			len_variable = ft_strlen(g_terminal.env[length], '=');
-		else
-			len_variable = len_name;
-		if (ft_strncmp(g_terminal.env[length], cmd->args[1], len_variable) == 0)
+		len_variable = ft_strlen(g_terminal.env[length], '=');
+		if (ft_strncmp(g_terminal.env[length], cmd->args[i], len_variable) == 0)
 		{
-			g_terminal.env[length] = ft_strdup("esvaziar");
-			free(g_terminal.env[length]);
+			printf("%i\n", ft_strlen_2d(g_terminal.env));
+			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
+			destroy_node(&g_terminal.expo, cmd->args[i]);
+			if (cmd->args[i + 1] != NULL)
+			{
+				length = -1;
+				i++;
+			}
+			else
+				break ;
 		}
 	}
 	return (STATUS_SUCCESS);
 }
-
-// int	execute_unset(t_cmd *cmd)
-// {
-// 	t_expo	*tmp;
-// 	size_t	length;
-// 	int		len_variable;
-
-// 	len_variable = 0;
-// 	g_terminal.expo = tmp;
-// 	length = ft_strlen(cmd->args[1], '=');
-// 	while (tmp)
-// 	{
-// 		if (ft_strlen(tmp->variable, '=') > length)
-// 			len_variable = ft_strlen(tmp->variable, '=');
-// 		else
-// 			len_variable = length;
-// 		if (ft_strncmp(tmp->variable, cmd->args[1], len_variable) == 0)
-// 		{
-// 			tmp->variable = NULL;
-// 			free(tmp->variable);
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// 	return (STATUS_SUCCESS);
-// }

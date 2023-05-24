@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:44:44 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/04 13:46:57 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/22 14:38:07 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ void	*malloc_ob(size_t length)
 		return (NULL);
 	element = (unsigned char *)tmp;
 	while (length-- > 0)
-		*element++ = 0;
+	{
+		*element = 0;
+		element++;
+	}
 	return (tmp);
 }

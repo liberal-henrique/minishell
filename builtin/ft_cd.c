@@ -6,19 +6,35 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 15:17:04 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 17:12:19 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	update_oldpwd(char *new)
+{
+	t_expo	*tmp;
+	int			len_var;
+
+	tmp = g_terminal.expo;
+	while (tmp)
+	{
+		len_var = ft_strlen(tmp->value, 0) - (ft_strlen(tmp->value, '=') + 1);
+		if (ft_strncmp(tmp->value, new, len_var) == 0 && tmp->value[len_var] == '=')
+		{
+
+		}
+		tmp = tmp->next;
+	}
+}
 
 int	execute_cd(t_cmd *cmd)
 {
 	char	*str;
 	char	*cwd;
 
-	cwd = (char *)malloc(sizeof(char) * 1024);
-	getcwd(cwd, 1024);
+	cwd = find_var("PWD");
 	str = NULL;
 	if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
 	{

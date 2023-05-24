@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 15:18:48 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:23:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ void	separator_cmd(char **new, char **s, int *i, int j)
 void	create_str(char *new, char *s, int i, char set)
 {
 	int	j;
+	int	c;
 
 	while (*s)
 	{
-		if (!set && is_quote(*s))
+		c = is_quote(*s);
+		if (!set && c != 0)
 			set = *s++;
-		else if (set == *s && *s++ && g_terminal.fquotes++)
+		else if (set == *s && *s++)
 			set = 0;
 		else if (!set && is_space(*s))
 			(*s) = 2;
@@ -52,19 +54,25 @@ void	create_str(char *new, char *s, int i, char set)
 void	ft_phrases(const char *line)
 {
 	char	*new;
+	char	*new2;
 	char	**arr;
 	t_cmd	*list;
 
-	new = malloc_ob(ft_strlen((char *)line, 0) * 2);
+	new = expander(g_terminal.env, (char *)line);
 	if (!new)
-		return ;
-	create_str(new, (char *)line, 0, 0);
-	arr = ft_split(new, 3);
+	{
+		free(new);
+		new = NULL;
+	}
+	new2 = malloc_ob(4096);
+	create_str(new2, new, 0, 0);
+	arr = ft_split(new2, 3);
 	list = create_list_tokens(arr);
 	build_cmds_list(&list);
-	// print_linked(list);
+	//print_linked(list);
 	g_terminal.begin = list;
-	execute_main(list, 0);
+	//printf("exp: %s\n", find_var("HOME"));
+	execute_main(list, 0, -1);
 	ft_wait(list);
 	// list->flag_quotes = flag;
 	free(new);

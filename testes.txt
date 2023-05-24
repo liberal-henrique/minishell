@@ -1,10 +1,16 @@
 
 Parsing Testes
+- env -i ./minishell --> Isso limita nosso env a nenhuma variavel env
+- Uma string qualquer (Ainda nao estamos a lidar com esse caso) ---check
 - echo "Ola, mundo" CHECK (Estou a tirar as aspas duplas)
 - echo "Ola, mundo" > outfile CHECK (Escreve a msg como deve ser dentro do file)
 - < outfile wc > test CHECK (Estou a apanhar o outfile anterior e empurrar tudo para o test)
 - ls < Makefile -l | wc >outfile2 -l CHECK
 - ls < Makefile > outfile -l | wc >outfile2 -l CHECK
+
+Testes para execucao
+- Caso apaguemos todas as nossas variaveis de ambiente devemos rodar o nosso minishell na mesma.
+Contudo, nossa execucao deve ser paralisada.
 
 Redirecoes
 - ls | wc CHECK
@@ -14,19 +20,28 @@ Redirecoes
 (Teste para lidar com as redirecoes in and out. Contudo, a funcao precisa ser refatorada para para menos de 25 linhas)
 
 
-Testes para  Pipes
+Testes para Pipes
 - cat | ls --> Estou em loop infinito e a execucao so eh encerrada com ctrl + c; (Se resolver esse resolvo o de baixo)
 - cat /dev/random | head
 
+Testes para cd
+- cd
+- cd -
+- cd /
+- cd /bin
+- cd ../../
+-
 
 Testes para Export e env
 
+--> export name= -->Devemos criar uma variavel com uma string vazia.
 --> export name=1234 && env
 --> export name=luiz && env
 --> export name="luiz Henrique" && env
--->
+--> Eh suposto eu conseguir criar varias variaveis de uma vez so
+--> E o unset 
 
-_
+
 
 Export
 !, @, #, $, %, ^, &, *, (, ), [, ], {, }, <, >, ?, |,

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 14:57:44 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:28:37 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ void	deallocate(t_cmd *curr)
 		free(curr);
 		curr = temp;
 	}
-	// close(STDIN_FILENO);
-	// close(STDOUT_FILENO);
 }
 
 void	*get_function(char *name)
@@ -55,24 +53,8 @@ void	*get_function(char *name)
 	(void) name;
 	if (ft_compare("echo", name))
 		return (execute_echo);
-	// if (ft_compare("pwd", name))
-	// 	return (execute_pwd);
-	/* if (ft_compare("cd", name))
-		return (execute_cd); */
-	// if (ft_compare(">", name))
-	// 	return (execute_redirection_out);
-	// if (ft_compare("env", name))
-	// 	return (execute_env);
-	// if (ft_compare("export", name))
-	// 	return (execute_export);
-	// if (ft_compare("unset", name))
-	// 	return (execute_unset);
-	/* if (ft_compare("<", name))
-		return (execute_redirection_in);
-	if (ft_compare("<<", name))
-		return (execute_redirection_heredoc); */
-	// if (ft_compare(">>", name))
-	// 	return (execute_redirection_append_out);
+	if (ft_compare("pwd", name))
+		return (execute_pwd);
 	return (execute_default);
 }
 

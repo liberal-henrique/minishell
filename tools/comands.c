@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 13:42:16 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:33:40 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,31 @@ void	build_cmds_list(t_cmd **list)
 void	cmd_redirect(t_cmd *cmd)
 {
 	t_token	*tmp;
-	int f;
-	int	i;
+	int		f;
+	int		i;
 
 	tmp = cmd->tokens;
 	i = 0;
+
 	while (tmp)
 	{
 		f = is_redirect(tmp->str);
 		if (f == 1)
 			cmd->fd_master[0] = open(tmp->next->str, O_RDONLY, 0444);
 		else if (f == 2)
-			cmd->fd_master[1] = open(tmp->next->str, O_CREAT | O_TRUNC | O_RDWR, 0644);
+			cmd->fd_master[1] = open(tmp->next->str, \
+			O_CREAT | O_TRUNC | O_RDWR, 0644);
 		else if (f == 4)
-			cmd->fd_master[1] = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			cmd->fd_master[1] = open(tmp->next->str, \
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else if (f == 3)
+		{
+			ft_heredoc(cmd, tmp->next->str);
+			//cmd->fd_master[0] = open("./.heredoc", O_RDONLY, 0444);
+			//cmd->fd_master[0] = cmd->fd[0];
+			// HERE;
+		}
+		//printf("ola\n");
 		tmp = tmp->next;
 		i++;
 	}

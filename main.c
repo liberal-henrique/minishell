@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 14:56:27 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:34:38 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	sighandler()
 	rl_on_new_line(); // Regenerate the prompt on a newline
     rl_replace_line("", 1); // Clear the previous text
     rl_redisplay(); //update the display of the current line on the terminal
+	printf("\n");
 }
 
 int	main(int ac, char **av, char **env)
@@ -28,13 +29,21 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	(void) env;
-	g_terminal.env = env;
 	g_terminal.env = clone_env(env);
 	g_terminal.expo = create_expo(env);
-	g_terminal.fquotes = 0;
-	signal(SIGQUIT, SIG_IGN);
+	/* if (ft_strlen_2d(env) != 0)
+	{
+		g_terminal.env = clone_env(env);
+		g_terminal.expo = create_expo(env);
+	}
+	else
+	{
+		g_terminal.env = NULL;
+		g_terminal.expo = NULL;
+	} */
+	//g_terminal.fquotes = 0;
 	signal(SIGINT, sighandler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		line = readline("Minishell$ ");
@@ -48,6 +57,7 @@ int	main(int ac, char **av, char **env)
 		add_history(line);
 		ft_phrases(line);
 		free(line);
+
 	}
 	return (0);
 }

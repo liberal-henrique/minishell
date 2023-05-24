@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/18 10:06:16 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:57:20 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,53 @@ int	execute_redirection_append_out(t_cmd *cmd)
 	return (STATUS_SUCCESS);
 }
 
+int	ft_heredoc(t_cmd *cmd, char *delimiter)
+{
+	char	*line;
+	int		len;
+	char	*buf;
+	int		fd[2];
 
+	pipe(fd);
+	len = ft_strlen(delimiter, 0);
+	buf = NULL;
+	line = NULL;
+	while (1)
+	{
+		line = readline(">");
+		line = expander(g_terminal.env, line);
+		if (!ft_strncmp(line, delimiter, len))
+			break ;
+		buf = ft_strjoin_rodraska(buf, line);
+		free(line);
+	}
+	write(fd[1], buf, ft_strlen(buf, 0));
+	close(fd[1]);
+	cmd->fd_master[0] = fd[0];
+	return (STATUS_SUCCESS);
+}
+
+char	*ft_strjoin_rodraska(char *line, char *buf)
+{
+	char	*new_line;
+	int		i;
+	int		k;
+	int		buf_len;
+	int		line_len;
+
+	buf_len = ft_strlen(buf, 0);
+	line_len = ft_strlen(line, 0);
+	new_line = (char *)malloc(buf_len + line_len + 2);
+	if (!new_line)
+		return (NULL);
+	i = -1;
+	k = -1;
+	while (++i < line_len)
+		new_line[i] = line[i];
+	while (++k < buf_len)
+		new_line[i++] = buf[k];
+	new_line[i++] = '\n';
+	new_line[i] = 0;
+	free(line);
+	return (new_line);
+}

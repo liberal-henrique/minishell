@@ -1,122 +1,112 @@
-// int	main(void)
-// {
-// 	char	strings[10][100] = {
-// 		"0hello=primeiro",
-// 		"9Ola=oinono",
-// 		"8Salut=oioitavo",
-// 		"7Hallo=oisetimo",
-// 		"6Ciao=oisexto",
-// 		"5Hola=oiquinto",
-// 		"4Oi=oiquarto",
-// 		"3Danke=Obrigadoterceiro",
-// 		"2Thanks=Obrigadosegundo",
-// 		"1Merci=Obrigadoomelhor",
-// 	};
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/21 18:13:00 by lliberal          #+#    #+#             */
+/*   Updated: 2023/05/21 18:23:10 by lliberal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// 	int		i = -1;
-// 	t_expo	*begin = NULL;
-// 	t_expo	*end = NULL;
-// 	while(++i < 10)
-// 		end = insert_end(&begin, strings[i], &end);
-// 	bubblesort(begin);
-// 	print_list(begin);
-// }
 
-// int	env_variable_replaced(char *cmd, int flag)
-// {
-// 	int		length;
-// 	size_t	len_name;
-// 	int		len_variable;
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stddef.h>
 
-// 	length = -1;
-// 	len_name = ft_strlen(cmd, '=');
-// 	len_variable = 0;
-// 	while (g_terminal.expo[++length] && cmd)
-// 	{
-// 		if (ft_strlen(g_terminal.expo[length], '=') > len_name)
-// 			len_variable = ft_strlen(g_terminal.expo[length], '=');
-// 		else
-// 			len_variable = len_name;
-// 		if (ft_strncmp(g_terminal.expo[length], cmd, len_variable) == 0)
-// 		{
-// 			g_terminal.expo[length] = ft_replace(g_terminal.expo[length], g_terminal.expo[length], cmd);
-// 			flag += 1;
-// 		}
-// 	}
-// 	return (flag);
-// }
+size_t	ft_strlen(const char *a, char set)
+{
+	int	i;
+
+	i = 0;
+	if (!a)
+		return (0);
+	while (a[i])
+	{
+		if (a[i] == set)
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+int	ft_strncmp(char *s1, char *s2, int n)
+{
+	int	i;
+
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
+}
+
+int	return_len_value(char **env, char *str)
+{
+	size_t	length_received;
+	int		len_var;
+	int		len;
+	int		i;
+
+	i = -1;
+	len = 0;
+	len_var = 0;
+	length_received = ft_strlen(str, 0);
+	while (env[++i])
+	{
+		if (ft_strlen(env[i], '=') > length_received)
+			len_var = ft_strlen(env[i], '=');
+		else
+			len_var = length_received;
+		if (ft_strncmp(env[i], str, len_var) == 0)
+			len = ft_strlen(env[i], 0) - (ft_strlen(env[i], '='));
+	}
+	return (len);
+}
+
+int	is_space(char c)
+{
+	return (c == 32 || (c >= 9 && c <= 13));
+}
+
+int	length_value(char **env, charchar *str)
+{
+	int		length;
+	int		j;
+	int		len;
+
+	j = 0;
+	length = 0;
+	len = 0;
+	while (*str)
+	{
+		if (j == 0 && *str++ == '\"')
+			j = 1;
+		else if (j == 1 && *str++ == '\"')
+			j = 0;
+		if (j == 1 && *str == '$')
+		{
+			*str++ = 5;
+			while (!is_space(*str))
+				[length++] = *str++;
+			len += return_len_value(env, set);
+		}
+	}
+	return (len);
+}
 
 int	main(int ac, char **av, char **env)
 {
 	(void) ac;
 	(void) av;
 
-	t_expo	*begin;
-	t_expo	*end;
-	int		counter = 0;
-	int i = -1;
-	begin = NULL;
-	end = NULL;
-	while (env[++i])
-	{
-		end = insert_end(&begin, env[i], &end);
-		counter++;
-	}
-	bubblesort(begin);
-	print_list(begin);
+	char	set[] = "ola, $name. Como Esta o seu dia? Tu faras teu $PATH?";
+	printf("%i\n", length_value(env, set));
+	return (0);
 }
-
-char	**create_expo(char **env)
-{
-	char	**expo;
-	int		i;
-	int		length;
-	int		j;
-	int		j_min;
-
-	j = 0;
-	i = 0;
-	expo = clone_env(env);
-	length = ft_strlen_2d(env);
-	while (i < (length - 1))
-	{
-		j_min = i;
-		while (j < (length - 1))
-		{
-			if (ft_strcmp(expo[j], expo[j_min]) < 0)
-				j_min = j;
-			j++;
-		}
- 		i++;
-	}
-	return (expo);
-}
-
-
-	// while (list)
-	// {
-	// 	token_print(list->tokens);
-	// 	// printf("in: %d\n", list->fd_master[0]);
-	// 	// printf("out: %d\n", list->fd_master[1]);
-	// 	list = list->next;
-	// }
-
-
-// t_cmd	*insert_end(t_cmd **root, char *s, t_cmd *end)
-// {
-// 	t_cmd	*new_node;
-
-// 	new_node = malloc_ob(sizeof(t_cmd));
-// 	if (!new_node)
-// 		return (NULL);
-// 	new_node->next = NULL;
-// 	new_node->args = ft_split(s, 2);
-// 	new_node->execute = get_function(new_node->args[0]);
-// 	new_node->gpath = get_gpath(g_terminal.env, new_node->args);
-// 	pipe(new_node->fd);
-// 	if (!(*root))
-// 		*root = new_node;
-// 	else
-// 		end->next = new_node;
-// 	return (new_node);
-// }
