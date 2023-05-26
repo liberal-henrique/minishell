@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 15:57:20 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:00:30 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,21 +77,50 @@ int	execute_redirection_append_out(t_cmd *cmd)
 	return (STATUS_SUCCESS);
 }
 
-int	ft_heredoc(t_cmd *cmd, char *delimiter)
+char	*check_delimiter(char *delimiter, char *set, int start, int i)
+{
+	char	*new;
+	int		end;
+
+	new = NULL;
+	end = 0;
+	*set = 0;
+	if (!delimiter)
+		return (ft_strdup(delimiter));
+	while (delimiter[++i])
+	{
+		if (*set == 0 && (delimiter[i] == '\'' || delimiter[i] == '\"'))
+		{
+			start = i + 1;
+			*set = 1;
+		}
+		else if (*set == 1 && (delimiter[i] == '\'' || delimiter[i] == '\"'))
+			end = i;
+	}
+	if (start == 0)
+		end = ft_strlen(delimiter, 0);
+	new = ft_substring(delimiter, start, end);
+	return (new);
+}
+
+int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 {
 	char	*line;
-	int		len;
-	char	*buf;
+	char	set;
 	int		fd[2];
 
 	pipe(fd);
+	delimiter = check_delimiter(delimiter, &set, 0, -1);
+	//printf("set: %d\n", set);
+	if (set == 0)
+		delimiter = expander(delimiter);
+	//printf("del: %s\n", delimiter);
 	len = ft_strlen(delimiter, 0);
-	buf = NULL;
-	line = NULL;
 	while (1)
 	{
 		line = readline(">");
-		line = expander(g_terminal.env, line);
+		if (set == 0)
+			line = expander(line);
 		if (!ft_strncmp(line, delimiter, len))
 			break ;
 		buf = ft_strjoin_rodraska(buf, line);
@@ -100,6 +129,7 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter)
 	write(fd[1], buf, ft_strlen(buf, 0));
 	close(fd[1]);
 	cmd->fd_master[0] = fd[0];
+	free(delimiter);
 	return (STATUS_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 18:41:41 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/25 01:11:48 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,21 +98,21 @@ int	execute_env(t_cmd *cmd)
 char	*find_var(char *var)
 {
 	t_expo		*tmp;
-	int			len_var;
-	char		*exp;
+	size_t		len_var;
 
 	tmp = g_terminal.expo;
 	len_var = 0;
-	exp = NULL;
 	while (tmp)
 	{
-		len_var = ft_strlen(tmp->variable, '=');
-		if (ft_strncmp(tmp->variable, var, len_var) == 0 && tmp->variable[len_var] == '=')
+
+		len_var = ft_strlen(tmp->variable, 0);
+		// printf("ENV: %s (%zu / %zu) %i\n", tmp->variable, len_var, ft_strlen(var, 0), ft_strncmp(tmp->variable, var, len_var));
+		if (ft_strlen(var, 0) == len_var && ft_strncmp(tmp->variable, var, len_var) == 0)
 		{
-			exp = tmp->value;
-			break ;
+			// printf("OK: %s\n", tmp->value);
+			return (tmp->value);
 		}
 		tmp = tmp->next;
 	}
-	return (exp);
+	return ("");
 }

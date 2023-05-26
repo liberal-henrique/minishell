@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 18:36:06 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/26 10:48:00 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@
 
 # define STATUS_ERROR 1 //tmp
 # define STATUS_SUCCESS 0
+# define STATUS_SYNTAX_ERROR 3
+# define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
 # define H printf("HERE\n")
 # define T printf("THERE\n")
-# define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
 
 typedef struct s_cmd		t_cmd;
 typedef struct s_env		t_env;
@@ -44,7 +45,6 @@ struct s_terminal
 	t_expo			*expo;
 	char			*path;
 	int				status;
-	int				fquotes;
 	t_cmd			*begin;
 };
 
@@ -78,18 +78,23 @@ struct s_token
 void					sighandler();
 
 //-----------parsing----------------------//
-void					ft_phrases(const char *line);
+int					ft_phrases(const char *line);
 t_cmd					*create_list_tokens(char **arr);
 void					cmd_redirect(t_cmd *cmd);
 void					clean_redirect_tokens(t_token **list);
-char					*expander(char **env, char *str);
 char					*putraska(char *str);
 char					*ft_strjoin_expansion(char *line, char *buf);
 char					*ft_strjoin_char(char *line, char c);
+
 //path
 char					*path_join(char *s1, char *s2);
 char					*get_path(char **env);
 char					*get_gpath(char **env, char **args);
+
+//-----------expander--------------------//
+int						check(char c);
+char					*expander(char *str);
+void					expander_args(t_cmd *list);
 
 //-----------tokens----------------------//
 void					token_add_back(t_token **root, char *str);
@@ -157,7 +162,7 @@ int						execute_unset(t_cmd *cmd);
 //-----------execute----------------------------//
 int						execute_redirection_out(t_cmd *cmd);
 int						execute_redirection_append_out(t_cmd *cmd);
-int						ft_heredoc(t_cmd *cmd, char *delimiter);
+int						ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len);
 char					*ft_strjoin_rodraska(char *line, char *buf);
 int						execute_main(t_cmd *cmd, int in, int out);
 int						execute_default(t_cmd *cmd);

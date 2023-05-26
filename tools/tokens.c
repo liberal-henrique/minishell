@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 10:49:49 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/19 13:32:54 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/25 12:17:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,6 @@ void	token_remove(t_token **root, t_token *elem)
 		}
 		tmp = tmp->next;
 	}
-}
-
-t_cmd	*insert_end_tokens(t_cmd **root, char *s, t_cmd *end)
-{
-	t_cmd	*new_node;
-
-	new_node = malloc_ob(sizeof(t_cmd));
-	if (!new_node)
-		return (NULL);
-	new_node->next = NULL;
-	ft_tokens(&new_node->tokens, s);
-	if (!(*root))
-		*root = new_node;
-	else
-		end->next = new_node;
-	return (new_node);
 }
 
 void	token_print(t_token *curr)

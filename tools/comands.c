@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/23 22:33:40 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:10:29 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	cmd_redirect(t_cmd *cmd)
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else if (f == 3)
 		{
-			ft_heredoc(cmd, tmp->next->str);
+			ft_heredoc(cmd, tmp->next->str, NULL, 0);
 			//cmd->fd_master[0] = open("./.heredoc", O_RDONLY, 0444);
 			//cmd->fd_master[0] = cmd->fd[0];
 			// HERE;

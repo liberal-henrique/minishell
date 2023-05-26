@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/23 22:28:37 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/26 10:47:38 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	print_linked(t_cmd *curr)
 	int	i;
 
 	printf("+++++++++++++++++++++++++++++++++++++++\n");
-	printf("%i\n", g_terminal.fquotes);
 	while (curr)
 	{
 		printf("------------------------------------\n");

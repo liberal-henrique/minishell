@@ -6,12 +6,11 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 18:39:33 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/26 10:28:13 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 t_expo	*create_expo(char **env)
 {
@@ -53,8 +52,6 @@ int	export_variable_name(char *cmd)
 	return (0);
 }
 
-// Percorre toda a global e caso ele encontre uma igual
-// ele substitui;
 int	env_variable_replaced(char *cmd, int *flag)
 {
 	t_expo		*tmp;
@@ -64,8 +61,13 @@ int	env_variable_replaced(char *cmd, int *flag)
 	len_variable = 0;
 	len_name = ft_strlen(cmd, '=');
 	tmp = g_terminal.expo;
+	*flag = 0;
 	if (export_variable_name(cmd) != 0)
+	{
 		printf("Not a valid identifier\n"); // Here is_wrong()
+		*flag = -2;
+		return (*flag);
+	}
 	while (tmp && cmd)
 	{
 		if (ft_strlen(tmp->variable, '=') > len_name)
@@ -74,10 +76,9 @@ int	env_variable_replaced(char *cmd, int *flag)
 			len_variable = len_name;
 		if (ft_strncmp(tmp->variable, cmd, len_variable) == 0)
 		{
-			H;
 			tmp->variable = ft_replace(tmp->variable, tmp->variable, ft_substring(cmd, 0, ft_strlen(cmd, '=')));
 			tmp->value = ft_replace(tmp->value, tmp->value, ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0)));
-			*flag += 1;
+			*flag = 1;
 		}
 		tmp = tmp->next;
 	}
@@ -88,17 +89,14 @@ void	insert_end_list(t_expo **root, char *value)
 {
 	t_expo	*new_node;
 	t_expo	*tmp;
-	char	*test;
 
 	tmp = *root;
 	new_node = malloc(sizeof(t_expo));
 	if (!new_node)
 		return ;
 	new_node->next = NULL;
-	test = ft_substring(value, (ft_strlen(value, '=') + 1), \
-	ft_strlen(value, 0));
 	new_node->variable = ft_substring(value, 0, (ft_strlen(value, '=')));
-	new_node->value = test;
+	new_node->value = ft_substring(value, (ft_strlen(value, '=') + 1), ft_strlen(value, 0));;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_node;
@@ -122,10 +120,12 @@ int	execute_export(t_cmd *cmd)
 	{
 		while (cmd->args[i])
 		{
+			//printf("arg: %s, %d\n", cmd->args[i], flag);
 			env_variable_replaced(cmd->args[i], &flag);
-			if (flag != 0)
+			//printf("flag: %d\n", flag);
+			if (flag != 0 && flag != -2)
 				g_terminal.env = synchronize_env(cmd->args[i]);
-			if (flag == 0)
+			if (flag == 0 && flag != -2)
 			{
 				insert_end_list(&g_terminal.expo, cmd->args[i]);
 				g_terminal.env = synchronize_env_adding(g_terminal.env, cmd->args[i]);

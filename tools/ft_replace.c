@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:07:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 15:20:15 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/25 00:57:59 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,19 @@ int	ft_compare(const char *s1, const char *s2)
 	return (*s1 == *s2);
 }
 
-// verify a string
+// echo "ola, $HOME" > outfile - $HOME
 int	check_contain(char *origin, char *set)
 {
+	int	position;
 	int	i;
 	int	j;
-	int	position;
 
 	i = -1;
 	position = 0;
-	while (origin[++i])
+	while (set && origin[++i])
 	{
 		j = 0;
-		while (origin[i] == set[j] && origin[i])
+		while (origin[i] && origin[i] == set[j])
 		{
 			if (j == 0)
 				position = i;
@@ -64,6 +64,33 @@ int	check_contain(char *origin, char *set)
 	return (-1);
 }
 
+// char	*ft_replace(char *dst, char *to, char *rep)
+// {
+// 	char	*new;
+// 	int		start;
+// 	int		i;
+// 	int		j;
+
+// 	start = check_contain(dst, to);
+// 	if (start < 0)
+// 		return (ft_strdup(dst));
+// 	new = malloc_ob((ft_strlen(dst, 0) - (ft_strlen(to, 0)) + ft_strlen(rep, 0) + 1));
+// 	j = -1;
+// 	i = 0;
+// 	while (to && rep && dst[++j])
+// 	{
+// 		if (i == start)
+// 			j += (ft_strlen(to, 0) - 1);
+// 		if (i == start)
+// 			while (*rep)
+// 				new[i++] = *rep++;
+// 		else
+// 			new[i++] = dst[j];
+// 	}
+// 	return (new);
+// }
+
+
 char	*ft_replace(char *dst, char *to, char *rep)
 {
 	char	*new;
@@ -72,21 +99,19 @@ char	*ft_replace(char *dst, char *to, char *rep)
 	int		j;
 
 	start = check_contain(dst, to);
-	if (start < 0)
-		return (NULL);
-	new = malloc_ob(((ft_strlen(dst, 0) - \
-	ft_strlen(to, 0)) + ft_strlen(rep, 0) + 1));
-	if (!new)
-		return (NULL);
+	if (start < 0 || !to || !rep)
+		return (ft_strdup(dst));
+	new = malloc_ob((ft_strlen(dst, 0) - \
+	(ft_strlen(to, 0)) + ft_strlen(rep, 0) + 1));
 	j = -1;
 	i = 0;
 	while (dst[++j])
 	{
-		if (i == start)
-			j += (ft_strlen(to, 0) - 1);
-		if (i == start)
+		if (j == start)
 			while (*rep)
 				new[i++] = *rep++;
+		if (j == start)
+			j += (ft_strlen(to, 0) - 1);
 		else
 			new[i++] = dst[j];
 	}

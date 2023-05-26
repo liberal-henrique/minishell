@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 18:23:43 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/26 09:53:38 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	create_str(char *new, char *s, int i, char set)
 	{
 		c = is_quote(*s);
 		if (!set && c != 0)
-			set = *s++;
-		else if (set == *s && *s++)
+			set = *s;
+		else if (set == *s && *s)
 			set = 0;
 		else if (!set && is_space(*s))
 			(*s) = 2;
@@ -51,33 +51,57 @@ void	create_str(char *new, char *s, int i, char set)
 	*new = 0;
 }
 
-void	ft_phrases(const char *line)
+int	check_sintaxe(const char *s, char set, int i, int j)
 {
-	char	*new;
+	int	spa;
+
+	while (s && s[i])
+	{
+		is_separator(&s[i], &j);
+		if (set == 0 && j != 0 && (s[i + 1] != '>' || s[i + 1] != '<'))
+		{
+			set = 1;
+			spa = i + 1;
+			while (is_space(s[spa]) && s[spa])
+				spa++;
+			if (!s[spa] || s[spa] == ';')
+				return (STATUS_ERROR);
+			if (check(s[spa]) || s[spa] == '>' || s[spa] == '<')
+				set = 0;
+			if (j == 2)
+				i++;
+		}
+		else if (set == 1 && j != 0 && !is_space(s[i]))
+			return (STATUS_ERROR);
+		i++;
+	}
+	return (STATUS_SUCCESS);
+}
+
+int	ft_phrases(const char *line)
+{
 	char	*new2;
 	char	**arr;
 	t_cmd	*list;
 
-	new = expander(g_terminal.env, (char *)line);
-	if (!new)
-	{
-		free(new);
-		new = NULL;
-	}
+	if (!line)
+		return (STATUS_ERROR);
+	if (check_sintaxe(line, 0, 0, 0) != 0)
+		return (printf("bash: syntax error near unexpected token 'newline'\n"));
 	new2 = malloc_ob(4096);
-	create_str(new2, new, 0, 0);
+	check_sintaxe(line, 0, 0, 0);
+	create_str(new2, (char *)line, 0, 0);
 	arr = ft_split(new2, 3);
 	list = create_list_tokens(arr);
+	expander_args(list);
 	build_cmds_list(&list);
-	//print_linked(list);
 	g_terminal.begin = list;
-	//printf("exp: %s\n", find_var("HOME"));
 	execute_main(list, 0, -1);
 	ft_wait(list);
-	// list->flag_quotes = flag;
-	free(new);
 	free_2d(arr);
+	free(new2);
 	deallocate(list);
+	return (STATUS_SUCCESS);
 }
 
 t_cmd	*create_list_tokens(char **arr)
@@ -99,4 +123,20 @@ t_cmd	*create_list_tokens(char **arr)
 		tmp = tmp->next;
 	}
 	return (begin);
+}
+
+t_cmd	*insert_end_tokens(t_cmd **root, char *s, t_cmd *end)
+{
+	t_cmd	*new_node;
+
+	new_node = malloc_ob(sizeof(t_cmd));
+	if (!new_node)
+		return (NULL);
+	new_node->next = NULL;
+	ft_tokens(&new_node->tokens, s);
+	if (!(*root))
+		*root = new_node;
+	else
+		end->next = new_node;
+	return (new_node);
 }

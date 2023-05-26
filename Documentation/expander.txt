@@ -1,0 +1,26 @@
+$> echo $HOME --> echo 5HOME
+>/nfs/homes/lliberal
+
+$> echo "$HOME." --> echo "5HOME"
+>/nfs/homes/lliberal
+
+$> echo "'$HOME'" --> echo "'5HOME'"
+>/nfs/homes/lliberal
+
+$> echo '$HOME'
+>$HOME
+
+estou a receber a line do meu user
+Quero alterar essa string e para fazer as minhas expansoes e deixar tamanho
+suficiente para acrescentar mais caracteres.
+
+-> Caso tenha single quotes e nao sera realizado;
+
+
+
+-> Portanto aqui eu posso percorrer a string e verificar se ha $ e
+caso seja encontrado vou substituir o caracter por 5.
+
+Se tive ' nao pode fazer expansao. A nao ser que elas estejam dentro de "
+Vou procurar a palavra que vier apos o 5. Ela ira terminar quando o
+char em questao for diferente de letras, numeros ou _.

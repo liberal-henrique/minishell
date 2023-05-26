@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/21 15:31:03 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/25 14:56:57 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,19 @@ int	is_quote(char c)
 	if (c == '\"')
 		return (1);
 	else if (c == '\'')
+		return (2);
+	return (0);
+}
+
+int	is_redirect(const char *s)
+{
+	if (s[0] == '<' && s[1] == '<')
+		return (3);
+	else if (s[0] == '>' && s[1] == '>')
+		return (4);
+	else if (s[0] == '<')
+		return (1);
+	else if (s[0] == '>')
 		return (2);
 	return (0);
 }
@@ -36,19 +49,6 @@ int	is_separator(const char *s, int *j)
 	else
 		*j = 0;
 	return (*j);
-}
-
-int	is_redirect(const char *s)
-{
-	if (s[0] == '<' && s[1] == '<')
-		return (3);
-	else if (s[0] == '>' && s[1] == '>')
-		return (4);
-	else if (s[0] == '<')
-		return (1);
-	else if (s[0] == '>')
-		return (2);
-	return (0);
 }
 
 int	is_space(char c)
