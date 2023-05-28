@@ -1,5 +1,5 @@
-# CC			=	cc -g -fsanitize=address
-CC			=	cc
+CC			=	cc -g -fsanitize=address
+#CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
 LDFLAGS		=	-lreadline
 RM			=	/bin/rm -f
@@ -15,9 +15,12 @@ SRCS		=	main.c \
 				builtin/ft_export.c \
 				builtin/ft_pwd.c \
 				builtin/ft_unset.c \
+				builtin/ft_dollar.c \
+				builtin/ft_exit.c \
 				execute/execute_redirections.c \
 				execute/execute.c \
 				execute/utils_exe.c \
+				execute/cleanall.c \
 				parse/expander.c \
 				parse/parsing.c \
 				parse/path.c \

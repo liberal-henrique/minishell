@@ -386,16 +386,33 @@ Dia 26 de Maio
 - Export: --> Nao esta a acrescenter multiplas variaveis perfeitamente sempre;
           --> Quando estiver a percorrer uma lista de multiplas variaveis a que tiver problemas
 		sera ignorada, porem o bash continuara a percorrer a lista a add ou atualizar as demais
-		variaveis.
-		--> As variaveis que irao para o exporte tambem precisam receber expansao.
+		variaveis. (CHECK)
+		--> As variaveis que irao para o exporte tambem precisam receber expansao. (CHECK)
 - Unset: --> precisa decrementar as variaveis recebidas do terminal e tambem as que nos adicionamos
-		multiplas vezes de forma consistente.
-		--> Nao esta a decrementar multiplas variaveis bem.
+		multiplas vezes de forma consistente. (CHECK)
+		--> Nao esta a decrementar multiplas variaveis bem. (CHECK)
+- Heredoc: --> O delimiter tambem precisa receber expansao. Caso, possua quotes nao havera expansao nem do
+		delimiter, nem do conteudo do heredoc. (CHECK)
+			-->
+-ECHO: --> esta a receber as flags como deve de ser (CHECK)
+
+
+
+Dia 27 de Maio
 - CTRL + D: --> Gera um segmentation fault. Acredito que tenhamos de limpar tudo que foi alocado, que sao:
 			- Lista de comandos e cada um dos elementos.
 			- Fds aberto em cada processo realizado.
 			- Variavel globais que possuem memoria alocada. Atualmente, as unicas que preenchem esse requisito
 			eh o export e o env.
-- Heredoc: --> O delimiter tambem precisa receber expansao. Caso, possua quotes nao havera expansao nem do
-		delimiter, nem do conteudo do heredoc.
+- Exit      --> Nos teremos de encerrar o programa, limpar tudo que foi criado, alterar o status da aplicacao,
+			lidar com qualquer argumento passado.
+- Remove the PATH --> Nenhum programa deveria ser executado a nao ser que passemos o path /bin/echo, por exemplo.
+			Estamos com um segmentation fault dentro da funcao build_cmds_list. Estamos a inserir o path de forma
+			equivocada.
 
+Nos temos de limpar
+--> g_terminal.env;
+--> g_terminal.expo;
+--> g_terminal.path;
+--> tokens
+--> tokens->str

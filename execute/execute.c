@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/25 16:21:58 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:09:25 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	close_shit(t_cmd *cmd)
 	cmd = temp;
 }
 
-int	execute_main(t_cmd *cmd, int in, int out)
+/* int	execute_main(t_cmd *cmd, int in, int out)
 {
 	if (ft_compare(cmd->args[0], "cd"))
 	{
@@ -85,16 +85,65 @@ int	execute_main(t_cmd *cmd, int in, int out)
 	if (cmd->next)
 		execute_main(cmd->next, cmd->fd[0], cmd->fd[1]);
 	return (STATUS_SUCCESS);
+} */
+
+int	execute_main(t_cmd *cmd, int in, int out)
+{
+	while (cmd)
+	{
+		if (ft_compare(cmd->args[0], "cd"))
+			execute_cd(cmd);
+		else if (ft_compare(cmd->args[0], "export"))
+			execute_export(cmd);
+		else if (ft_compare(cmd->args[0], "unset"))
+			execute_unset(cmd);
+		else if (ft_compare(cmd->args[0], "env"))
+			execute_env(cmd);
+		else if (ft_compare(cmd->args[0], "$?"))
+			execute_dollar(cmd);
+		else if (ft_compare(cmd->args[0], "exit"))
+			execute_exit(cmd);
+		else
+			execute_geral(cmd, in, out);
+		if (cmd->next)
+		{
+			in = cmd->fd[0];
+			out = cmd->fd[1];
+		}
+		cmd = cmd->next;
+	}
+	return (STATUS_SUCCESS);
+}
+
+int	execute_geral(t_cmd *cmd, int in, int out)
+{
+	if (out > 0)
+		close(out);
+	(void)out;
+	cmd->pid = fork();
+	if (cmd->pid == 0)
+	{
+		if (cmd->fd_master[0] > 2)
+			dup2(cmd->fd_master[0], STDIN_FILENO);
+		if (cmd->fd_master[0] < 3)
+			dup2(in, STDIN_FILENO);
+		if (cmd->fd_master[1] > 2)
+			dup2(cmd->fd_master[1], STDOUT_FILENO);
+		if (cmd->fd_master[1] < 3)
+			dup2(cmd->fd[1], STDOUT_FILENO);
+		close_shit(cmd);
+		exit(cmd->execute(cmd, in));
+	}
+	if (in != STDIN_FILENO)
+		close(in);
+	return (STATUS_SUCCESS);
 }
 
 int	execute_default(t_cmd *cmd)
 {
-	//printf("fd_master[0] :%d\n", cmd->fd_master[0]);
-	// if (!cmd->gpath)
-	// 	return (0);
 	if (execve(cmd->gpath, cmd->args, g_terminal.env) == -1)
 	{
-		printf("%s%s\n", cmd->args[0], ": command not found");
+		printf("%s%s\n", "command not found: ", cmd->args[0]);
 		g_terminal.status = 127;
 		return (g_terminal.status);
 	}
@@ -103,16 +152,15 @@ int	execute_default(t_cmd *cmd)
 
 void	ft_wait(t_cmd *cmd)
 {
-	int	wstatus;
-	t_cmd *temp = cmd;
+	t_cmd	*temp;
+	int		wstatus;
 
+	temp = cmd;
 	while (cmd)
 	{
 		waitpid(-1, &wstatus, WUNTRACED);
-		// close (STDOUT_FILENO);
 		wstatus = WEXITSTATUS(wstatus);
 		g_terminal.status = wstatus;
-		// dprintf(2, "t: %i\n", wstatus);
 		cmd = cmd->next;
 	}
 	while (temp)

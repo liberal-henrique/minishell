@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/26 10:48:00 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:31:00 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ struct s_token
 void					sighandler();
 
 //-----------parsing----------------------//
-int					ft_phrases(const char *line);
+int						ft_phrases(const char *line);
 t_cmd					*create_list_tokens(char **arr);
 void					cmd_redirect(t_cmd *cmd);
 void					clean_redirect_tokens(t_token **list);
@@ -88,7 +88,7 @@ char					*ft_strjoin_char(char *line, char c);
 
 //path
 char					*path_join(char *s1, char *s2);
-char					*get_path(char **env);
+char					*get_path(char **env, char *str);
 char					*get_gpath(char **env, char **args);
 
 //-----------expander--------------------//
@@ -126,6 +126,7 @@ char					*ft_substring(const char *str, int start, int end);
 
 //----------helpers------//
 int						is_quote(char c);
+
 int						is_separator(const char *s, int *j);
 int						is_redirect(const char *s);
 int						is_space(char c);
@@ -158,15 +159,20 @@ int						execute_env(t_cmd *cmd);
 int						execute_export(t_cmd *cmd);
 int						execute_pwd(t_cmd *cmd);
 int						execute_unset(t_cmd *cmd);
+int						execute_dollar(t_cmd *cmd);
+int						execute_exit(t_cmd *cmd);
 
 //-----------execute----------------------------//
 int						execute_redirection_out(t_cmd *cmd);
 int						execute_redirection_append_out(t_cmd *cmd);
-int						ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len);
+int						ft_heredoc(t_cmd *cmd, char *delimiter, \
+char *buf, int len);
 char					*ft_strjoin_rodraska(char *line, char *buf);
 int						execute_main(t_cmd *cmd, int in, int out);
+int						execute_geral(t_cmd *cmd, int in, int out);
 int						execute_default(t_cmd *cmd);
 void					ft_wait(t_cmd *cmd);
+void					cleanall(t_cmd *list);
 
 // --------utils_exe---------------------//
 char					**clone_env(char **env);
@@ -187,6 +193,7 @@ t_expo					*create_expo(char **env);
 char					**synchronize_env(char *cmd);
 char					**synchronize_env_adding(char **env, char *cmd);
 char					*put_quotes(char *str);
+int						env_variable_replaced(char *cmd, int *flag);
 
 extern t_terminal			g_terminal;
 

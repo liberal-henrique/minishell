@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/26 10:28:13 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:22:11 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,7 @@ int	execute_export(t_cmd *cmd)
 	{
 		while (cmd->args[i])
 		{
-			//printf("arg: %s, %d\n", cmd->args[i], flag);
 			env_variable_replaced(cmd->args[i], &flag);
-			//printf("flag: %d\n", flag);
 			if (flag != 0 && flag != -2)
 				g_terminal.env = synchronize_env(cmd->args[i]);
 			if (flag == 0 && flag != -2)

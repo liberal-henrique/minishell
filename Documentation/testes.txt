@@ -1,8 +1,9 @@
 
 Syntax ERROR
-- echo ola (NO ERROR)
-- echo ola > outfile (NO ERROR)
+- echo ola 			  (NO ERROR)
+- echo ola > outfile  (NO ERROR)
 - echo ola >> outfile (NO ERROR)
+- echo Luiz henrique > outfile | wc
 - echo ola > > outfile ERROR
 - echo ola >| outfile ERROR
 - echo ola > outfile | ERROR
@@ -10,7 +11,8 @@ Syntax ERROR
 - || ERROR
 - |> ERROR
 - >| ERROR
-
+- echo "'$HOME'" --> '/nfs/homes/lliberal'
+- echo '"$HOME"' --> "$HOME"
 
 HereDoc
 - cat << NO > out2 | cat << YES > out1 --> Estou indicando syntax error
@@ -23,11 +25,6 @@ lliberal
 $minishell
 
 -
-
-
-
-
-
 
 
 Parsing Testes
@@ -57,6 +54,7 @@ Testes para Pipes
 
 Tests paara o echo
 - echo Ola (CHECK)
+- echo $HO"ME"
 - echo -n Ola (CHECK)
 - echo -nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn Ola (CHECK)
 - echo -nnnnnnnnnnnnnnnnnnnnnnnnxxxxxnn Ola (CHECK)

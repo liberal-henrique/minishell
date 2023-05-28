@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/26 12:00:30 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:00:51 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,14 @@ char	*check_delimiter(char *delimiter, char *set, int start, int i)
 	return (new);
 }
 
+/* void	sighear(int	sig)
+{
+	if (sig == SIGINT)
+	{
+		// limpar tudo e dar exit do processo;
+	}
+} */
+
 int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 {
 	char	*line;
@@ -111,14 +119,16 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 
 	pipe(fd);
 	delimiter = check_delimiter(delimiter, &set, 0, -1);
-	//printf("set: %d\n", set);
 	if (set == 0)
 		delimiter = expander(delimiter);
-	//printf("del: %s\n", delimiter);
 	len = ft_strlen(delimiter, 0);
+	//signal(SIGQUIT, &sighear);
+	//signal(SIGINT, &sighear);
 	while (1)
 	{
 		line = readline(">");
+		if (!line)
+			printf("bash: warning: here-document at line 1 delimited by end-of-file (wanted '%s')\n", delimiter);
 		if (set == 0)
 			line = expander(line);
 		if (!ft_strncmp(line, delimiter, len))

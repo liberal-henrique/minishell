@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/26 09:53:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:17:02 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	check_sintaxe(const char *s, char set, int i, int j)
 	while (s && s[i])
 	{
 		is_separator(&s[i], &j);
-		if (set == 0 && j != 0 && (s[i + 1] != '>' || s[i + 1] != '<'))
+		if (set == 0 && j != 0 && (s[i + 1] != '>' && s[i + 1] != '<'))
 		{
 			set = 1;
 			spa = i + 1;
@@ -66,7 +66,7 @@ int	check_sintaxe(const char *s, char set, int i, int j)
 				spa++;
 			if (!s[spa] || s[spa] == ';')
 				return (STATUS_ERROR);
-			if (check(s[spa]) || s[spa] == '>' || s[spa] == '<')
+			if (check(s[spa]))
 				set = 0;
 			if (j == 2)
 				i++;
@@ -89,18 +89,17 @@ int	ft_phrases(const char *line)
 	if (check_sintaxe(line, 0, 0, 0) != 0)
 		return (printf("bash: syntax error near unexpected token 'newline'\n"));
 	new2 = malloc_ob(4096);
-	check_sintaxe(line, 0, 0, 0);
 	create_str(new2, (char *)line, 0, 0);
 	arr = ft_split(new2, 3);
+	free(new2);
 	list = create_list_tokens(arr);
+	free_2d(arr);
 	expander_args(list);
 	build_cmds_list(&list);
+	//print_linked(list);
 	g_terminal.begin = list;
 	execute_main(list, 0, -1);
 	ft_wait(list);
-	free_2d(arr);
-	free(new2);
-	deallocate(list);
 	return (STATUS_SUCCESS);
 }
 
@@ -116,6 +115,7 @@ t_cmd	*create_list_tokens(char **arr)
 	i = -1;
 	while (arr[++i])
 		end = insert_end_tokens(&begin, arr[i], end);
+	//free(end);
 	tmp = begin;
 	while (tmp)
 	{
@@ -134,6 +134,7 @@ t_cmd	*insert_end_tokens(t_cmd **root, char *s, t_cmd *end)
 		return (NULL);
 	new_node->next = NULL;
 	ft_tokens(&new_node->tokens, s);
+	// free(s);
 	if (!(*root))
 		*root = new_node;
 	else

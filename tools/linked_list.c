@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/26 10:47:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:12:42 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	clean_list_tokens(t_token *token)
 	while (token)
 	{
 		tmp = token->next;
+		free(token->str);
+		printf("3: %p\n", token->str);
 		free(token);
 		token = tmp;
 	}
@@ -39,6 +41,7 @@ void	deallocate(t_cmd *curr)
 	temp = NULL;
 	while (curr)
 	{
+		H;
 		temp = curr->next;
 		clean_list_tokens(curr->tokens);
 		free_2d(curr->args);
@@ -62,17 +65,17 @@ void	print_linked(t_cmd *curr)
 {
 	int	i;
 
-	printf("+++++++++++++++++++++++++++++++++++++++\n");
+	// printf("+++++++++++++++++++++++++++++++++++++++\n");
 	while (curr)
 	{
-		printf("------------------------------------\n");
+		// printf("------------------------------------\n");
 		i = -1;
 		token_print(curr->tokens);
 		while (curr->args[++i])
 			printf("Argumento: %i, %s\n", i, curr->args[i]);
-		printf("path: %s\n", curr->gpath);
-		printf("fd_master[0]: %i\n", curr->fd_master[0]);
-		printf("fd_master[1]: %i\n", curr->fd_master[1]);
+		// printf("path: %s\n", curr->gpath);
+		// printf("fd_master[0]: %i\n", curr->fd_master[0]);
+		// printf("fd_master[1]: %i\n", curr->fd_master[1]);
 		curr = curr->next;
 	}
 }

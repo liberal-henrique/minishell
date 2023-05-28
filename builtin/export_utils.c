@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:23:21 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/26 11:48:21 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 21:13:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ void	print_list(t_expo *node)
 
 void	print_list2(t_expo *node, t_cmd *cmd)
 {
-	int fd[2];
+	int	fd[2];
 
 	pipe(fd);
-
 	while (node)
 	{
 		write(fd[1], "declare -x ", ft_strlen("declare -x ", 0));

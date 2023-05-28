@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/25 11:22:54 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 13:09:03 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	expander_args(t_cmd *list)
 		temp = list->tokens;
 		while (temp)
 		{
+			if (!ft_strcmp(temp->str, "$?"))
+				return ;
 			str = temp->str;
 			if (str && !(*str == '\'' && str[ft_strlen(str, 0) - 1] == '\''))
 				temp->str = expander(str);

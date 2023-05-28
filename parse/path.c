@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/10 15:18:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 22:36:23 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*path_join(char *s1, char *s2)
 	return (new);
 }
 
-char	*get_path(char **env)
+char	*get_path(char **env, char *str)
 {
 	int	i;
 
@@ -47,11 +47,12 @@ char	*get_path(char **env)
 		&& env[i][2] == 'T' && env[i][3] == 'H')
 			return (ft_substring(env[i], 5, ft_strlen(env[i], 0)));
 	}
-	return (NULL);
+	return (ft_strdup(str));
 }
 
 char	*get_gpath(char **env, char **args)
 {
+	char	*single_path;
 	char	**path;
 	char	*new_path;
 	char	*cmd;
@@ -59,8 +60,11 @@ char	*get_gpath(char **env, char **args)
 
 	i = -1;
 	cmd = args[0];
-	g_terminal.path = get_path(env);
-	path = ft_split(g_terminal.path, ':');
+	// g_terminal.path = get_path(env, cmd);
+	// path = ft_split(g_terminal.path, ':');
+	single_path = get_path(env, cmd);
+	path = ft_split(single_path, ':');
+	free(single_path);
 	while (path && path[++i])
 	{
 		new_path = path_join(path[i], cmd);
@@ -71,6 +75,7 @@ char	*get_gpath(char **env, char **args)
 		}
 		free(new_path);
 	}
+
 	free_2d(path);
 	return (ft_strdup(args[0]));
 }
