@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_redirections.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 19:00:51 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 18:46:48 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 		free(line);
 	}
 	write(fd[1], buf, ft_strlen(buf, 0));
+	free(buf);
 	close(fd[1]);
 	cmd->fd_master[0] = fd[0];
 	free(delimiter);

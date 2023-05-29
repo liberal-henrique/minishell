@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 21:22:11 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:39:48 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_expo	*create_expo(char **env)
 
 	begin = NULL;
 	end = NULL;
-	i = 0;
+	i = -1;
 	while (env[++i])
 		end = insert_end_expo_list(&begin, env[i], &end);
 	bubblesort(begin);
@@ -55,8 +55,10 @@ int	export_variable_name(char *cmd)
 int	env_variable_replaced(char *cmd, int *flag)
 {
 	t_expo		*tmp;
+	char		*sub;
 	size_t		len_variable;
 	size_t		len_name;
+	t_expo		helper;
 
 	len_variable = 0;
 	len_name = ft_strlen(cmd, '=');
@@ -76,8 +78,16 @@ int	env_variable_replaced(char *cmd, int *flag)
 			len_variable = len_name;
 		if (ft_strncmp(tmp->variable, cmd, len_variable) == 0)
 		{
-			tmp->variable = ft_replace(tmp->variable, tmp->variable, ft_substring(cmd, 0, ft_strlen(cmd, '=')));
-			tmp->value = ft_replace(tmp->value, tmp->value, ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0)));
+			helper = *tmp;
+			sub = ft_substring(cmd, 0, ft_strlen(cmd, '='));
+			tmp->variable = ft_replace(tmp->variable, tmp->variable, sub);
+			free(helper.variable);
+			free(sub);
+			sub = NULL;
+			sub = ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0));
+			tmp->value = ft_replace(tmp->value, tmp->value, sub);
+			free(helper.value);
+			free(sub);
 			*flag = 1;
 		}
 		tmp = tmp->next;

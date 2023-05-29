@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 12:46:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 15:03:21 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ char	*remove_quotes(char *str)
 void	expander_args(t_cmd *list)
 {
 	t_token	*temp;
+	char	*tmp_str;
 	char	*s;
 
 	while (list)
@@ -76,9 +77,14 @@ void	expander_args(t_cmd *list)
 				return ;
 			s = temp->str;
 			if (s && !(*s == '\'' && s[ft_strlen(s, 0) - 1] == '\''))
-				temp->str = remove_quotes(expander(s));
+			{
+				tmp_str = expander(s);
+				temp->str = remove_quotes(tmp_str);
+				//free(tmp_str);
+			}	
 			else if (s && (*s == '\'' && s[ft_strlen(s, 0) - 1] == '\''))
 				temp->str = remove_quotes(s);
+			//free(s);
 			temp = temp->next;
 		}
 		list = list->next;

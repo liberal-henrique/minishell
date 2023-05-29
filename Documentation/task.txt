@@ -421,15 +421,16 @@ Nos temos de limpar
 Dia 29 de Maio
 
 Testes e Leaks que precisaremos melhorar
---> PWD esta a indicar leaks
---> Esse teste cd $HOME/Documents esta a indicar um erro de bash
---> Esse teste echo -n -n -nnnn -nnnnm esta a indicar leaks
---> Apenas indicando o $ esta a ter segmentation Fault
---> not_cmd bonjour > salut Nesse comando o minishell esta
+--> pwd esta a indicar leaks (CHECK)
+--> OLDPWD E PWD (CHECK)
+--> Esse teste cd $HOME/Documents esta a indicar um erro de bash (CHECK)
+--> Esse teste echo -n -n -nnnn -nnnnm esta a indicar leaks (CHECK)
+--> Apenas indicando o $ esta a ter segmentation Fault (MISSING)
+--> not_cmd bonjour > salut Nesse comando o minishell esta 
 a criar e a empurrar para o file salut a seguinte mensagem:
 "command not found: not_cmd". Enquanto essa mensagem no bash
 eh indicada no Terminal.
---> cat Makefile | grep pr | head -n 5 | cd test (mybin)
+--> cat Makefile | grep pr | head -n 5 | cd test (mybin) (CHECK)
 a mensagem de erro nao eh a mesma e nem o status code.
 --> cat Makefile | grep pr | head -n 5 | cd test mesma mensagem,
 porem o status code nao eh o mesmo;
@@ -481,3 +482,5 @@ a ser aceito.
 nada. Contudo estamos a escrever ^\. O minishell da gabi esta
 a ter o mesmo comportamento. Portanto, deveremos verificar se esse eh
 o comportamento padrao.
+
+

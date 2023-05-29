@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 13:01:02 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 18:46:04 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	create_str(char *new, char *s, int i, char set)
 int	check_sintaxe(const char *s, char set, int i, int j)
 {
 	int	spa;
-
+	int	v;
+	
 	while (s && s[i])
 	{
 		is_separator(&s[i], &j);
@@ -66,7 +67,7 @@ int	check_sintaxe(const char *s, char set, int i, int j)
 				spa++;
 			if (!s[spa] || s[spa] == ';')
 				return (STATUS_ERROR);
-			if (check(s[spa]))
+			if (!is_separator(&s[spa], &v))
 				set = 0;
 			if (j == 2)
 				i++;
@@ -96,7 +97,7 @@ int	ft_phrases(const char *line)
 	free_2d(arr);
 	expander_args(list);
 	build_cmds_list(&list);
-	// print_linked(list);
+	//print_linked(list);
 	g_terminal.begin = list;
 	execute_main(list, 0, -1);
 	ft_wait(list);

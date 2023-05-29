@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:26:27 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 18:47:53 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	deallocate(t_cmd *curr)
 	t_cmd	*temp;
 
 	temp = NULL;
+	//temp = curr;
 	while (curr)
 	{
 		temp = curr->next;
@@ -47,6 +48,7 @@ void	deallocate(t_cmd *curr)
 		free(curr);
 		curr = temp;
 	}
+	curr = NULL;
 }
 
 void	*get_function(char *name)

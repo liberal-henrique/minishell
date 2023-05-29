@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/24 17:00:50 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 16:21:17 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,11 @@ char	**clone_env(char **env)
 		return (NULL);
 	i = -1;
 	while (env[++i])
+	{
 		clone[i_c++] = ft_strdup(env[i]);
+		//free(env[i]);
+	}
+	//free_2d(env);
 	return (clone);
 }
 

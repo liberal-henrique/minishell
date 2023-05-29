@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/25 01:11:48 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 17:33:14 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,13 @@ char	**synchronize_env_adding(char **env, char *cmd)
 	while (new_env[++i])
 		new_env[i] = new_env[i];
 	new_env[i] = ft_strdup(cmd);
-	free(env);
+	free_2d(env);
 	return (new_env);
 }
 
 char	**synchronize_env(char *cmd)
 {
+	char	*tmp;
 	char	**new;
 	int		i;
 	size_t	length;
@@ -56,16 +57,17 @@ char	**synchronize_env(char *cmd)
 	len_variable = 0;
 	length = ft_strlen(cmd, '=');
 	new = clone_env(g_terminal.env);
+	free_2d(g_terminal.env);
 	while (new[++i])
 	{
-		if (ft_strlen(new[i], '=') > length)
-			len_variable = ft_strlen(new[i], '=');
-		else
-			len_variable = length;
-		if (ft_strncmp(new[i], cmd, len_variable) == 0)
+		len_variable = ft_strlen(new[i], '=');
+		if (ft_strncmp(new[i], cmd, len_variable) == 0 && new[i][len_variable == '='])
+		{
+			tmp = new[i];
 			new[i] = ft_replace(new[i], new[i], cmd);
+			free(tmp);
+		}
 	}
-	free_2d(g_terminal.env);
 	return (new);
 }
 

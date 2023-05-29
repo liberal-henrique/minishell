@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanall.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 21:10:25 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 22:08:53 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 18:37:33 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,14 @@ void	clean_tokens(t_token *list)
 	list = NULL;
 }
 
-void	cleanall(t_cmd *list)
+void	cleanall(t_cmd *list, int f)
 {
-	/* t_cmd	*tmp;
-
-	tmp = list;
-	while (tmp)
-	{
+	if (f == 0)
 		deallocate(list);
-		tmp = tmp->next;
-	} */
-	deallocate(list);
-	free_2d(g_terminal.env);
-	clean_expo(g_terminal.expo);
+	if (f == 1)
+	{
+		free_2d(g_terminal.env);
+		clean_expo(g_terminal.expo);
+	}
 	free(g_terminal.path);
-	//clean_tokens(list->tokens);
 }

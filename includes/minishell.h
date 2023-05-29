@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 11:25:42 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 19:55:21 by rreis-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ struct s_terminal
 	char			*path;
 	int				status;
 	t_cmd			*begin;
+	int				SHLVL;
 };
 
 struct s_cmd
@@ -172,7 +173,7 @@ int						execute_main(t_cmd *cmd, int in, int out);
 int						execute_geral(t_cmd *cmd, int in, int out);
 int						execute_default(t_cmd *cmd);
 void					ft_wait(t_cmd *cmd);
-void					cleanall(t_cmd *list);
+void					cleanall(t_cmd *list, int f);
 
 // --------utils_exe---------------------//
 char					**clone_env(char **env);
@@ -181,6 +182,7 @@ int						ft_strncmp(char *s1, char *s2, int n);
 char					*str_join(char *old, char *seg, char c);
 int						ft_strlen_2d(char **a);
 char					*find_var(char *var);
+int						ft_atoi(const char *str, int res, int i, int sign);
 
 void					print_list(t_expo *node);
 void					print_list2(t_expo *node, t_cmd *cmd);
