@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 21:31:00 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 11:25:42 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void					expander_args(t_cmd *list);
 //-----------tokens----------------------//
 void					token_add_back(t_token **root, char *str);
 void					token_remove(t_token **root, t_token *elem);
-void					ft_tokens(t_token **token, char *phrase);
+void					ft_tokens(t_token **token, char *phrase, int i);
 t_cmd					*insert_end_tokens(t_cmd **root, char *s, t_cmd *end);
 void					token_print(t_token *curr);
 

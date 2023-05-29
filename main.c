@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:01:48 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:18:51 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	g_terminal.env = clone_env(env);
-	g_terminal.expo = create_expo(env);
-	/* if (ft_strlen_2d(env) != 0)
+	// g_terminal.env = clone_env(env);
+	// g_terminal.expo = create_expo(env);
+	if (ft_strlen_2d(env) != 0)
 	{
 		g_terminal.env = clone_env(env);
 		g_terminal.expo = create_expo(env);
@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **env)
 	{
 		g_terminal.env = NULL;
 		g_terminal.expo = NULL;
-	} */
+	}
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, sighandler);
 	while (1)

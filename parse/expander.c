@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 13:09:03 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 12:46:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,26 @@ char	*expander(char *str)
 	return (expander(new));
 }
 
+char	*remove_quotes(char *str)
+{
+	char	*new;
+	int		end;
+
+	end = 0;
+	if (*str == '\"')
+		end = (ft_strlen(str, 0) - 1);
+	else if (*str == '\'')
+		end = (ft_strlen(str, 0) - 1);
+	else
+		return (str);
+	new = ft_substring(str, 1, end);
+	return (new);
+}
+
 void	expander_args(t_cmd *list)
 {
 	t_token	*temp;
-	char	*str;
+	char	*s;
 
 	while (list)
 	{
@@ -58,9 +74,11 @@ void	expander_args(t_cmd *list)
 		{
 			if (!ft_strcmp(temp->str, "$?"))
 				return ;
-			str = temp->str;
-			if (str && !(*str == '\'' && str[ft_strlen(str, 0) - 1] == '\''))
-				temp->str = expander(str);
+			s = temp->str;
+			if (s && !(*s == '\'' && s[ft_strlen(s, 0) - 1] == '\''))
+				temp->str = remove_quotes(expander(s));
+			else if (s && (*s == '\'' && s[ft_strlen(s, 0) - 1] == '\''))
+				temp->str = remove_quotes(s);
 			temp = temp->next;
 		}
 		list = list->next;

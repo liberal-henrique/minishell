@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:17:02 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:01:02 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	ft_phrases(const char *line)
 	free_2d(arr);
 	expander_args(list);
 	build_cmds_list(&list);
-	//print_linked(list);
+	// print_linked(list);
 	g_terminal.begin = list;
 	execute_main(list, 0, -1);
 	ft_wait(list);
@@ -115,7 +115,6 @@ t_cmd	*create_list_tokens(char **arr)
 	i = -1;
 	while (arr[++i])
 		end = insert_end_tokens(&begin, arr[i], end);
-	//free(end);
 	tmp = begin;
 	while (tmp)
 	{
@@ -133,8 +132,7 @@ t_cmd	*insert_end_tokens(t_cmd **root, char *s, t_cmd *end)
 	if (!new_node)
 		return (NULL);
 	new_node->next = NULL;
-	ft_tokens(&new_node->tokens, s);
-	// free(s);
+	ft_tokens(&new_node->tokens, s, -1);
 	if (!(*root))
 		*root = new_node;
 	else

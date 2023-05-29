@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:12:42 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:26:27 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	clean_list_tokens(t_token *token)
 	{
 		tmp = token->next;
 		free(token->str);
-		printf("3: %p\n", token->str);
 		free(token);
 		token = tmp;
 	}
@@ -41,7 +40,6 @@ void	deallocate(t_cmd *curr)
 	temp = NULL;
 	while (curr)
 	{
-		H;
 		temp = curr->next;
 		clean_list_tokens(curr->tokens);
 		free_2d(curr->args);

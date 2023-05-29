@@ -416,3 +416,68 @@ Nos temos de limpar
 --> g_terminal.path;
 --> tokens
 --> tokens->str
+
+
+Dia 29 de Maio
+
+Testes e Leaks que precisaremos melhorar
+--> PWD esta a indicar leaks
+--> Esse teste cd $HOME/Documents esta a indicar um erro de bash
+--> Esse teste echo -n -n -nnnn -nnnnm esta a indicar leaks
+--> Apenas indicando o $ esta a ter segmentation Fault
+--> not_cmd bonjour > salut Nesse comando o minishell esta
+a criar e a empurrar para o file salut a seguinte mensagem:
+"command not found: not_cmd". Enquanto essa mensagem no bash
+eh indicada no Terminal.
+--> cat Makefile | grep pr | head -n 5 | cd test (mybin)
+a mensagem de erro nao eh a mesma e nem o status code.
+--> cat Makefile | grep pr | head -n 5 | cd test mesma mensagem,
+porem o status code nao eh o mesmo;
+--> cat Makefile | grep pr | head -n 5 | cat test mesma mensagem
+e mesmo codigo
+--> $bla --> Esta a indicar command not found quando na verdade
+deveria apenas retornar o prompt.
+--> Caso torne o line com uma linha vazia o minishell encerrara.
+Isso por causa do CTRL + D no main.c.
+
+--> sleep 5 | exit --> o minishell esta a encerrar automaticamente
+quando na verdade deveria aguardar o tempo para sleep.
+
+--> ; --> deveria retornar syntax error, quando esta a retornar
+command not found.
+--> env -i ./minishell --> Estamos a correr nosso minishell, porem
+quando tentamos executar qualquer comando temos um SEGfault.
+
+
+Compilei com o fsanitize=address
+--> Caso inicie o minishell e corra o comando:
+- echo ola > outfile --> O file sera alterado de forma adequada.
+Contudo, caso repitamos o comando, nesse caso teremos leaks. Portanto,
+acredito que o problema seja na destruicao das listas de comandos antigas.
+
+--> O mesmo disposto em cima acontece com o append.
+echo ola >> outfile --> Caso seja a primeira
+execucao, nos nao teremos problema e o file sera alterado como devido. Contudo,
+ja repeticao do comando as coisas comecam a correr mal.
+
+--> cat << '$HOME' --> No expansion, parou no delimiter e nao detectou leaks. (CHECK)
+--> cat << "$HOME" --> No expansion, parou no delimiter e nao detectou leaks. (CHECK)
+
+--> cat << '$HOME' > outfile --> estamos a indicar bash: syntax error near
+unexpected token 'newline'. Contudo, o suposto seria empurrar o conteudo do
+heardoc para o file outfile e nao realizar expansoes.
+Na verdade, acabei de compilar o echo ola << eof > outfile e nao recebi um
+syntax error.
+
+cat << 'eof' > outfile --> syntax error near unexpected token 'newline'
+cat << $USER > outfile --> syntax error near unexpected token 'newline'
+
+Portanto, posso perceber que apos as duplas redirecoes podemos receber algo
+diferente de alphanumerico. Portanto, precisamos alargar esse range do que esta
+a ser aceito.
+
+
+--> ctrl + \ --> Acredito que nao deveriamos fazer
+nada. Contudo estamos a escrever ^\. O minishell da gabi esta
+a ter o mesmo comportamento. Portanto, deveremos verificar se esse eh
+o comportamento padrao.

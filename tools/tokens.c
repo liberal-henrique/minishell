@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 10:49:49 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:16:10 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/29 13:42:29 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	token_add_back(t_token **root, char *str)
 	if (!new_node)
 		return ;
 	new_node->next = NULL;
-
 	new_node->str = str;
-	printf("2: %p\n", new_node->str);
 	if (!(*root))
 		*root = new_node;
 	else
@@ -35,21 +33,15 @@ void	token_add_back(t_token **root, char *str)
 	}
 }
 
-void	ft_tokens(t_token **token, char *phrase)
+void	ft_tokens(t_token **token, char *phrase, int i)
 {
 	char	**tokens;
-	int		i;
 
 	tokens = ft_split(phrase, 2);
-	i = -1;
-	while (tokens[++i])
-	{
-		printf("1: %p\n", tokens[i]);
-		token_add_back(token, tokens[i]);
-	}
-	free(tokens);
 	// free(phrase);
-	//free_2d(tokens);
+	while (tokens[++i])
+		token_add_back(token, tokens[i]);
+	free(tokens);
 }
 
 void	token_remove(t_token **root, t_token *elem)
