@@ -106,3 +106,40 @@ Testes unset
 Testes Exit
 --> exit 10 + $? apos o encerramos deve retornar o codigo 10; (CHECK)
 --> exit -10 + $? apos o encerramos deve retornar o codigo 246; (CHECK)
+
+
+testes para dia 31 de maio
+
+--> echo ola 							(CHECK)
+--> echo $HOME (expandiu, sem leaks)	(CHECK)
+--> echo "$HOME" (expandiu, sem leaks)	(CHECK)
+--> echo '$HOME' (expandiu, sem leaks)	(CHECK)
+--> cat << '$HOME' --> No expansion, parou no delimiter e nao detectou leaks. (CHECK)
+--> cat << "$HOME" --> No expansion, parou no delimiter e nao detectou leaks. (CHECK)
+
+--> export a  --> deveria criar uma variavel sozinha (CHECK)
+--> export b= --> deveria criar uma variavel com igual e as aspas duplas  (CHECK)
+--> export c=12 --> cria normalmente		(CHECK)
+--> export 1m=12 --> Nao eh criado			(CHECK)
+--> export m1=12 --> eh criado normalmente	(CHECK)
+
+--> export bana banana bananana && unset banana --> esta a correr bem (CHECK)
+
+
+--> cat | ls --> funciona bem sem leaks(CHECK)
+--> ls | ls --> funciona bem sem leaks(CHECK)
+
+--> cat << "$HOME" --> funciona bem (CHECK)
+--> cat << '$HOME' --> funciona bem (CHECK)
+--> cat << $HOME --> estava detetar um leak de memoria pois o line fazia a expansao (CHECK)
+e o strncmp fazia o break. COntudo, o free(line) nao era alcancado. Portanto,
+coloquei um free(line) dentro do ft_strncmp. Assim nao esta mais a detetar os leaks.
+
+--> sleep 3 | exit --> aguarda o sleep e depois retorna o terminal (CHECK)
+
+--> exit (saiu sem leaks)				(CHECK)
+
+
+para comparar
+terei de analisa
+

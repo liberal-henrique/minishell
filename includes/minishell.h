@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 19:55:21 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:32:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int						execute_export(t_cmd *cmd);
 int						execute_pwd(t_cmd *cmd);
 int						execute_unset(t_cmd *cmd);
 int						execute_dollar(t_cmd *cmd);
-int						execute_exit(t_cmd *cmd);
+int						execute_exit(t_cmd *cmd, int len_cmd);
 
 //-----------execute----------------------------//
 int						execute_redirection_out(t_cmd *cmd);
@@ -196,6 +196,8 @@ char					**synchronize_env(char *cmd);
 char					**synchronize_env_adding(char **env, char *cmd);
 char					*put_quotes(char *str);
 int						env_variable_replaced(char *cmd, int *flag);
+
+char					*ft_itoa(int n);
 
 extern t_terminal			g_terminal;
 

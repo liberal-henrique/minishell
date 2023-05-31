@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 21:09:25 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:26:54 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,18 @@ void	close_shit(t_cmd *cmd)
 	return (STATUS_SUCCESS);
 } */
 
+int	cnt_here(t_cmd *node)
+{
+	if (node == NULL)
+		return (0);
+	return (1 + cnt_here(node->next));
+}
+
 int	execute_main(t_cmd *cmd, int in, int out)
 {
+	int	len_cmd;
+
+	len_cmd = cnt_here(cmd);
 	while (cmd)
 	{
 		if (ft_compare(cmd->args[0], "cd"))
@@ -102,7 +112,7 @@ int	execute_main(t_cmd *cmd, int in, int out)
 		else if (ft_compare(cmd->args[0], "$?"))
 			execute_dollar(cmd);
 		else if (ft_compare(cmd->args[0], "exit"))
-			execute_exit(cmd);
+			execute_exit(cmd, len_cmd);
 		else
 			execute_geral(cmd, in, out);
 		if (cmd->next)
@@ -143,7 +153,10 @@ int	execute_default(t_cmd *cmd)
 {
 	if (execve(cmd->gpath, cmd->args, g_terminal.env) == -1)
 	{
-		printf("%s%s\n", "command not found: ", cmd->args[0]);
+		// printf("%s%s\n", "command not found: ", cmd->args[0]);
+		write(2, "command not found: ", 19);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		write(2, "\n", 1);
 		g_terminal.status = 127;
 		return (g_terminal.status);
 	}

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 16:23:21 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 21:13:22 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:20:34 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,13 @@ void	print_list(t_expo *node)
 	{
 		printf("declare -x ");
 		printf("%s", tmp->variable);
-		printf("=");
-		printf("\"");
-		printf("%s", tmp->value);
-		printf("\"");
+		if (tmp->value)
+		{
+			// printf("=");
+			printf("\"");
+			printf("%s", tmp->value);
+			printf("\"");
+		}
 		printf("\n");
 		tmp = tmp->next;
 	}
@@ -38,7 +41,7 @@ void	print_list2(t_expo *node, t_cmd *cmd)
 	while (node)
 	{
 		write(fd[1], "declare -x ", ft_strlen("declare -x ", 0));
-		write(fd[1], node->variable, ft_strlen(node->variable, 0));
+		write(fd[1], node->variable, ft_strlen(node->variable, '='));
 		write(fd[1], "=", 1);
 		write(fd[1], "\"", 1);
 		write(fd[1], node->value, ft_strlen(node->value, 0));
@@ -107,7 +110,7 @@ t_expo	*insert_end_expo_list(t_expo **root, char *s, t_expo **end)
 	new_node = malloc_ob(sizeof(t_expo));
 	if (!new_node)
 		return (NULL);
-	new_node->variable = ft_substring(s, 0, ft_strlen(s, '='));
+	new_node->variable = ft_substring(s, 0, ft_strlen(s, '=') + 1);
 	new_node->value = ft_substring(s, (ft_strlen(s, '=') + 1), ft_strlen(s, 0));
 	if (!(*root))
 	{

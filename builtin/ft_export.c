@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 19:39:48 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:20:05 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,34 @@ int	export_variable_name(char *cmd)
 
 	i = -1;
 	if (!ft_isalpha(cmd[0]) && cmd[0] != '_' )
+	{
 		return (1);
+	}
 	if (cmd[0] == '_' && cmd[1] == '=')
+	{
 		return (3);
+	}
 	while (cmd[++i])
 	{
-		if (!ft_isalpha(cmd[i]) && !ft_isnum(cmd[i]))
+		if (!ft_isalpha(cmd[i]) && !ft_isnum(cmd[i]) && cmd[i] != '_')
+		{
 			return (2);
+		}
 		if (cmd[i + 1] == '=')
+		{
+
 			return (0);
+		}
 	}
 	return (0);
 }
 
 int	env_variable_replaced(char *cmd, int *flag)
 {
-	t_expo		*tmp;
 	char		*sub;
 	size_t		len_variable;
 	size_t		len_name;
+	t_expo		*tmp;
 	t_expo		helper;
 
 	len_variable = 0;
@@ -72,20 +81,21 @@ int	env_variable_replaced(char *cmd, int *flag)
 	}
 	while (tmp && cmd)
 	{
-		if (ft_strlen(tmp->variable, '=') > len_name)
+		if ((ft_strlen(tmp->variable, '=')) > len_name)
 			len_variable = ft_strlen(tmp->variable, '=');
 		else
 			len_variable = len_name;
 		if (ft_strncmp(tmp->variable, cmd, len_variable) == 0)
 		{
 			helper = *tmp;
-			sub = ft_substring(cmd, 0, ft_strlen(cmd, '='));
+			sub = ft_substring(cmd, 0, (ft_strlen(cmd, '=') + 1));
 			tmp->variable = ft_replace(tmp->variable, tmp->variable, sub);
 			free(helper.variable);
 			free(sub);
 			sub = NULL;
 			sub = ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0));
-			tmp->value = ft_replace(tmp->value, tmp->value, sub);
+			// tmp->value = ft_replace(tmp->value, tmp->value, sub);
+			tmp->value = ft_strdup(sub);
 			free(helper.value);
 			free(sub);
 			*flag = 1;
@@ -105,8 +115,8 @@ void	insert_end_list(t_expo **root, char *value)
 	if (!new_node)
 		return ;
 	new_node->next = NULL;
-	new_node->variable = ft_substring(value, 0, (ft_strlen(value, '=')));
-	new_node->value = ft_substring(value, (ft_strlen(value, '=') + 1), ft_strlen(value, 0));;
+	new_node->variable = ft_substring(value, 0, (ft_strlen(value, '=') + 1));
+	new_node->value = ft_substring(value, (ft_strlen(value, '=') + 1), ft_strlen(value, 0));
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_node;
@@ -124,7 +134,8 @@ int	execute_export(t_cmd *cmd)
 			print_list(g_terminal.expo);
 		else
 			print_list2(g_terminal.expo, cmd);
-		return (STATUS_SUCCESS);
+		g_terminal.status = STATUS_SUCCESS;
+		return (g_terminal.status);
 	}
 	else
 	{
@@ -141,5 +152,6 @@ int	execute_export(t_cmd *cmd)
 			i++;
 		}
 	}
-	return (STATUS_SUCCESS);
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
 }

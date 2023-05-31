@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 18:18:21 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:39:58 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,14 @@ int	execute_cd(t_cmd *cmd)
 	if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
 	{
 		if (chdir(cmd->args[1]) != 0)
-			return (STATUS_ERROR);
+		{
+			g_terminal.status = STATUS_ERROR;
+			return (g_terminal.status);
+		}
 		update_paths(cwd, cmd->args[1], 1);
 		free(cwd);
-		return (STATUS_SUCCESS);
+		g_terminal.status = STATUS_SUCCESS;
+		return (g_terminal.status);
 	}
 	str = str_join(cwd, cmd->args[1], '/');
 	if (chdir(str) != 0)
@@ -88,10 +92,12 @@ int	execute_cd(t_cmd *cmd)
 		free(str);
 		printf("%s%s%s\n", "bash: cd: ", cmd->args[1], ": No such file or directory");
 		free(cwd);
-		return (STATUS_ERROR);
+		g_terminal.status = STATUS_ERROR;
+		return (g_terminal.status);
 	}
 	update_paths(cwd, cmd->args[1], 2);
 	free(str);
 	free(cwd);
-	return (STATUS_SUCCESS);
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
 }

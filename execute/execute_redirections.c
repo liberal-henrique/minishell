@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_redirections.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 18:46:48 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:51:38 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,10 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 		if (set == 0)
 			line = expander(line);
 		if (!ft_strncmp(line, delimiter, len))
+		{
+			free(line);
 			break ;
+		}
 		buf = ft_strjoin_rodraska(buf, line);
 		free(line);
 	}

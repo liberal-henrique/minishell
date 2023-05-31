@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 17:33:14 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:08:00 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,7 @@ char	*find_var(char *var)
 	while (tmp)
 	{
 
-		len_var = ft_strlen(tmp->variable, 0);
-		// printf("ENV: %s (%zu / %zu) %i\n", tmp->variable, len_var, ft_strlen(var, 0), ft_strncmp(tmp->variable, var, len_var));
+		len_var = ft_strlen(tmp->variable, '=');
 		if (ft_strlen(var, 0) == len_var && ft_strncmp(tmp->variable, var, len_var) == 0)
 		{
 			// printf("OK: %s\n", tmp->value);

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 21:31:16 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:21:47 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,22 @@ int	ft_atoi(const char *str, int res, int i, int sign)
 	return (res * sign);
 }
 
-int	execute_exit(t_cmd *cmd)
+int	exit_pipe(int status)
 {
-	int	n;
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		exit(status);
+	}
+	return (status);
+}
+
+int	execute_exit(t_cmd *cmd, int len_cmd)
+{
 	int	status;
+	int	n;
 
 	n = -1;
 	status = 0;
@@ -47,7 +59,15 @@ int	execute_exit(t_cmd *cmd)
 		status = ft_atoi(cmd->args[1], 0, 0, 1);
 	else if (n == 3)
 		status = STATUS_ERROR;
-	printf("exit\n");
-	rl_clear_history();
-	exit(status);
+	if (len_cmd < 2)
+	{
+		printf("exit\n");
+		rl_clear_history();
+		exit(status);
+	}
+	else
+	{
+		exit_pipe(status);
+	}
+	return (status);
 }

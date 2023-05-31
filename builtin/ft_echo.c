@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:59:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 12:21:36 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 14:25:33 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	execute_echo(t_cmd *cmd)
 	}
 	if (flag == 0)
 		write(1, "\n", 1);
-	return (STATUS_SUCCESS);
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
 }
 
 

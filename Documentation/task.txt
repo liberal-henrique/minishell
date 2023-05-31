@@ -426,7 +426,7 @@ Testes e Leaks que precisaremos melhorar
 --> Esse teste cd $HOME/Documents esta a indicar um erro de bash (CHECK)
 --> Esse teste echo -n -n -nnnn -nnnnm esta a indicar leaks (CHECK)
 --> Apenas indicando o $ esta a ter segmentation Fault (MISSING)
---> not_cmd bonjour > salut Nesse comando o minishell esta 
+--> not_cmd bonjour > salut Nesse comando o minishell esta
 a criar e a empurrar para o file salut a seguinte mensagem:
 "command not found: not_cmd". Enquanto essa mensagem no bash
 eh indicada no Terminal.
@@ -461,8 +461,7 @@ echo ola >> outfile --> Caso seja a primeira
 execucao, nos nao teremos problema e o file sera alterado como devido. Contudo,
 ja repeticao do comando as coisas comecam a correr mal.
 
---> cat << '$HOME' --> No expansion, parou no delimiter e nao detectou leaks. (CHECK)
---> cat << "$HOME" --> No expansion, parou no delimiter e nao detectou leaks. (CHECK)
+
 
 --> cat << '$HOME' > outfile --> estamos a indicar bash: syntax error near
 unexpected token 'newline'. Contudo, o suposto seria empurrar o conteudo do

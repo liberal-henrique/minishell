@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 20:07:26 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:28:40 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**invent_env()
 	//t_expo	*expo;
 	char	**env;
 	char	*cwd;
-	
+
 	env = (char **)malloc_ob(sizeof(char *) * 4);
 	cwd = getcwd(NULL, 0);
 	env[0] = str_join("PWD", cwd, '=');
@@ -106,7 +106,7 @@ int	main(int ac, char **av, char **env)
 	(void) ac;
 	(void) av;
 	if (ft_strlen_2d(env) != 0)
-	{	
+	{
 		g_terminal.env = clone_env(env);
 		g_terminal.expo = create_expo(env);
 	}
@@ -120,10 +120,6 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("Minishell$ ");
-		if (!ft_strncmp(line, "./minishell", 11))
-		{
-			g_terminal.SHLVL += 1;
-		}
 		if (!line)
 		{
 			cleanall(g_terminal.begin, 1);

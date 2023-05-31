@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:15:29 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 13:48:38 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,7 @@ void	cmd_redirect(t_cmd *cmd)
 			ft_heredoc(cmd, tmp->next->str, NULL, 0);
 			//cmd->fd_master[0] = open("./.heredoc", O_RDONLY, 0444);
 			//cmd->fd_master[0] = cmd->fd[0];
-			// HERE;
 		}
-		//printf("ola\n");
 		tmp = tmp->next;
 		i++;
 	}
