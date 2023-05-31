@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 15:49:07 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 23:36:06 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**destroy_row(char **env, char *str)
 	char	**new;
 	int		i;
 	int		i_c;
-	int 	k;
+	int		k;
 
 	new = malloc_ob(sizeof(char *) * (ft_strlen_2d(env)));
 	i = 0;
@@ -56,9 +56,6 @@ void	destroy_first_node(t_expo **list)
 	tmp = NULL;
 }
 
-
-//if (ft_strncmp(g_terminal.env[length], cmd->args[i], ft_strlen(g_terminal.env[length], '=')) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(g_terminal.env[length], '='))
-
 void	destroy_node(t_expo **list, char *str)
 {
 	t_expo	*tmp;
@@ -69,11 +66,6 @@ void	destroy_node(t_expo **list, char *str)
 	i = 0;
 	tmp = (*list);
 	len = ft_strlen((*list)->variable, '=');
-	/* if (ft_strncmp((*list)->variable, str, len) == 0)
-	{
-		destroy_first_node(list);
-		return ;
-	} */
 	if (ft_strncmp((*list)->variable, str, ft_strlen((*list)->variable, '=')) == 0 && ft_strlen(str, 0) == ft_strlen((*list)->variable, '='))
 	{
 		destroy_first_node(list);
@@ -82,7 +74,6 @@ void	destroy_node(t_expo **list, char *str)
 	//printf("arg: %s\n", str);
 	while (tmp->next)
 	{
-		//printf("var :%s\n", (*list)->variable);
 		if (ft_strncmp(tmp->next->variable, str, ft_strlen(tmp->next->variable, '=')) == 0 && ft_strlen(str, 0) == ft_strlen(tmp->next->variable, '='))
 		{
 			aux = tmp->next;
@@ -132,8 +123,8 @@ int	execute_unset(t_cmd *cmd)
 		//len_variable = ft_strlen(g_terminal.env[length], '=');
 		if (ft_strncmp(g_terminal.env[length], cmd->args[i], ft_strlen(g_terminal.env[length], '=')) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(g_terminal.env[length], '='))
 		{
-			printf("var: %s\n", g_terminal.env[length]);
-			printf("arg: %s\n", cmd->args[i]);
+			//printf("var: %s\n", g_terminal.env[length]);
+			//printf("arg: %s\n", cmd->args[i]);
 			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
 			destroy_node(&g_terminal.expo, cmd->args[i]);
 			if (cmd->args[i + 1])

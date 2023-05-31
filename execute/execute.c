@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 13:26:54 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 20:28:19 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,11 @@ int	execute_main(t_cmd *cmd, int in, int out)
 			execute_unset(cmd);
 		else if (ft_compare(cmd->args[0], "env"))
 			execute_env(cmd);
-		else if (ft_compare(cmd->args[0], "$?"))
+		/* else if (ft_compare(cmd->args[0], "$?"))
+		{
+			T;
 			execute_dollar(cmd);
+		} */
 		else if (ft_compare(cmd->args[0], "exit"))
 			execute_exit(cmd, len_cmd);
 		else
@@ -122,7 +125,9 @@ int	execute_main(t_cmd *cmd, int in, int out)
 		}
 		cmd = cmd->next;
 	}
-	return (STATUS_SUCCESS);
+	return (0);
+	/* g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status); */
 }
 
 int	execute_geral(t_cmd *cmd, int in, int out)
@@ -131,11 +136,12 @@ int	execute_geral(t_cmd *cmd, int in, int out)
 		close(out);
 	(void)out;
 	cmd->pid = fork();
+	g_terminal.childs = 1;
 	if (cmd->pid == 0)
 	{
 		if (cmd->fd_master[0] > 2)
 			dup2(cmd->fd_master[0], STDIN_FILENO);
-		if (cmd->fd_master[0] < 3)
+		if (cmd->fd_master[0] < 3)	/* ft_wait(cmd); */
 			dup2(in, STDIN_FILENO);
 		if (cmd->fd_master[1] > 2)
 			dup2(cmd->fd_master[1], STDOUT_FILENO);
@@ -146,14 +152,22 @@ int	execute_geral(t_cmd *cmd, int in, int out)
 	}
 	if (in != STDIN_FILENO)
 		close(in);
-	return (STATUS_SUCCESS);
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
 }
+
+
 
 int	execute_default(t_cmd *cmd)
 {
+	// char	**clone;
+
+	// clone = clone_env(g_terminal.env);
+	// ft_strcpy(clone[find_env(clone)], ft_strjoin("SHLVL=", ft_itoa((ft_atoi(find_var("SHLVL="), 0, 0, 1)+ 1))));
+	// write(2, ft_itoa((ft_atoi(find_var("SHLVL="), 0, 0, 1)+ 1)), sizeof(ft_itoa((ft_atoi(find_var("SHLVL="), 0, 0, 1)+ 1))));
+	// if (execve(cmd->gpath, cmd->args, clone) == -1)
 	if (execve(cmd->gpath, cmd->args, g_terminal.env) == -1)
 	{
-		// printf("%s%s\n", "command not found: ", cmd->args[0]);
 		write(2, "command not found: ", 19);
 		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
 		write(2, "\n", 1);
@@ -161,6 +175,15 @@ int	execute_default(t_cmd *cmd)
 		return (g_terminal.status);
 	}
 	return (220);
+}
+
+int	find_env(char **env)
+{
+	int	f;
+
+	f = -1;
+	while (ft_strncmp(env[++f], "SHLVL=", 6));
+	return (f);
 }
 
 void	ft_wait(t_cmd *cmd)
@@ -173,6 +196,7 @@ void	ft_wait(t_cmd *cmd)
 	{
 		waitpid(-1, &wstatus, WUNTRACED);
 		wstatus = WEXITSTATUS(wstatus);
+		//printf("wstatus: %d", wstatus);
 		g_terminal.status = wstatus;
 		cmd = cmd->next;
 	}

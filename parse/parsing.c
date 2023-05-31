@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 18:46:04 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/05/31 17:27:05 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	check_sintaxe(const char *s, char set, int i, int j)
 {
 	int	spa;
 	int	v;
-	
+
 	while (s && s[i])
 	{
 		is_separator(&s[i], &j);
@@ -100,7 +100,9 @@ int	ft_phrases(const char *line)
 	//print_linked(list);
 	g_terminal.begin = list;
 	execute_main(list, 0, -1);
-	ft_wait(list);
+	//printf("global childs%d\n", g_terminal.childs);
+	if (g_terminal.childs == 1)
+		ft_wait(list);
 	return (STATUS_SUCCESS);
 }
 

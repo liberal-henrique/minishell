@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 14:20:05 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 20:04:41 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ int	env_variable_replaced(char *cmd, int *flag)
 	*flag = 0;
 	if (export_variable_name(cmd) != 0)
 	{
-		printf("Not a valid identifier\n"); // Here is_wrong()
+		printf("Not a valid identifier\n");
 		*flag = -2;
-		return (*flag);
+		return (STATUS_ERROR);
 	}
 	while (tmp && cmd)
 	{
@@ -94,7 +94,6 @@ int	env_variable_replaced(char *cmd, int *flag)
 			free(sub);
 			sub = NULL;
 			sub = ft_substring(cmd, (ft_strlen(cmd, '=') + 1), ft_strlen(cmd, 0));
-			// tmp->value = ft_replace(tmp->value, tmp->value, sub);
 			tmp->value = ft_strdup(sub);
 			free(helper.value);
 			free(sub);
@@ -102,7 +101,8 @@ int	env_variable_replaced(char *cmd, int *flag)
 		}
 		tmp = tmp->next;
 	}
-	return (*flag);
+	/* return (*flag); */
+	return (0);
 }
 
 void	insert_end_list(t_expo **root, char *value)
@@ -141,7 +141,11 @@ int	execute_export(t_cmd *cmd)
 	{
 		while (cmd->args[i])
 		{
-			env_variable_replaced(cmd->args[i], &flag);
+			if (env_variable_replaced(cmd->args[i], &flag) == 1)
+			{
+				g_terminal.status = STATUS_ERROR;
+				//return (g_terminal.status);
+			}
 			if (flag != 0 && flag != -2)
 				g_terminal.env = synchronize_env(cmd->args[i]);
 			if (flag == 0 && flag != -2)
@@ -152,6 +156,7 @@ int	execute_export(t_cmd *cmd)
 			i++;
 		}
 	}
-	g_terminal.status = STATUS_SUCCESS;
+	/* if (g_terminal.status == S)
+	g_terminal.status = STATUS_SUCCESS; */
 	return (g_terminal.status);
 }

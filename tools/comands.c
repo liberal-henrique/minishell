@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 13:48:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 23:43:29 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,27 @@ void	cmd_redirect(t_cmd *cmd)
 	t_token	*tmp;
 	int		f;
 	int		i;
+	int		fd;
 
 	tmp = cmd->tokens;
 	i = 0;
 
+	fd = 0;
 	while (tmp)
 	{
 		f = is_redirect(tmp->str);
 		if (f == 1)
-			cmd->fd_master[0] = open(tmp->next->str, O_RDONLY, 0444);
+		{
+			fd = open(tmp->next->str, O_RDONLY, 0444);
+			if (fd == -1)
+			{
+				write(2, "bash: ", 6);
+				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
+				write(2, ": No such file or directory\n", 28);
+				exit (1);
+			}
+			cmd->fd_master[0] = fd;
+		}
 		else if (f == 2)
 			cmd->fd_master[1] = open(tmp->next->str, \
 			O_CREAT | O_TRUNC | O_RDWR, 0644);

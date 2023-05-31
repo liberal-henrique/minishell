@@ -140,6 +140,17 @@ coloquei um free(line) dentro do ft_strncmp. Assim nao esta mais a detetar os le
 --> exit (saiu sem leaks)				(CHECK)
 
 
+--> echo "ola'aoishdfla"kj"sdfl'" --> ola'aoishdflakjsdfl'
+--> echo "ola,'mundo'" --> ola,'mundo'
+--> echo "ola,'m"u"ndo'" --> ola,'mundo'
+--> echo 'ola,'m"u"ndo'' --> ola,mundo
+--> echo 'ola,'mundo'' --> ola,mundo
+
+--> echo $. --> $.
+--> echo $HOME$
+
 para comparar
 terei de analisa
+
+---> export a n atualiza no env
 

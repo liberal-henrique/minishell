@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 13:28:40 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/05/31 23:44:10 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	**invent_env()
 }
 
 t_expo	*invent_expo(char **env)
-{			H;
+{
 	t_expo	*begin;
 	t_expo	*end;
 	int		i;
@@ -119,6 +119,7 @@ int	main(int ac, char **av, char **env)
 	signal(SIGINT, sighandler);
 	while (1)
 	{
+		g_terminal.childs = 0;
 		line = readline("Minishell$ ");
 		if (!line)
 		{
