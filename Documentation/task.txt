@@ -591,3 +591,5 @@ fica tonto.
 
 --> echo < ./butkljasf
 
+--> minishell dentro de minishell
+

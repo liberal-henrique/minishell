@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 18:25:14 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 23:36:09 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ struct s_terminal
 	t_cmd			*begin;
 	int				SHLVL;
 	int				childs;
+	int				heredoc;
+	int				stopheredoc;
+	int				in_cmd;
 };
 
 struct s_cmd
@@ -95,7 +98,7 @@ char					*path_join(char *s1, char *s2);
 char					*get_path(char **env, char *str);
 char					*get_gpath(char **env, char **args);
 
-int	find_env(char **env);
+int						find_env(char **env);
 
 //-----------expander--------------------//
 int						check(char c);
@@ -203,6 +206,7 @@ char					*remove_quotes(char *str);
 char					*put_quotes(char *str);
 int						env_variable_replaced(char *cmd, int *flag);
 char					*ft_itoa(int n);
+void					close_shit(t_cmd *cmd);
 
 extern t_terminal			g_terminal;
 

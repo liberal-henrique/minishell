@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 19:38:12 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 00:15:25 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,11 +144,6 @@ int	execute_main(t_cmd *cmd, int in, int out)
 			execute_env(cmd);
 		else if (!ft_strncmp(cmd->args[0], "./", 2) || !ft_strncmp(cmd->args[0], "/", 1))
 			execute_directory(cmd);
-		/* else if (ft_compare(cmd->args[0], "$?"))
-		{
-			T;
-			execute_dollar(cmd);
-		} */
 		else if (ft_compare(cmd->args[0], "exit"))
 			execute_exit(cmd, len_cmd);
 		else
@@ -176,7 +171,7 @@ int	execute_geral(t_cmd *cmd, int in, int out)
 	{
 		if (cmd->fd_master[0] > 2)
 			dup2(cmd->fd_master[0], STDIN_FILENO);
-		if (cmd->fd_master[0] < 3)	/* ft_wait(cmd); */
+		if (cmd->fd_master[0] < 3)
 			dup2(in, STDIN_FILENO);
 		if (cmd->fd_master[1] > 2)
 			dup2(cmd->fd_master[1], STDOUT_FILENO);
@@ -231,7 +226,6 @@ void	ft_wait(t_cmd *cmd)
 	{
 		waitpid(-1, &wstatus, WUNTRACED);
 		wstatus = WEXITSTATUS(wstatus);
-		//printf("wstatus: %d", wstatus);
 		g_terminal.status = wstatus;
 		cmd = cmd->next;
 	}

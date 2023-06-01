@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 23:44:10 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 00:14:25 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,29 @@ t_terminal	g_terminal;
 
 void	sighandler()
 {
-	printf("\n");
-	rl_on_new_line(); //Regenerate the prompt on a newline
-	rl_replace_line("", 1);// Clear the previous text
-	rl_redisplay(); //update the display of the current line on the terminal
-	//printf("\n");
+	if (g_terminal.heredoc == 1)
+	{
+		g_terminal.stopheredoc = 1;
+		g_terminal.status = 130;
+		g_terminal.heredoc = 0;
+		write(1, "\n", 1);
+		exit (130);
+	}
+	if (g_terminal.in_cmd == 1)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+		g_terminal.status = 130;
+		return ;
+	}
+	else
+	{
+		g_terminal.status = 130;
+		//g_terminal.in_cmd = 1;
+		return ;
+	}
 }
 
 unsigned int	nb_size(long int n)
@@ -105,6 +123,9 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
+	g_terminal.heredoc = 0;
+	g_terminal.stopheredoc = 0;
+	g_terminal.in_cmd = 1;
 	if (ft_strlen_2d(env) != 0)
 	{
 		g_terminal.env = clone_env(env);
@@ -119,6 +140,7 @@ int	main(int ac, char **av, char **env)
 	signal(SIGINT, sighandler);
 	while (1)
 	{
+		g_terminal.in_cmd = 1;
 		g_terminal.childs = 0;
 		line = readline("Minishell$ ");
 		if (!line)

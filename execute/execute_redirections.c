@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 19:29:12 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 00:05:35 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,37 +118,55 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 	char	*line;
 	char	set;
 	int		fd[2];
+	int		pid;
+	int		wstatus;
 
+	g_terminal.heredoc = 1;
+	g_terminal.in_cmd = 0;
 	pipe(fd);
-	delimiter = check_delimiter(delimiter, &set, 0, -1);
-	if (set == 0)
-		delimiter = expander(delimiter);
-	len = ft_strlen(delimiter, 0);
-	while (1)
+	pid = fork();
+	if (pid == 0)
 	{
-		line = readline(">");
-		if (!line && ft_strlen(line, 0) == 0)
-		{
-			printf("bash: warning: here-document at line 1 delimited by end-of-file (wanted '%s')\n", delimiter);
-			g_terminal.status = STATUS_SUCCESS;
-			break ;
-		}
+		delimiter = check_delimiter(delimiter, &set, 0, -1);
 		if (set == 0)
-			line = expander(line);
-		if (!ft_strncmp(line, delimiter, len))
+			delimiter = expander(delimiter);
+		len = ft_strlen(delimiter, 0);
+		while (!g_terminal.stopheredoc)
 		{
+			line = readline(">");
+			if (!line && ft_strlen(line, 0) == 0 && !g_terminal.stopheredoc)
+			{
+				write(2, "bash: warning: here-document at line 1 \
+				delimited by end-of-file (wanted `", 73);
+				write(2, delimiter, ft_strlen(delimiter, 0));
+				write(2, "')\n", 3);
+				break ;
+			}
+			if (set == 0)
+				line = expander(line);
+			if (!ft_strncmp(line, delimiter, len))
+			{
+				free(line);
+				break ;
+			}
+			buf = ft_strjoin_rodraska(buf, line);
 			free(line);
-			break ;
 		}
-		buf = ft_strjoin_rodraska(buf, line);
-		free(line);
+		write(fd[1], buf, ft_strlen(buf, 0));
+		free(buf);
+		close(fd[1]);
+		free(delimiter);
+		exit (130);
 	}
-	write(fd[1], buf, ft_strlen(buf, 0));
-	free(buf);
+	g_terminal.heredoc = 0;
 	close(fd[1]);
 	cmd->fd_master[0] = fd[0];
-	free(delimiter);
-	g_terminal.status = STATUS_SUCCESS;
+	//waitpid(pid, NULL, 0);
+	waitpid(pid, &wstatus, WUNTRACED);
+	wstatus = WEXITSTATUS(wstatus);
+	g_terminal.status = wstatus;
+	//printf("terminal status: %d\n", g_terminal.status);
+	//g_terminal.status = 130;
 	return (g_terminal.status);
 }
 
