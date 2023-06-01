@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 13:51:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 19:29:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ char	*check_delimiter(char *delimiter, char *set, int start, int i)
 	}
 } */
 
+
+
 int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 {
 	char	*line;
@@ -122,13 +124,15 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 	if (set == 0)
 		delimiter = expander(delimiter);
 	len = ft_strlen(delimiter, 0);
-	//signal(SIGQUIT, &sighear);
-	//signal(SIGINT, &sighear);
 	while (1)
 	{
 		line = readline(">");
-		if (!line)
+		if (!line && ft_strlen(line, 0) == 0)
+		{
 			printf("bash: warning: here-document at line 1 delimited by end-of-file (wanted '%s')\n", delimiter);
+			g_terminal.status = STATUS_SUCCESS;
+			break ;
+		}
 		if (set == 0)
 			line = expander(line);
 		if (!ft_strncmp(line, delimiter, len))
@@ -144,7 +148,8 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 	close(fd[1]);
 	cmd->fd_master[0] = fd[0];
 	free(delimiter);
-	return (STATUS_SUCCESS);
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
 }
 
 char	*ft_strjoin_rodraska(char *line, char *buf)

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 14:39:58 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:48:47 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,20 @@ void	update_pwd(char *new)
 
 void	update_paths(char *cwd, char *arg, int f)
 {
+	char	*dup;
+
 	if (f == 1)
 	{
+
+		dup = ft_strdup(arg);
+		update_pwd(dup);
 		update_oldpwd(cwd);
-		update_pwd(ft_strdup(arg));
+
 	}
 	else if (f == 2)
 	{
-		update_oldpwd(cwd);
 		update_pwd(str_join(cwd, arg, '/'));
+		update_oldpwd(cwd);
 	}
 }
 
@@ -73,8 +78,27 @@ int	execute_cd(t_cmd *cmd)
 	char	*cwd;
 
 	str = NULL;
+	if (cmd->args[2])
+	{
+		write(2, "bash: cd: too many arguments\n", 29);
+		g_terminal.status = STATUS_ERROR;
+		return (g_terminal.status);
+	}
 	cwd = getcwd(NULL, 0);
-	if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
+	if (ft_compare(cmd->args[1], "-"))
+	{
+		if (chdir(find_var("OLDPWD")) != 0)
+		{
+			g_terminal.status = STATUS_ERROR;
+			return (g_terminal.status);
+		}
+		update_paths(cwd, find_var("OLDPWD"), 1);
+		free(cwd);
+		printf("%s\n", find_var("PWD"));
+		g_terminal.status = STATUS_SUCCESS;
+		return (g_terminal.status);
+	}
+	else if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
 	{
 		if (chdir(cmd->args[1]) != 0)
 		{
@@ -90,7 +114,10 @@ int	execute_cd(t_cmd *cmd)
 	if (chdir(str) != 0)
 	{
 		free(str);
-		printf("%s%s%s\n", "bash: cd: ", cmd->args[1], ": No such file or directory");
+		write(2, "bash: cd: ", 10);
+		write(2, cmd->args[1], ft_strlen(cmd->args[1], 0));
+		write(2, ": No such file or directory\n", 28);
+		//printf("%s%s%s\n", "bash: cd: ", cmd->args[1], ": No such file or directory");
 		free(cwd);
 		g_terminal.status = STATUS_ERROR;
 		return (g_terminal.status);

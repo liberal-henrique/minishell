@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 20:04:41 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:25:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,25 @@ int	export_variable_name(char *cmd)
 	i = -1;
 	if (!ft_isalpha(cmd[0]) && cmd[0] != '_' )
 	{
-		return (1);
+		return (STATUS_ERROR);
 	}
 	if (cmd[0] == '_' && cmd[1] == '=')
 	{
-		return (3);
+		return (STATUS_ERROR);
 	}
 	while (cmd[++i])
 	{
 		if (!ft_isalpha(cmd[i]) && !ft_isnum(cmd[i]) && cmd[i] != '_')
 		{
-			return (2);
+			return (STATUS_ERROR);
 		}
 		if (cmd[i + 1] == '=')
 		{
 
-			return (0);
+			return (STATUS_SUCCESS);
 		}
 	}
-	return (0);
+	return (STATUS_SUCCESS);
 }
 
 int	env_variable_replaced(char *cmd, int *flag)
@@ -75,7 +75,8 @@ int	env_variable_replaced(char *cmd, int *flag)
 	*flag = 0;
 	if (export_variable_name(cmd) != 0)
 	{
-		printf("Not a valid identifier\n");
+		// printf("Not a valid identifier\n");
+		write(2, "Not a valid identifier\n", 23);
 		*flag = -2;
 		return (STATUS_ERROR);
 	}
@@ -147,11 +148,13 @@ int	execute_export(t_cmd *cmd)
 				//return (g_terminal.status);
 			}
 			if (flag != 0 && flag != -2)
-				g_terminal.env = synchronize_env(cmd->args[i]);
+				if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
+					g_terminal.env = synchronize_env(cmd->args[i]);
 			if (flag == 0 && flag != -2)
 			{
 				insert_end_list(&g_terminal.expo, cmd->args[i]);
-				g_terminal.env = synchronize_env_adding(g_terminal.env, cmd->args[i]);
+				if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
+					g_terminal.env = synchronize_env_adding(g_terminal.env, cmd->args[i]);
 			}
 			i++;
 		}

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:07:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/25 00:57:59 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:40:40 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ int	check_contain(char *origin, char *set)
 	while (set && origin[++i])
 	{
 		j = 0;
-		while (origin[i] && origin[i] == set[j])
+		while (origin[i] && set[j] && origin[i] == set[j])
 		{
 			if (j == 0)
 				position = i;
 			i++;
 			j++;
 		}
-		if (!set[j])
+		if (set[j] == '\0')
 			return (position);
 	}
 	return (-1);

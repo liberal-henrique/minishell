@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 23:36:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:56:36 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,28 @@ char	*find_needle(char *stack, char *needle)
 
 char	*expander(char *str)
 {
-	char	name[1024];
+	char	*name;
 	int		index;
 	int		start;
 	int		end;
 	char	*new;
 
-	// printf("%s\n", str);
 	start = -1;
 	end = 0;
 	index = 0;
 	str = find_needle(str, "$?");
+	name = malloc_ob(1024);
 	while (str[index] && end == 0)
 	{
 		if (start == -1 && str[index] == '$')
+		{
+			if (!str[index + 1] || str[index + 1] == '.')
+			{
+				free(name);
+				return (str);
+			}
 			start = index;
+		}
 		else if (start >= 0 && !check(str[index]) && ++end)
 			name[index] = 0;
 		if (end == 0 && start != -1)
@@ -73,9 +80,13 @@ char	*expander(char *str)
 		index++;
 	}
 	if (start == -1)
+	{
+		free(name);
 		return (str);
+	}
 	new = ft_replace(str, name, find_var(&name[1]));
 	free(str);
+	free(name);
 	return (expander(new));
 }
 
@@ -124,29 +135,29 @@ char	*remove_quotes_2(char *str, int fsingle, int fdouble)
 	}
 	return (new);
 }
-// echo ola''''"asdf" -- > olaasdf | ola"asdf"
+
 char	*remove_quotes(char *str)
 {
-	int		fsingle;
-	int		fdouble;
+	int		fune;
+	int		fdeux;
 	char	*new;
 	int		i;
 
-	fsingle = 0;
-	fdouble = 0;
+	fune = 0;
+	fdeux = 0;
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i] == '\'' && fsingle == 0 && (fdouble == 0 || fdouble == 2))
-			fsingle = 1;
-		else if (str[i] == '\'' && fsingle == 1)
-			fsingle = 2;
-		else if (str[i] == '\"' && (fsingle == 0 || fsingle == 2) && fdouble == 0)
-			fdouble = 1;
-		else if (str[i] == '\"' && fdouble == 1)
-			fdouble = 2;
+		if (str[i] == '\'' && fune == 0 && (fdeux == 0 || fdeux == 2))
+			fune = 1;
+		else if (str[i] == '\'' && fune == 1)
+			fune = 2;
+		else if (str[i] == '\"' && (fune == 0 || fune == 2) && fdeux == 0)
+			fdeux = 1;
+		else if (str[i] == '\"' && fdeux == 1)
+			fdeux = 2;
 	}
-	new = remove_quotes_2(str, fsingle, fdouble);
+	new = remove_quotes_2(str, fune, fdeux);
 	free(str);
 	return (new);
 }

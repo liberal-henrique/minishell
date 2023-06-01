@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 21:42:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:25:14 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@
 // Signal libraries
 # include<signal.h>
 # include<stdarg.h>
+# include<dirent.h>
 # include<sys/types.h>
+# include<sys/stat.h>
 
 # define STATUS_ERROR 1 //tmp
 # define STATUS_SUCCESS 0
@@ -197,6 +199,7 @@ char *s, t_expo **end);
 t_expo					*create_expo(char **env);
 char					**synchronize_env(char *cmd);
 char					**synchronize_env_adding(char **env, char *cmd);
+char					*remove_quotes(char *str);
 char					*put_quotes(char *str);
 int						env_variable_replaced(char *cmd, int *flag);
 char					*ft_itoa(int n);

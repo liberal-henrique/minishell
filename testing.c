@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 
 void	*malloc_ob(size_t length);
 
@@ -210,5 +212,8 @@ int	ft_isnum_t(char c)
 
 int	main(void)
 {
-	printf("%i\n", ft_isnum_t('1'));
+	int fd;
+
+	fd = open("myfile", O_CREAT | O_TRUNC | O_RDWR, 0644);
+	printf("fd: %d\n", fd);
 }

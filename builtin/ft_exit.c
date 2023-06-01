@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 23:07:11 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:11:06 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,12 @@ int	execute_exit(t_cmd *cmd, int len_cmd)
 
 	n = -1;
 	status = 0;
-	if (!is_all_num(cmd->args[1], 0))
+	if (ft_compare(cmd->args[0], "exit") && !cmd->args[1])
+	{
+		write(2, "exit\n", 5);
+		exit (0);
+	}
+	if (cmd->args[1] && !is_all_num(cmd->args[1], 0))
 	{
 		write(2, "exit\n", 5);
 		write(2, "bash: exit: ", 12);
@@ -152,7 +157,7 @@ int	execute_exit(t_cmd *cmd, int len_cmd)
 	//printf("status: %lld\n", status);
 	//printf("itoa: %s\n", itoa);
 	//printf("arg: %s\n", cmd->args[1]);
-	if (/* cmd->args[1][0] == '-' ||  */cmd->args[1][0] == '+')
+	if (cmd->args[1][0] == '+')
 	{
 		if ((ft_strncmp(itoa, &cmd->args[1][1], ft_strlen(itoa, 0)) != 0))
 		{

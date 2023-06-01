@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 23:43:29 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 21:22:37 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,22 +71,52 @@ void	cmd_redirect(t_cmd *cmd)
 		f = is_redirect(tmp->str);
 		if (f == 1)
 		{
+			tmp->next->str = remove_quotes(tmp->next->str);
 			fd = open(tmp->next->str, O_RDONLY, 0444);
 			if (fd == -1)
 			{
 				write(2, "bash: ", 6);
 				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
 				write(2, ": No such file or directory\n", 28);
-				exit (1);
+				exit(1);
+				// g_terminal.status = STATUS_ERROR;
+				// clean_redirect_tokens(&cmd->tokens);
+				// return ;
 			}
 			cmd->fd_master[0] = fd;
 		}
 		else if (f == 2)
-			cmd->fd_master[1] = open(tmp->next->str, \
-			O_CREAT | O_TRUNC | O_RDWR, 0644);
+		{
+			tmp->next->str = remove_quotes(tmp->next->str);
+			fd = open(tmp->next->str, O_CREAT | O_TRUNC | O_RDWR, 0644);
+			if (fd == -1)
+			{
+				write(2, "bash: ", 6);
+				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
+				write(2, ": No such file or directory\n", 28);
+				exit(1);
+				// g_terminal.status = STATUS_ERROR;
+				// clean_redirect_tokens(&cmd->tokens);
+				// return ;
+			}
+			cmd->fd_master[1] = fd;
+		}
 		else if (f == 4)
-			cmd->fd_master[1] = open(tmp->next->str, \
-			O_WRONLY | O_CREAT | O_APPEND, 0644);
+		{
+			tmp->next->str = remove_quotes(tmp->next->str);
+			fd = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd == -1)
+			{
+				write(2, "bash: ", 6);
+				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
+				write(2, ": No such file or directory\n", 28);
+				exit(1);
+				// g_terminal.status = STATUS_ERROR;
+				// clean_redirect_tokens(&cmd->tokens);
+				// return ;
+			}
+			cmd->fd_master[1] = fd;
+		}
 		else if (f == 3)
 		{
 			ft_heredoc(cmd, tmp->next->str, NULL, 0);

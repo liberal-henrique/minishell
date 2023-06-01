@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:30:26 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 20:38:47 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 11:47:16 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	execute_pwd(t_cmd *cmd)
 	else
 	{
 		perror("Error on getcwd\n");
-		return (STATUS_ERROR);
+		g_terminal.status = STATUS_ERROR;
+		return (g_terminal.status);
 	}
 	free(cwd);
 	return (STATUS_SUCCESS);

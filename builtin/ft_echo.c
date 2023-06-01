@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:59:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 14:25:33 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:15:11 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	execute_echo(t_cmd *cmd)
 
 	i = 0;
 	flag = 0;
-	while (check_flag(cmd->args[++i]))
+	while (cmd->args[1] && check_flag(cmd->args[++i]))
 			flag = 1;
-	while (cmd->args[i])
+	while (cmd->args[1] && cmd->args[i])
 	{
 		write(1, cmd->args[i], ft_strlen(cmd->args[i], 0));
 		if (cmd->args[i + 1])

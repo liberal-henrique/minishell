@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 17:27:05 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:33:04 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,11 @@ int	ft_phrases(const char *line)
 	if (!line)
 		return (STATUS_ERROR);
 	if (check_sintaxe(line, 0, 0, 0) != 0)
-		return (printf("bash: syntax error near unexpected token 'newline'\n"));
+	{
+		write(2, "bash: syntax error near unexpected token 'newline'\n", 51);
+		g_terminal.status = STATUS_ERROR;
+		return (g_terminal.status);
+	}
 	new2 = malloc_ob(4096);
 	create_str(new2, (char *)line, 0, 0);
 	arr = ft_split(new2, 3);

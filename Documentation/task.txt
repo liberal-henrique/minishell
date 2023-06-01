@@ -482,4 +482,112 @@ nada. Contudo estamos a escrever ^\. O minishell da gabi esta
 a ter o mesmo comportamento. Portanto, deveremos verificar se esse eh
 o comportamento padrao.
 
+--> Exit esta a ter segmentation fault, quando nao recebe (CHECK)
+argumentos
+
+--> bash: cd: -: No such file or directory (CHECK)
+
+Dia 01 de Junho
+
+--> Tratar da execucao sem as variaveis de ambiente
+--> Tratar da execucao sem o path para os comandos. Devemos nesse caso rodar nossos
+Builtins normalment.
+
+--> Nao estamos a fazer o modulo de 256 de numeros maiores que 256 dentro do EXIT
+--> Se executarmos ECHO sem qualquer argumento estamos a ter
+segmentation fault.
+
+
+--> echo ola$HOME$ Segmentation fault
+--> echo no arguments
+--> echo $HOME$
+--> echo $HOME --> Devemos repetir esses testes
+pois as vezes estamos a ter leaks
+
+--> $. --> A mensagem esta incompleta
+
+--> Nos temos de fazer as demais protecoes para as redirecoes
+
+--> Quando digitamos tabs o minishell prime todo ls.
+
+--> Quando digitamos um file /bin/ls/filethatdoesnotexist
+bash: /bin/ls/filethatdoesnotexist: Not a directory
+
+--> echo "|;" --> Segmentation Fault
+--> echo ola > outfile | ; --> Syntax error is putting us
+is a segmentation fault.
+
+--> echo ola > outfile | wc ; --> a mensagem de erro
+esta a ser errada
+
+
+
+--> /bin/ls/filethatdoesnotexist, apos $? + $?
+a mensagem deveria ser: 126: command not found
+
+--> $> bash: syntax error near unexpected token 'newline'
+[1]    234530 segmentation fault (core dumped)  ./minishell
+--> O tester esta a comecar com uma mensagem de segmentation
+fault.
+"
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==187650==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x0000004ced2c bp 0x7ffc0bd55400 sp 0x7ffc0bd553a0 T0)
+==187650==The signal is caused by a READ memory access.
+==187650==Hint: address points to the zero page.
+    #0 0x4ced2c in is_all_num /sgoinfre/goinfre/Perso/lliberal/mini_hell/builtin/ft_exit.c:113:7
+    #1 0x4cef2d in execute_exit /sgoinfre/goinfre/Perso/lliberal/mini_hell/builtin/ft_exit.c:132:7
+    #2 0x4d0e41 in execute_main /sgoinfre/goinfre/Perso/lliberal/mini_hell/execute/execute.c:118:4
+    #3 0x4d5262 in ft_phrases /sgoinfre/goinfre/Perso/lliberal/mini_hell/parse/parsing.c:102:2
+    #4 0x4c8e4a in main /sgoinfre/goinfre/Perso/lliberal/mini_hell/main.c:133:4
+    #5 0x7fb2540db082 in __libc_start_main /build/glibc-SzIz7B/glibc-2.31/csu/../csu/libc-start.c:308:16
+    #6 0x41c39d in _start (/sgoinfre/goinfre/Perso/lliberal/mini_hell/minishell+0x41c39d)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /sgoinfre/goinfre/Perso/lliberal/mini_hell/builtin/ft_exit.c:113:7 in is_all_num
+==187650==ABORTING
+"
+
+40 --> cd $PWD hi --> SEGMENTATION FAULT
+39 --> cd $PWD  --> SEGMENTATION FAULT
+
+Erro de pipes
+
+--> export GHOST=123 | env | grep GHOST
+ O output foi GHOST=123 quando na verdade nao deveria imprimir
+ nada e o exit code deveria ser 1;
+
+Redirects
+--> echo <"./test_files/infile" "bonjour       42"
+Nosso output deveria ser "bonjour 42", porem nao esta
+a ser impresso nada na tela.
+
+67 --> cat <"./test_files/file name with spaces"
+72 --> cat <"./test_files/infile"
+Deveria ser impresso o conteudo do ficheiro, porem nao esta a ser
+impresso nada e o status passado eh de erro quando deveria ser 0.
+
+138 --> $PWD
+mini exit code = 1
+bash exit code = 126
+mini error = ( /sgoinfre/goinfre/Perso/lliberal/mini_hell/minishell_tester)
+bash error = ( Is a directory)
+
+146 --> ./test_files
+mini exit code = 127
+bash exit code = 126
+mini error = ( ./test_files)
+bash error = ( Is a directory)
+
+-->  Do 72 ate o 85 nao estamos a ter nenhum positivo.
+--> Do 90 ate o 105 acertamos MUITO pouco.
+--> Do 120 ate o 125
+--> Basicamente, acertamos quando a coisa eh mais linear e/ou simples.
+Quando estamos a complexificar as coisas mais um bocado, nosso codigo
+fica tonto.
+
+--> testar infiles e outfiles com expansoes
+
+
+--> echo < ./butkljasf
 

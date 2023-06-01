@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 23:36:06 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:36:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	cnt(t_expo *node)
 		return (0);
 	return (1 + cnt(node->next));
 }
-
+/*
 int	execute_unset(t_cmd *cmd)
 {
 	int		len_variable;
@@ -120,11 +120,8 @@ int	execute_unset(t_cmd *cmd)
 	len_variable = 0;
 	while (g_terminal.env[++length] && cmd->args[i])
 	{
-		//len_variable = ft_strlen(g_terminal.env[length], '=');
 		if (ft_strncmp(g_terminal.env[length], cmd->args[i], ft_strlen(g_terminal.env[length], '=')) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(g_terminal.env[length], '='))
 		{
-			//printf("var: %s\n", g_terminal.env[length]);
-			//printf("arg: %s\n", cmd->args[i]);
 			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
 			destroy_node(&g_terminal.expo, cmd->args[i]);
 			if (cmd->args[i + 1])
@@ -137,5 +134,40 @@ int	execute_unset(t_cmd *cmd)
 			length = -1;
 		}
 	}
-	return (STATUS_SUCCESS);
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
+} */
+
+int	execute_unset(t_cmd *cmd)
+{
+	int		len_variable;
+	int		i;
+	t_expo	*tmp;
+
+	i = 1;
+	tmp = g_terminal.expo;
+	len_variable = 0;
+	while (tmp && cmd->args[i])
+	{
+		if (ft_strncmp(tmp->variable, cmd->args[i], ft_strlen(tmp->variable, '=')) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(tmp->variable, '='))
+		{
+			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
+			destroy_node(&g_terminal.expo, cmd->args[i]);
+			if (cmd->args[i + 1])
+			{
+				tmp = g_terminal.expo;
+				//length = -1;
+				i++;
+			}
+			else
+				break ;
+			tmp = g_terminal.expo;
+			//length = -1;
+		}
+		tmp = tmp->next;
+	}
+	g_terminal.status = STATUS_SUCCESS;
+	return (g_terminal.status);
 }
+
+

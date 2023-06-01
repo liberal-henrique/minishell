@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/31 20:28:19 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/01 19:38:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,39 @@ int	cnt_here(t_cmd *node)
 	return (1 + cnt_here(node->next));
 }
 
+int	execute_directory(t_cmd *cmd)
+{
+	DIR	*dir;
+	int	fd;
+
+	dir = opendir(cmd->args[0]);
+	fd = open(cmd->args[0], O_RDONLY, 0777);
+	if (dir != NULL)
+	{
+		g_terminal.status = 126;
+		write(2, "bash: ", 6);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		write(2, ": Is a directory\n", 17);
+	}
+	else if (fd != -1)
+	{
+		g_terminal.status = 126;
+		write(2, "bash: ", 6);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		write(2, ": Permission denied\n", 20);
+	}
+	else
+	{
+		g_terminal.status = 127;
+		write(2, "bash: ", 6);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		write(2, ": No such file or directory\n", 28);
+	}
+	closedir(dir);
+	close(fd);
+	return (g_terminal.status);
+}
+
 int	execute_main(t_cmd *cmd, int in, int out)
 {
 	int	len_cmd;
@@ -109,6 +142,8 @@ int	execute_main(t_cmd *cmd, int in, int out)
 			execute_unset(cmd);
 		else if (ft_compare(cmd->args[0], "env"))
 			execute_env(cmd);
+		else if (!ft_strncmp(cmd->args[0], "./", 2) || !ft_strncmp(cmd->args[0], "/", 1))
+			execute_directory(cmd);
 		/* else if (ft_compare(cmd->args[0], "$?"))
 		{
 			T;
