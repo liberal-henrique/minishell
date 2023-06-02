@@ -205,15 +205,118 @@ int	ft_strncmp(char *s1, char *s2, int n)
 // 	return 0;
 // }
 
-int	ft_isnum_t(char c)
+char	*remove_quotes(char *str)
 {
-	return (c >= '0' && c <= '9');
+	char	*new;
+	char	s;
+	int		i;
+
+	s = 0;
+	i = 0;
+	new = malloc_ob(ft_strlen(str,0));
+	while (*str)
+	{
+		if (s == 0 && (*str == '\'' || *str == '\"'))
+			s = *str;
+		else if (*str == s)
+			s = 0;
+		else
+			new[i++] = *str;
+		str++;
+	}
+	//free(str);
+	return (new);
+}
+
+int	is_quote(char c)
+{
+	if (c == '\"')
+		return (1);
+	else if (c == '\'')
+		return (2);
+	return (0);
+}
+
+int	is_separator_here(const char *s, int *j)
+{
+	if (s[0] == '>' && s[1] == '>')
+		*j = (2);
+	else if (s[0] == '<' && s[1] == '<')
+		*j = (2);
+	else if (s[0] == '>')
+		*j = (3);
+	else if (s[0] == '<')
+		*j = (4);
+	else if (s[0] == '|')
+		*j = (5);
+	else
+		*j = 0;
+	return (*j);
+}
+
+int	check_sintaxe(const char *s, char set, int i, int j)
+{
+	int	a;
+	int	spa;
+	int	g;
+	int	h;
+
+	spa = 0;
+	g = 0;
+	a = 0;
+	while (is_space(s[++i]))
+		;
+	if (s[i] == '|')
+		return (1);
+	while (s && s[++i])
+	{
+		if (a == 0 && is_quote(s[i]) != 0)
+		{
+			printf("is quote\n");
+			a = s[i];
+		}
+		else if (is_quote(s[i]) != 0 && a == s[i])
+		{
+			printf("eh nois\n");
+			a = 0;
+		}
+		if (is_separator_here(&s[i], &g) != 0 && a == 0)
+		{
+			printf("here\n");
+			j = 1;
+			spa = i + 1;
+			if (g == 2)
+				spa++;
+			while (is_space(s[spa]))
+				spa++;
+			if ((g != 5 && g != 0 && is_separator_here(&s[spa], &h) != 0) \
+			|| (g == 5 && s[spa] == '|') || !s[spa])
+				return (1);
+			else
+				j = 0;
+		}
+	}
+	// if (j == 1 && !s[i])
+	// {
+	// 	printf("OLA\n");
+	// 	return (1);
+	// }
+	return (0);
 }
 
 int	main(void)
 {
-	int fd;
+	printf("1 check: %d\n", check_sintaxe("echo ola << |oi | asdf", 0, -1, 0));
+	printf("2 check: %d\n", check_sintaxe("echo ola << oi | asdf", 0, -1, 0));
+	printf("3 check: %d\n", check_sintaxe("echo ola |oi | asdf | asdf", 0, -1, 0));
+	printf("4 check: %d\n", check_sintaxe("echo ola << < oi | asdf ", 0, -1, 0));
+	printf("5 check: %d\n", check_sintaxe("echo ola <<<<<< |oi | asdf", 0, -1, 0));
+	printf("6 check: %d\n", check_sintaxe("echo ola <<  > |oi | asdf", 0, -1, 0));
+	printf("7 check: %d\n", check_sintaxe("echo ola << >> |oi | asdf", 0, -1, 0));
+	printf("8 check: %d\n", check_sintaxe("echo ola << |oi | asdf >", 0, -1, 0));
+	printf("9 check: %d\n", check_sintaxe("oi | a >", 0, -1, 0));
+	printf("10 check: %d\n", check_sintaxe("asdf | asdf > a", 0, -1, 0));
+	printf("11 check: %d\n", check_sintaxe("asdf < asdf < asdf < > asfd |", 0, -1, 0));
 
-	fd = open("myfile", O_CREAT | O_TRUNC | O_RDWR, 0644);
-	printf("fd: %d\n", fd);
+
 }

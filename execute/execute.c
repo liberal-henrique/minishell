@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 00:15:25 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 17:37:20 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ int	execute_main(t_cmd *cmd, int in, int out)
 			execute_unset(cmd);
 		else if (ft_compare(cmd->args[0], "env"))
 			execute_env(cmd);
-		else if (!ft_strncmp(cmd->args[0], "./", 2) || !ft_strncmp(cmd->args[0], "/", 1))
+		else if (cmd->is_type != 0)
 			execute_directory(cmd);
 		else if (ft_compare(cmd->args[0], "exit"))
 			execute_exit(cmd, len_cmd);
@@ -156,18 +156,20 @@ int	execute_main(t_cmd *cmd, int in, int out)
 		cmd = cmd->next;
 	}
 	return (0);
-	/* g_terminal.status = STATUS_SUCCESS;
-	return (g_terminal.status); */
 }
 
 int	execute_geral(t_cmd *cmd, int in, int out)
 {
+	int pid;
+
 	if (out > 0)
 		close(out);
 	(void)out;
-	cmd->pid = fork();
+	pid = fork();
+	if (cmd->pid == -1)
+		cmd->pid = pid;
 	g_terminal.childs = 1;
-	if (cmd->pid == 0)
+	if (pid == 0)
 	{
 		if (cmd->fd_master[0] > 2)
 			dup2(cmd->fd_master[0], STDIN_FILENO);
@@ -186,7 +188,14 @@ int	execute_geral(t_cmd *cmd, int in, int out)
 	return (g_terminal.status);
 }
 
+// int	find_env(char **env)
+// {
+// 	int	f;
 
+// 	f = -1;
+// 	while (ft_strncmp(env[++f], "SHLVL=", 6));
+// 	return (f);
+// }
 
 int	execute_default(t_cmd *cmd)
 {
@@ -202,18 +211,9 @@ int	execute_default(t_cmd *cmd)
 		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
 		write(2, "\n", 1);
 		g_terminal.status = 127;
-		return (g_terminal.status);
+		exit (g_terminal.status);
 	}
 	return (220);
-}
-
-int	find_env(char **env)
-{
-	int	f;
-
-	f = -1;
-	while (ft_strncmp(env[++f], "SHLVL=", 6));
-	return (f);
 }
 
 void	ft_wait(t_cmd *cmd)
@@ -224,9 +224,18 @@ void	ft_wait(t_cmd *cmd)
 	temp = cmd;
 	while (cmd)
 	{
-		waitpid(-1, &wstatus, WUNTRACED);
-		wstatus = WEXITSTATUS(wstatus);
-		g_terminal.status = wstatus;
+		/* if (cmd->args)
+		 	printf("%s  pid: %d\n", *cmd->args, cmd->pid); */
+		if (cmd->pid != -1 && waitpid(cmd->pid, &wstatus, WUNTRACED) > 0)
+		{
+			wstatus = WEXITSTATUS(wstatus);
+			g_terminal.status = wstatus;
+		}
+		else
+		{
+			g_terminal.status = cmd->status;
+		}
+
 		cmd = cmd->next;
 	}
 	while (temp)
@@ -241,5 +250,4 @@ void	ft_wait(t_cmd *cmd)
 			close(temp->fd_master[1]);
 		temp = temp->next;
 	}
-
 }

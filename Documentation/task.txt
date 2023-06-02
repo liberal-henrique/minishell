@@ -589,7 +589,34 @@ fica tonto.
 --> testar infiles e outfiles com expansoes
 
 
---> echo < ./butkljasf
+--> Estamos a ter leaks dentro do minishell quando iniciado sem as variaveis de am-
+biente. (CHECK)
 
+
+Tasks para o dia 02 de Junho
+
+--> Estamos a ter um problema com o parsing na hora de realizar o open file
+de ficheiros que estiverem dentro de double quotes ou single quotes.
+
+--> DEal with this shit $>. Devemos fazer expansao apenas quando o next char
+eh numero, letra e  e
+
+--> echo < ./butkljasf
+--> na execucao do execute diretory estavamos a realizar o ft_strncmp. Contudo, com esse
+acrescimo nao conseguiamos compilar codigo dentro da linha /bin/cat outfile. Tinhamos a
+mensagem de error permission denied. Dessa forma, tirei isso mas deveremos repensar em outras
+formas de contornar aquela situacao.
 --> minishell dentro de minishell
 
+--> echo "''"12'23 '"''"343
+
+--> Devemos exibir o TAB
+
+
+--> Executing cat + ctrl + C
+
+--> Executing cat + ctrl + \ --> ^\Quit (core dumped)
+
+--> export a; export a=3 (n ta a aparecer no env)
+
+//echo fudido > outfile > out2 | <main.c wc > olafile

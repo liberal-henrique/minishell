@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 17:48:47 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 15:04:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,34 +81,34 @@ int	execute_cd(t_cmd *cmd)
 	if (cmd->args[2])
 	{
 		write(2, "bash: cd: too many arguments\n", 29);
-		g_terminal.status = STATUS_ERROR;
-		return (g_terminal.status);
+		cmd->status = STATUS_ERROR;
+		return (cmd->status);
 	}
 	cwd = getcwd(NULL, 0);
 	if (ft_compare(cmd->args[1], "-"))
 	{
 		if (chdir(find_var("OLDPWD")) != 0)
 		{
-			g_terminal.status = STATUS_ERROR;
-			return (g_terminal.status);
+			cmd->status = STATUS_ERROR;
+			return (cmd->status);
 		}
 		update_paths(cwd, find_var("OLDPWD"), 1);
 		free(cwd);
-		printf("%s\n", find_var("PWD"));
-		g_terminal.status = STATUS_SUCCESS;
-		return (g_terminal.status);
+		// printf("%s\n", find_var("PWD"));
+		cmd->status = STATUS_SUCCESS;
+		return (cmd->status);
 	}
 	else if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
 	{
 		if (chdir(cmd->args[1]) != 0)
 		{
-			g_terminal.status = STATUS_ERROR;
-			return (g_terminal.status);
+			cmd->status = STATUS_ERROR;
+			return (cmd->status);
 		}
 		update_paths(cwd, cmd->args[1], 1);
 		free(cwd);
-		g_terminal.status = STATUS_SUCCESS;
-		return (g_terminal.status);
+		cmd->status = STATUS_SUCCESS;
+		return (cmd->status);
 	}
 	str = str_join(cwd, cmd->args[1], '/');
 	if (chdir(str) != 0)
@@ -117,14 +117,13 @@ int	execute_cd(t_cmd *cmd)
 		write(2, "bash: cd: ", 10);
 		write(2, cmd->args[1], ft_strlen(cmd->args[1], 0));
 		write(2, ": No such file or directory\n", 28);
-		//printf("%s%s%s\n", "bash: cd: ", cmd->args[1], ": No such file or directory");
 		free(cwd);
-		g_terminal.status = STATUS_ERROR;
-		return (g_terminal.status);
+		cmd->status = STATUS_ERROR;
+		return (cmd->status);
 	}
 	update_paths(cwd, cmd->args[1], 2);
 	free(str);
 	free(cwd);
-	g_terminal.status = STATUS_SUCCESS;
-	return (g_terminal.status);
+	cmd->status = STATUS_SUCCESS;
+	return (cmd->status);
 }

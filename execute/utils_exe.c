@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rreis-de <rreis-de@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 16:21:17 by rreis-de         ###   ########.fr       */
+/*   Updated: 2023/06/02 11:38:39 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*str_join(char *old, char *seg, char c)
 
 	old_len = ft_strlen(old, 0);
 	seg_len = ft_strlen(seg, 0);
-	new = (char *)malloc(old_len + seg_len + 2);
+	new = malloc_ob(old_len + seg_len + 2);
 	i = -1;
 	while (++i < old_len)
 		new[i] = old[i];

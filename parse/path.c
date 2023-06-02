@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 22:36:23 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 15:16:08 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ char	*get_gpath(char **env, char **args)
 
 	i = -1;
 	cmd = args[0];
-	// g_terminal.path = get_path(env, cmd);
-	// path = ft_split(g_terminal.path, ':');
 	single_path = get_path(env, cmd);
 	path = ft_split(single_path, ':');
 	free(single_path);

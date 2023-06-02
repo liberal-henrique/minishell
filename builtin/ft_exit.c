@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 15:11:06 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:34:39 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,11 @@ long long	ft_atoi_long(const char *str, long long res, int i, int sign)
 	return (res * sign);
 }
 
-int	exit_pipe(int status)
+int	exit_pipe(t_cmd *cmd, int status)
 {
-	int	pid;
-
-	pid = fork();
+	cmd->pid = fork();
 	g_terminal.childs = 1;
-	if (pid == 0)
+	if (cmd->pid == 0)
 	{
 		exit(status);
 	}
@@ -154,9 +152,6 @@ int	execute_exit(t_cmd *cmd, int len_cmd)
 		exit(1);
 	}
 	itoa = ft_itoa_long(status);
-	//printf("status: %lld\n", status);
-	//printf("itoa: %s\n", itoa);
-	//printf("arg: %s\n", cmd->args[1]);
 	if (cmd->args[1][0] == '+')
 	{
 		if ((ft_strncmp(itoa, &cmd->args[1][1], ft_strlen(itoa, 0)) != 0))
@@ -179,7 +174,7 @@ int	execute_exit(t_cmd *cmd, int len_cmd)
 	}
 	else
 	{
-		exit_pipe(status);
+		exit_pipe(cmd, status);
 	}
 	return (status);
 }

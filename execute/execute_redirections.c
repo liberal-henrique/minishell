@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 00:05:35 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 17:41:03 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,18 +118,17 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 	char	*line;
 	char	set;
 	int		fd[2];
-	int		pid;
-	int		wstatus;
+	// int		wstatus;
 
 	g_terminal.heredoc = 1;
 	g_terminal.in_cmd = 0;
 	pipe(fd);
-	pid = fork();
-	if (pid == 0)
+	cmd->pid = fork();
+	if (cmd->pid == 0)
 	{
 		delimiter = check_delimiter(delimiter, &set, 0, -1);
 		if (set == 0)
-			delimiter = expander(delimiter);
+			delimiter = expander(delimiter, 0);
 		len = ft_strlen(delimiter, 0);
 		while (!g_terminal.stopheredoc)
 		{
@@ -143,7 +142,7 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 				break ;
 			}
 			if (set == 0)
-				line = expander(line);
+				line = expander(line, 0);
 			if (!ft_strncmp(line, delimiter, len))
 			{
 				free(line);
@@ -156,17 +155,11 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 		free(buf);
 		close(fd[1]);
 		free(delimiter);
-		exit (130);
+		exit (0);
 	}
 	g_terminal.heredoc = 0;
 	close(fd[1]);
 	cmd->fd_master[0] = fd[0];
-	//waitpid(pid, NULL, 0);
-	waitpid(pid, &wstatus, WUNTRACED);
-	wstatus = WEXITSTATUS(wstatus);
-	g_terminal.status = wstatus;
-	//printf("terminal status: %d\n", g_terminal.status);
-	//g_terminal.status = 130;
 	return (g_terminal.status);
 }
 

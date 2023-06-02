@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 00:14:25 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 21:25:23 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,21 @@ t_terminal	g_terminal;
 
 void	sighandler()
 {
+	g_terminal.status = 130;
 	if (g_terminal.heredoc == 1)
 	{
 		g_terminal.stopheredoc = 1;
-		g_terminal.status = 130;
 		g_terminal.heredoc = 0;
 		write(1, "\n", 1);
 		exit (130);
 	}
 	if (g_terminal.in_cmd == 1)
 	{
+		g_terminal.status = 130;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
-		g_terminal.status = 130;
-		return ;
-	}
-	else
-	{
-		g_terminal.status = 130;
-		//g_terminal.in_cmd = 1;
 		return ;
 	}
 }
@@ -66,7 +60,7 @@ char	*ft_itoa(int n)
 
 	ln = n;
 	len = nb_size(ln);
-	str = (char *)malloc(sizeof(char) * (len + 1));
+	str = malloc_ob((len + 1));
 	if (!str)
 		return (NULL);
 	if (ln == 0)
@@ -76,7 +70,6 @@ char	*ft_itoa(int n)
 		str[0] = '-';
 		ln *= -1;
 	}
-	str[len] = '\0';
 	len--;
 	while (ln != 0)
 	{
@@ -89,16 +82,18 @@ char	*ft_itoa(int n)
 
 char	**invent_env()
 {
-	//t_expo	*expo;
 	char	**env;
 	char	*cwd;
+	char	*tmp;
 
 	env = (char **)malloc_ob(sizeof(char *) * 4);
 	cwd = getcwd(NULL, 0);
+	tmp = ft_itoa(g_terminal.SHLVL);
 	env[0] = str_join("PWD", cwd, '=');
-	env[1] = str_join("SHLVL", ft_itoa(g_terminal.SHLVL), '=');
+	env[1] = str_join("SHLVL", tmp, '=');
 	env[2] = str_join("_", "/usr/bin/env", '=');
 	free(cwd);
+	free(tmp);
 	return (env);
 }
 
@@ -117,12 +112,20 @@ t_expo	*invent_expo(char **env)
 	return (begin);
 }
 
+void	ft_here_macros()
+{
+	g_terminal.heredoc = 0;
+	g_terminal.stopheredoc = 0;
+	g_terminal.in_cmd = 1;
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*line;
 
 	(void) ac;
 	(void) av;
+	//ft_here_macros();
 	g_terminal.heredoc = 0;
 	g_terminal.stopheredoc = 0;
 	g_terminal.in_cmd = 1;
@@ -154,7 +157,9 @@ int	main(int ac, char **av, char **env)
 			add_history(line);
 			ft_phrases(line);
 			free(line);
-			cleanall(g_terminal.begin, 0);
+			if (g_terminal.begin)
+				cleanall(g_terminal.begin, 0);
+
 		}
 	}
 	return (0);

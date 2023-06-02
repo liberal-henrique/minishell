@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 00:13:25 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 16:14:16 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*find_needle(char *stack, char *needle)
 	return (stack);
 }
 
-char	*expander(char *str)
+char	*expander(char *str, char sep)
 {
 	char	*name;
 	int		index;
@@ -64,7 +64,11 @@ char	*expander(char *str)
 	name = malloc_ob(1024);
 	while (str[index] && end == 0)
 	{
-		if (start == -1 && str[index] == '$')
+		if (sep == 0 && (str[index] == '\'' || str[index] == '\"'))
+			sep = str[index];
+		else if (str[index] == sep)
+			sep = 0;
+		if (sep != '\'' && start == -1 && str[index] == '$')
 		{
 			if (!str[index + 1] || str[index + 1] == '.')
 			{
@@ -87,78 +91,35 @@ char	*expander(char *str)
 	new = ft_replace(str, name, find_var(&name[1]));
 	free(str);
 	free(name);
-	return (expander(new));
+	return (expander(new, 0));
 }
 
-/* char	*remove_quotes(char *str)
-{
-	char	*new;
-	int		len;
-
-	len = 0;
-	new = malloc_ob(ft_strlen(str, 0));
-	printf("%s\n", str);
-	while (*str)
-	{
-		if (*str == '\'' || *str == '\"')
-			str++;
-		else
-			new[len++] = *str++;
-	}
-
-	free(str);
-	return (new);
-} */
-
-char	*remove_quotes_2(char *str, int fsingle, int fdouble)
-{
-	char	*new;
-	int		end;
-	int		i;
-	int		j;
-
-	end = 0;
-	new = malloc_ob(ft_strlen(str, 0) + 1);
-	i = -1;
-	j = 0;
-	while (str[++i])
-	{
-		if (str[i] == '\'' && fsingle == 2)
-			;
-		else if (str[i] == '\"' && fdouble == 2)
-			;
-		else
-		{
-			new[j] = str[i];
-			j++;
-		}
-	}
-	return (new);
-}
-
+//echo "   $USE'R'"'$USER'''
 char	*remove_quotes(char *str)
 {
-	int		fune;
-	int		fdeux;
 	char	*new;
+	char	*temp;
+	char	s;
 	int		i;
 
-	fune = 0;
-	fdeux = 0;
-	i = -1;
-	while (str[++i])
+	s = 0;
+	i = 0;
+	temp = str;
+	if (!str)
+		return (str);
+	new = malloc_ob(ft_strlen(str, 0) * 2);
+	while (*str)
 	{
-		if (str[i] == '\'' && fune == 0 && (fdeux == 0 || fdeux == 2))
-			fune = 1;
-		else if (str[i] == '\'' && fune == 1)
-			fune = 2;
-		else if (str[i] == '\"' && (fune == 0 || fune == 2) && fdeux == 0)
-			fdeux = 1;
-		else if (str[i] == '\"' && fdeux == 1)
-			fdeux = 2;
+		if (s == 0 && (*str == '\'' || *str == '\"'))
+			s = *str;
+		else if (*str == s)
+			s = 0;
+		else
+			new[i++] = *str;
+		str++;
 	}
-	new = remove_quotes_2(str, fune, fdeux);
-	free(str);
+	new[i++] = 0;
+	free(temp);
 	return (new);
 }
 
@@ -182,13 +143,11 @@ void	expander_args(t_cmd *list)
 			s = temp->str;
 			if (!ft_strcmp(temp->str, "$") || !ft_strcmp(temp->str, "\"$\""))
 				temp->str = remove_quotes(temp->str);
-			else if (s && !(*s == '\'' && s[ft_strlen(s, 0) - 1] == '\''))
+			else
 			{
-				tmp_str = expander(s);
+				tmp_str = expander(s, 0);
 				temp->str = remove_quotes(tmp_str);
 			}
-			else if (s && (*s == '\'' && s[ft_strlen(s, 0) - 1] == '\''))
-					temp->str = remove_quotes(s);
 			temp = temp->next;
 		}
 		list = list->next;

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 21:22:37 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 17:06:37 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,12 @@ void	build_cmds_list(t_cmd **list)
 		return ;
 	while (tmp)
 	{
+		// tmp->pid = -1;
 		tmp->args = create_array_cmds(tmp->tokens);
 		tmp->execute = get_function(tmp->args[0]);
 		tmp->gpath = get_gpath(g_terminal.env, tmp->args);
+		if (tmp->gpath && (*tmp->gpath == '/'))
+			tmp->is_type = (access(tmp->gpath, X_OK) != 0);
 		if (tmp->next)
 			pipe(tmp->fd);
 		else
@@ -64,7 +67,6 @@ void	cmd_redirect(t_cmd *cmd)
 
 	tmp = cmd->tokens;
 	i = 0;
-
 	fd = 0;
 	while (tmp)
 	{
@@ -79,9 +81,6 @@ void	cmd_redirect(t_cmd *cmd)
 				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
 				write(2, ": No such file or directory\n", 28);
 				exit(1);
-				// g_terminal.status = STATUS_ERROR;
-				// clean_redirect_tokens(&cmd->tokens);
-				// return ;
 			}
 			cmd->fd_master[0] = fd;
 		}
@@ -95,9 +94,6 @@ void	cmd_redirect(t_cmd *cmd)
 				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
 				write(2, ": No such file or directory\n", 28);
 				exit(1);
-				// g_terminal.status = STATUS_ERROR;
-				// clean_redirect_tokens(&cmd->tokens);
-				// return ;
 			}
 			cmd->fd_master[1] = fd;
 		}
@@ -111,18 +107,11 @@ void	cmd_redirect(t_cmd *cmd)
 				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
 				write(2, ": No such file or directory\n", 28);
 				exit(1);
-				// g_terminal.status = STATUS_ERROR;
-				// clean_redirect_tokens(&cmd->tokens);
-				// return ;
 			}
 			cmd->fd_master[1] = fd;
 		}
 		else if (f == 3)
-		{
 			ft_heredoc(cmd, tmp->next->str, NULL, 0);
-			//cmd->fd_master[0] = open("./.heredoc", O_RDONLY, 0444);
-			//cmd->fd_master[0] = cmd->fd[0];
-		}
 		tmp = tmp->next;
 		i++;
 	}

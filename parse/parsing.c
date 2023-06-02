@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 00:05:51 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 21:37:42 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,33 +51,62 @@ void	create_str(char *new, char *s, int i, char set)
 	*new = 0;
 }
 
+// echo fudido >> outfile > out2 |                           <main.c wc > olafile
+// echo ||
+// echo |>
+// echo >| --> error;
+// ||
+
+int	is_separator_here(const char *s, int *j)
+{
+	if (s[0] == '>' && s[1] == '>')
+		*j = (2);
+	else if (s[0] == '<' && s[1] == '<')
+		*j = (2);
+	else if (s[0] == '>')
+		*j = (3);
+	else if (s[0] == '<')
+		*j = (4);
+	else if (s[0] == '|')
+		*j = (5);
+	else
+		*j = 0;
+	return (*j);
+}
+
 int	check_sintaxe(const char *s, char set, int i, int j)
 {
+	int	a;
 	int	spa;
-	int	v;
+	int	g;
 
-	while (s && s[i])
+	spa = 0;
+	g = 0;
+	while (s && s[++i])
 	{
-		is_separator(&s[i], &j);
-		if (set == 0 && j != 0 && (s[i + 1] != '>' && s[i + 1] != '<'))
+		if (!is_quote(s[i]))
+			a = s[i];
+		else if (!is_quote(s[i]) && a == s[i])
+			a = 0;
+		else if (is_separator_here(s[spa], &g) != 0 && a == 0)
 		{
-			set = 1;
+			j = 1;
 			spa = i + 1;
-			while (is_space(s[spa]) && s[spa])
+			if (g == 2)
 				spa++;
-			if (!s[spa] || s[spa] == ';')
-				return (STATUS_ERROR);
-			if (!is_separator(&s[spa], &v))
-				set = 0;
-			if (j == 2)
-				i++;
+			while (is_space(s[spa]))
+				spa++;
+			if ((g != 5 && is_separator_here(&s[spa], &g) != 0) \
+			|| (g == 5 && s[spa] == '|'))
+				return (1);
 		}
-		else if (set == 1 && j != 0 && !is_space(s[i]))
-			return (STATUS_ERROR);
-		i++;
 	}
-	return (STATUS_SUCCESS);
+	if (j == 1 && !s[i])
+		return (1);
+	return (0);
 }
+// s[i] == '|'
+
 
 int	ft_phrases(const char *line)
 {
@@ -91,9 +120,10 @@ int	ft_phrases(const char *line)
 	{
 		write(2, "bash: syntax error near unexpected token 'newline'\n", 51);
 		g_terminal.status = STATUS_ERROR;
+		g_terminal.begin = NULL;
 		return (g_terminal.status);
 	}
-	new2 = malloc_ob(4096);
+	new2 = malloc_ob(ft_strlen(line, 0) * 10);
 	create_str(new2, (char *)line, 0, 0);
 	arr = ft_split(new2, 3);
 	free(new2);
@@ -105,8 +135,8 @@ int	ft_phrases(const char *line)
 	g_terminal.begin = list;
 	execute_main(list, 0, -1);
 	//printf("global childs%d\n", g_terminal.childs);
-	if (g_terminal.childs == 1)
-		ft_wait(list);
+	// if (g_terminal.childs == 1)
+	ft_wait(list);
 	return (STATUS_SUCCESS);
 }
 
@@ -139,6 +169,7 @@ t_cmd	*insert_end_tokens(t_cmd **root, char *s, t_cmd *end)
 	if (!new_node)
 		return (NULL);
 	new_node->next = NULL;
+	new_node->pid = -1;
 	ft_tokens(&new_node->tokens, s, -1);
 	if (!(*root))
 		*root = new_node;

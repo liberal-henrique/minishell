@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 23:36:09 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 18:24:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ struct s_cmd
 	t_token			*tokens;
 	char			**args;
 	char			*gpath;
+	int				is_type; //0 for nothing, 1 for dir, 2 for file
 	int				fd_master[2];
 	int				fd[2];
 	int				pid;
@@ -102,7 +103,7 @@ int						find_env(char **env);
 
 //-----------expander--------------------//
 int						check(char c);
-char					*expander(char *str);
+char					*expander(char *str, char sep);
 void					expander_args(t_cmd *list);
 
 //-----------tokens----------------------//

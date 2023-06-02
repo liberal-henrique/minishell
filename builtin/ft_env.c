@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 16:19:58 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/02 14:57:19 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	execute_env(t_cmd *cmd)
 	i = -1;
 	pipe(fd);
 	(void) cmd;
-	if(!cmd->next)
+	if (!cmd->next)
 	{
 		while (g_terminal.env[++i])
 			printf("%s\n", g_terminal.env[i]);
