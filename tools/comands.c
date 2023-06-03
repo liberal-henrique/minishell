@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 17:55:12 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:25:52 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,15 @@ char	**create_array_cmds(t_token *list)
 		return (NULL);
 	while (tmp)
 	{
-		args[i++] = ft_strdup(tmp->str);
+		if (ft_strlen(tmp->str, 0) != 0)
+			args[i++] = ft_strdup(tmp->str);
 		tmp = tmp->next;
 	}
 	return (args);
 }
 
-void	build_cmds_list(t_cmd **list)
+void	build_cmds_list(t_cmd **list, t_cmd	*tmp)
 {
-	t_cmd	*tmp;
-
 	tmp = (*list);
 	if (!(*list))
 		return ;
@@ -56,29 +55,18 @@ void	build_cmds_list(t_cmd **list)
 			tmp->execute = get_function(tmp->args[0]);
 			tmp->gpath = get_gpath(g_terminal.env, tmp->args);
 			tmp->is_type = 0;
-			if (tmp->gpath && ((tmp->args[0][0] == '/') \
-			|| !ft_strncmp("./", tmp->args[0], 2)))
-			{
-				tmp->is_type = (access(tmp->gpath, X_OK) != 0);
-				if (tmp->is_type == 0)
-					tmp->is_type = 2;
-			}
 			if (tmp->next)
 				pipe(tmp->fd);
 			else
 				tmp->fd[1] = 1;
 			tmp = tmp->next;
 		}
-
 	}
 }
 
-void	cmd_redirect(t_cmd *cmd)
+void	cmd_redirect(t_cmd *cmd, int f, int i, int fd)
 {
 	t_token	*tmp;
-	int		f;
-	int		i;
-	int		fd;
 
 	tmp = cmd->tokens;
 	i = 0;

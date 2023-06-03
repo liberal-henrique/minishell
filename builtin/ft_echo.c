@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:59:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 15:15:11 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:23:57 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	check_flag(char *str)
 {
 	int	j;
 
+	if (!str)
+		return (0);
 	if (str[0] != '-')
 		return (0);
 	j = 0;
@@ -49,15 +51,15 @@ int	execute_echo(t_cmd *cmd)
 	return (g_terminal.status);
 }
 
+int	status(t_cmd *cmd, int status)
+{
+	cmd->status = status;
+	return (cmd->status);
+}
 
-
-
-
-
-
-
-
-
-
-
-
+int	cnt(t_expo *node)
+{
+	if (node == NULL)
+		return (0);
+	return (1 + cnt(node->next));
+}

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 11:35:29 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:23:48 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	ft_strncmp(char *s1, char *s2, int n)
 	int	i;
 
 	i = 0;
+	if (!s1 || !s2)
+		return (1);
 	while ((s1[i] || s2[i]) && i < n)
 	{
 		if (s1[i] != s2[i])
@@ -86,7 +88,5 @@ char	*str_join(char *old, char *seg, char c)
 	while (++j < seg_len)
 		new[i++] = seg[j];
 	new[i] = 0;
-	/* if (old)
-		free(old); */
 	return (new);
 }

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 14:43:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:24:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ char	**destroy_row(char **env, char *str)
 	k = ft_strlen_2d(env);
 	while (i_c < k && env[i])
 	{
-		if (!(ft_strncmp(env[i], str, ft_strlen(env[i], '=')) == 0 && ft_strlen(str, 0) == ft_strlen(env[i], '=')))
+		if (!(ft_strncmp(env[i], str, ft_strlen(env[i], '=')) \
+		== 0 && ft_strlen(str, 0) == ft_strlen(env[i], '=')))
 		{
 			new[i_c] = ft_strdup(env[i]);
 			i_c++;
@@ -50,25 +51,12 @@ void	destroy_first_node(t_expo **list)
 	tmp = NULL;
 }
 
-void	destroy_node(t_expo **list, char *str)
+void	destroy_node_2(char *str, t_expo *tmp, t_expo *aux)
 {
-	t_expo	*tmp;
-	t_expo	*aux;
-	size_t	len;
-	int		i;
-
-	i = 0;
-	tmp = (*list);
-	len = ft_strlen((*list)->variable, '=');
-	if (ft_strncmp((*list)->variable, str, ft_strlen((*list)->variable, '=')) == 0 && ft_strlen(str, 0) == ft_strlen((*list)->variable, '='))
-	{
-		destroy_first_node(list);
-		return ;
-	}
-	//printf("arg: %s\n", str);
 	while (tmp->next)
 	{
-		if (ft_strncmp(tmp->next->variable, str, ft_strlen(tmp->next->variable, '=')) == 0 && ft_strlen(str, 0) == ft_strlen(tmp->next->variable, '='))
+		if (ft_strncmp(tmp->next->variable, str, ft_strlen(tmp->next->variable, \
+		'=')) == 0 && ft_strlen(str, 0) == ft_strlen(tmp->next->variable, '='))
 		{
 			aux = tmp->next;
 			if (tmp->next)
@@ -84,11 +72,20 @@ void	destroy_node(t_expo **list, char *str)
 	}
 }
 
-int	cnt(t_expo *node)
+void	destroy_node(t_expo **list, char *str, t_expo *tmp, t_expo *aux)
 {
-	if (node == NULL)
-		return (0);
-	return (1 + cnt(node->next));
+	size_t	len;
+	int		i;
+
+	i = 0;
+	len = ft_strlen((*list)->variable, '=');
+	if (ft_strncmp((*list)->variable, str, ft_strlen((*list)->variable, '='\
+	)) == 0 && ft_strlen(str, 0) == ft_strlen((*list)->variable, '='))
+	{
+		destroy_first_node(list);
+		return ;
+	}
+	destroy_node_2(str, tmp, aux);
 }
 
 int	execute_unset(t_cmd *cmd)
@@ -102,15 +99,13 @@ int	execute_unset(t_cmd *cmd)
 	len_variable = 0;
 	while (tmp && cmd->args[i])
 	{
-		if (ft_strncmp(tmp->variable, cmd->args[i], ft_strlen(tmp->variable, '=')) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(tmp->variable, '='))
+		if (ft_strncmp(tmp->variable, cmd->args[i], ft_strlen(tmp->variable, '='\
+		)) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(tmp->variable, '='))
 		{
 			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
-			destroy_node(&g_terminal.expo, cmd->args[i]);
-			if (cmd->args[i + 1])
-			{
+			destroy_node(&g_terminal.expo, cmd->args[i], g_terminal.expo, NULL);
+			if (cmd->args[i + 1] && ++i)
 				tmp = g_terminal.expo;
-				i++;
-			}
 			else
 				break ;
 			tmp = g_terminal.expo;
@@ -120,5 +115,3 @@ int	execute_unset(t_cmd *cmd)
 	g_terminal.status = STATUS_SUCCESS;
 	return (g_terminal.status);
 }
-
-

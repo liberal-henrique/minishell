@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 11:54:10 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:01:35 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ void	deallocate(t_cmd *curr)
 	t_cmd	*temp;
 
 	temp = NULL;
-	//temp = curr;
-	if(curr == NULL)
+	if (curr == NULL)
 		return ;
 	while (curr)
 	{

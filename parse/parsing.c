@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 18:00:05 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:05:44 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ int	ft_phrases(const char *line)
 {
 	char	*new2;
 	char	**arr;
-	t_cmd	*list;
 
 	if (!line)
 		return (STATUS_ERROR);
@@ -116,7 +115,7 @@ int	ft_phrases(const char *line)
 	{
 		write(2, "bash: syntax error near unexpected token 'newline'\n", 51);
 		g_terminal.status = STATUS_ERROR;
-		g_terminal.begin = NULL;
+		g_terminal.list = NULL;
 		return (g_terminal.status);
 	}
 	g_terminal.agoravai = 0;
@@ -124,12 +123,11 @@ int	ft_phrases(const char *line)
 	create_str(new2, (char *)line, 0, 0);
 	arr = ft_split(new2, 3);
 	free(new2);
-	list = create_list_tokens(arr);
+	g_terminal.list = create_list_tokens(arr);
 	free_2d(arr);
-	expander_args(list);
-	build_cmds_list(&list);
-	g_terminal.begin = list;
-	if (g_terminal.agoravai && cnt_here(list) > 1)
+	expander_args(g_terminal.list);
+	build_cmds_list(&g_terminal.list, NULL);
+	if (g_terminal.agoravai && cnt_here(g_terminal.list) > 1)
 	{
 		int fd[2];
 
@@ -140,11 +138,11 @@ int	ft_phrases(const char *line)
 		while (read(1, c, 1) > 0 && *c != '\n')
 			;
 		close(fd[1]);
-		execute_main(list, fd[0], -1);
+		execute_main(g_terminal.list, fd[0], -1);
 	}
 	else
-		execute_main(list, 0, -1);
-	ft_wait(list);
+		execute_main(g_terminal.list, 0, -1);
+	ft_wait(g_terminal.list);
 	return (STATUS_SUCCESS);
 }
 
@@ -163,7 +161,7 @@ t_cmd	*create_list_tokens(char **arr)
 	tmp = begin;
 	while (tmp)
 	{
-		cmd_redirect(tmp);
+		cmd_redirect(tmp, 0, 0, 0);
 		tmp = tmp->next;
 	}
 	return (begin);

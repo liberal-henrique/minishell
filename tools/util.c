@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:05:45 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 17:35:28 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 23:58:24 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ size_t	ft_strlen(const char *a, char set)
 	int	i;
 
 	i = 0;
+	if (!a)
+		return (0);
 	while (a && a[i] && a[i] != set)
 		i++;
 	return (i);

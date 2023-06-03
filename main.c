@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 21:25:23 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:08:27 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@ t_terminal	g_terminal;
 void	sighandler()
 {
 	g_terminal.status = 130;
-	if (g_terminal.heredoc == 1)
-	{
-		g_terminal.stopheredoc = 1;
-		g_terminal.heredoc = 0;
-		write(1, "\n", 1);
-		exit (130);
-	}
 	if (g_terminal.in_cmd == 1)
 	{
 		g_terminal.status = 130;
@@ -32,6 +25,13 @@ void	sighandler()
 		rl_replace_line("", 1);
 		rl_redisplay();
 		return ;
+	}
+	if (g_terminal.heredoc == 1)
+	{
+		g_terminal.stopheredoc = 1;
+		g_terminal.heredoc = 0;
+		write(1, "\n", 1);
+		exit (130);
 	}
 }
 
@@ -80,7 +80,7 @@ char	*ft_itoa(int n)
 	return (str);
 }
 
-char	**invent_env()
+char	**invent_env(void)
 {
 	char	**env;
 	char	*cwd;
@@ -88,7 +88,7 @@ char	**invent_env()
 
 	env = (char **)malloc_ob(sizeof(char *) * 4);
 	cwd = getcwd(NULL, 0);
-	tmp = ft_itoa(g_terminal.SHLVL);
+	tmp = ft_itoa(1);
 	env[0] = str_join("PWD", cwd, '=');
 	env[1] = str_join("SHLVL", tmp, '=');
 	env[2] = str_join("_", "/usr/bin/env", '=');
@@ -125,7 +125,6 @@ int	main(int ac, char **av, char **env)
 
 	(void) ac;
 	(void) av;
-	//ft_here_macros();
 	g_terminal.heredoc = 0;
 	g_terminal.stopheredoc = 0;
 	g_terminal.in_cmd = 1;
@@ -148,7 +147,7 @@ int	main(int ac, char **av, char **env)
 		line = readline("Minishell$ ");
 		if (!line)
 		{
-			cleanall(g_terminal.begin, 1);
+			cleanall(g_terminal.list, 1);
 			printf("exit\n");
 			exit(STATUS_SUCCESS);
 		}
@@ -157,9 +156,9 @@ int	main(int ac, char **av, char **env)
 			add_history(line);
 			ft_phrases(line);
 			free(line);
-			if (g_terminal.begin)
-				cleanall(g_terminal.begin, 0);
-
+			if (g_terminal.list)
+				cleanall(g_terminal.list, 0);
+			g_terminal.list = NULL;
 		}
 	}
 	return (0);

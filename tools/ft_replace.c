@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:07:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 15:40:40 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 00:22:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	ft_compare(const char *s1, const char *s2)
 	return (*s1 == *s2);
 }
 
-// echo "ola, $HOME" > outfile - $HOME
 int	check_contain(char *origin, char *set)
 {
 	int	position;
@@ -63,33 +62,6 @@ int	check_contain(char *origin, char *set)
 	}
 	return (-1);
 }
-
-// char	*ft_replace(char *dst, char *to, char *rep)
-// {
-// 	char	*new;
-// 	int		start;
-// 	int		i;
-// 	int		j;
-
-// 	start = check_contain(dst, to);
-// 	if (start < 0)
-// 		return (ft_strdup(dst));
-// 	new = malloc_ob((ft_strlen(dst, 0) - (ft_strlen(to, 0)) + ft_strlen(rep, 0) + 1));
-// 	j = -1;
-// 	i = 0;
-// 	while (to && rep && dst[++j])
-// 	{
-// 		if (i == start)
-// 			j += (ft_strlen(to, 0) - 1);
-// 		if (i == start)
-// 			while (*rep)
-// 				new[i++] = *rep++;
-// 		else
-// 			new[i++] = dst[j];
-// 	}
-// 	return (new);
-// }
-
 
 char	*ft_replace(char *dst, char *to, char *rep)
 {

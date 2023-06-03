@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 18:00:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 22:35:23 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,12 @@ struct s_terminal
 	t_expo			*expo;
 	char			*path;
 	int				status;
-	t_cmd			*begin;
-	int				SHLVL;
 	int				childs;
 	int				heredoc;
 	int				stopheredoc;
 	int				in_cmd;
 	int				agoravai;
+	t_cmd			*list;
 };
 
 struct s_cmd
@@ -90,10 +89,9 @@ void					sighandler();
 //-----------parsing----------------------//
 int						ft_phrases(const char *line);
 t_cmd					*create_list_tokens(char **arr);
-void					cmd_redirect(t_cmd *cmd);
+// void					cmd_redirect(t_cmd *cmd);
 void					clean_tokens(t_token *list);
 void					clean_redirect_tokens(t_token **list);
-char					*putraska(char *str);
 char					*ft_strjoin_expansion(char *line, char *buf);
 char					*ft_strjoin_char(char *line, char c);
 int						check_sintaxe(const char *s, int spa, int i, int j);
@@ -108,6 +106,7 @@ int						find_env(char **env);
 //-----------expander--------------------//
 int						check(char c);
 char					*expander(char *str, char sep);
+char					*dollar(char *str);
 void					expander_args(t_cmd *list);
 
 //-----------tokens----------------------//
@@ -122,9 +121,12 @@ void					*malloc_ob(size_t length);
 
 //---------comands-----//
 char					**create_array_cmds(t_token *list);
-void					build_cmds_list(t_cmd **list);
-void					cmd_redirect(t_cmd *cmd);
+void					build_cmds_list(t_cmd **list, t_cmd	*tmp);
+void					cmd_redirect(t_cmd *cmd, int f, int i, int fd);
 void					clean_redirect_tokens(t_token **list);
+
+//---------clean-------//
+void					clean_expo(t_expo *list);
 
 //---------ft_replace---------------//
 int						check_contain(char *origin, char *set);
@@ -151,6 +153,7 @@ int						ft_isnum(char c);
 //----------linked_list----------//
 int						cnt_rec(t_token *node);
 int						cnt_here(t_cmd *node);
+int						cnt(t_expo *node);
 void					deallocate(t_cmd *curr);
 void					*get_function(char *name);
 t_cmd					*insert_end(t_cmd **root, t_cmd *end);
@@ -174,7 +177,6 @@ int						execute_env(t_cmd *cmd);
 int						execute_export(t_cmd *cmd);
 int						execute_pwd(t_cmd *cmd);
 int						execute_unset(t_cmd *cmd);
-int						execute_dollar(t_cmd *cmd);
 int						execute_exit(t_cmd *cmd, int len_cmd);
 
 //-----------execute----------------------------//
@@ -206,13 +208,16 @@ void					bubblesort(t_expo *root);
 t_expo					*insert_end_expo_list(t_expo **root, \
 char *s, t_expo **end);
 t_expo					*create_expo(char **env);
-char					**synchronize_env(char *cmd, int i, int fu);
-char					**sync_env_adding(char **env, char *cmd);
+char					**sync_e(char *cmd, int i, int fu);
+char					**syncadd(char **env, char *cmd);
 char					*remove_quotes(char *str);
 char					*put_quotes(char *str);
 int						env_variable_replaced(char *cmd, int *flag);
 char					*ft_itoa(int n);
 void					close_shit(t_cmd *cmd);
+int						export_variable_name(char *cmd);
+
+int						status(t_cmd *cmd, int status);
 
 extern t_terminal			g_terminal;
 

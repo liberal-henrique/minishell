@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 16:34:39 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:45:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,17 +95,6 @@ long long	ft_atoi_long(const char *str, long long res, int i, int sign)
 	return (res * sign);
 }
 
-int	exit_pipe(t_cmd *cmd, int status)
-{
-	cmd->pid = fork();
-	g_terminal.childs = 1;
-	if (cmd->pid == 0)
-	{
-		exit(status);
-	}
-	return (status);
-}
-
 int	is_all_num(char *str, int i)
 {
 	if (!ft_isnum(str[0]) && str[0] != '+' && str[0] != '-')
@@ -116,65 +105,4 @@ int	is_all_num(char *str, int i)
 			return (0);
 	}
 	return (1);
-}
-
-// bash: exit: hello: numeric argument required
-int	execute_exit(t_cmd *cmd, int len_cmd)
-{
-	long long status;
-	int			n;
-	char		*itoa;
-
-	n = -1;
-	status = 0;
-	if (ft_compare(cmd->args[0], "exit") && !cmd->args[1])
-	{
-		write(2, "exit\n", 5);
-		exit (0);
-	}
-	if (cmd->args[1] && !is_all_num(cmd->args[1], 0))
-	{
-		write(2, "exit\n", 5);
-		write(2, "bash: exit: ", 12);
-		write(2, cmd->args[1], ft_strlen(cmd->args[1], 0));
-		write(2, ": numeric argument required\n", 28);
-		exit (2);
-	}
-	while (cmd->args[++n])
-		;
-	if (n == 1)
-		status = 0;
-	else if (n == 2)
-		status = ft_atoi_long(cmd->args[1], 0, 0, 1);
-	else if (n >= 3)
-	{
-		write(2, "exit: too many arguments\n", 25);
-		exit(1);
-	}
-	itoa = ft_itoa_long(status);
-	if (cmd->args[1][0] == '+')
-	{
-		if ((ft_strncmp(itoa, &cmd->args[1][1], ft_strlen(itoa, 0)) != 0))
-		{
-			free(itoa);
-			exit(2);
-		}
-	}
-	else if ((ft_strncmp(itoa, cmd->args[1], ft_strlen(itoa, 0)) != 0))
-	{
-		free(itoa);
-		exit(2);
-	}
-	free(itoa);
-	if (len_cmd < 2)
-	{
-		printf("exit\n");
-		rl_clear_history();
-		exit(status);
-	}
-	else
-	{
-		exit_pipe(cmd, status);
-	}
-	return (status);
 }

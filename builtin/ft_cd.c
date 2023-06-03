@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 15:06:28 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 21:17:03 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	update_oldpwd(char *new)
 {
-	int	flag;
-	char *str;
+	char	*str;
+	int		flag;
 
 	flag = 0;
 	str = str_join("OLDPWD", new, '=');
 	env_variable_replaced(str, &flag);
-	g_terminal.env = synchronize_env(str, -1, 0);
+	g_terminal.env = sync_e(str, -1, 0);
 	free(str);
 }
 
@@ -28,7 +28,7 @@ void	update_pwd(char *new)
 {
 	char	*str;
 	char	*sub;
-	int 	flag;
+	int		flag;
 	int		i;
 
 	i = 0;
@@ -48,7 +48,7 @@ void	update_pwd(char *new)
 	else
 		str = str_join("PWD", new, '=');
 	env_variable_replaced(str, &flag);
-	g_terminal.env = synchronize_env(str, -1, 0);
+	g_terminal.env = sync_e(str, -1, 0);
 	free(str);
 	free(new);
 }
@@ -59,11 +59,9 @@ void	update_paths(char *cwd, char *arg, int f)
 
 	if (f == 1)
 	{
-
 		dup = ft_strdup(arg);
 		update_pwd(dup);
 		update_oldpwd(cwd);
-
 	}
 	else if (f == 2)
 	{
@@ -72,44 +70,10 @@ void	update_paths(char *cwd, char *arg, int f)
 	}
 }
 
-int	execute_cd(t_cmd *cmd)
+int	execute_cd_2(t_cmd *cmd, char *cwd)
 {
 	char	*str;
-	char	*cwd;
 
-	str = NULL;
-	if (cmd->args[2])
-	{
-		write(2, "bash: cd: too many arguments\n", 29);
-		cmd->status = STATUS_ERROR;
-		return (cmd->status);
-	}
-	cwd = getcwd(NULL, 0);
-	if (ft_compare(cmd->args[1], "-"))
-	{
-		if (chdir(find_var("OLDPWD")) != 0)
-		{
-			cmd->status = STATUS_ERROR;
-			return (cmd->status);
-		}
-		update_paths(cwd, find_var("OLDPWD"), 1);
-		free(cwd);
-		// printf("%s\n", find_var("PWD"));
-		cmd->status = STATUS_SUCCESS;
-		return (cmd->status);
-	}
-	else if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
-	{
-		if (chdir(cmd->args[1]) != 0)
-		{
-			cmd->status = STATUS_ERROR;
-			return (cmd->status);
-		}
-		update_paths(cwd, cmd->args[1], 1);
-		free(cwd);
-		cmd->status = STATUS_SUCCESS;
-		return (cmd->status);
-	}
 	str = str_join(cwd, cmd->args[1], '/');
 	if (chdir(str) != 0)
 	{
@@ -126,4 +90,31 @@ int	execute_cd(t_cmd *cmd)
 	free(cwd);
 	cmd->status = STATUS_SUCCESS;
 	return (cmd->status);
+}
+
+int	execute_cd(t_cmd *cmd)
+{
+	char	*cwd;
+
+	if (cmd->args[2] && write(2, "bash: cd: too many arguments\n", 29))
+		return (status(cmd, STATUS_ERROR));
+	cwd = getcwd(NULL, 0);
+	if (ft_compare(cmd->args[1], "-"))
+	{
+		if (chdir(find_var("OLDPWD")) != 0)
+			return (status(cmd, STATUS_ERROR));
+		update_paths(cwd, find_var("OLDPWD"), 1);
+		free(cwd);
+		cmd->status = STATUS_SUCCESS;
+		return (cmd->status);
+	}
+	else if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
+	{
+		if (chdir(cmd->args[1]) != 0)
+			return (status(cmd, STATUS_ERROR));
+		update_paths(cwd, cmd->args[1], 1);
+		free(cwd);
+		return (status(cmd, STATUS_SUCCESS));
+	}
+	return (execute_cd_2(cmd, cwd));
 }
