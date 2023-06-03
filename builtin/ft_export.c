@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:01:23 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 14:57:52 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:08:10 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	env_variable_replaced(char *cmd, int *flag)
 	*flag = 0;
 	if (export_variable_name(cmd) != 0)
 	{
-		// printf("Not a valid identifier\n");
 		write(2, "Not a valid identifier\n", 23);
 		*flag = -2;
 		return (STATUS_ERROR);
@@ -140,23 +139,53 @@ int	execute_export(t_cmd *cmd)
 	}
 	else
 	{
-		while (cmd->args[i])
+		if (cmd->next)
 		{
-			if (env_variable_replaced(cmd->args[i], &flag) == 1)
+			cmd->pid = fork();
+			if (cmd->pid == 0)
 			{
-				cmd->status = STATUS_ERROR;
+				while (cmd->args[i])
+				{
+					if (env_variable_replaced(cmd->args[i], &flag) == 1)
+					{
+						cmd->status = STATUS_ERROR;
+					}
+					if (flag != 0 && flag != -2)
+						if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
+							g_terminal.env = synchronize_env(cmd->args[i], -1, 0);
+					if (flag == 0 && flag != -2)
+					{
+						insert_end_list(&g_terminal.expo, cmd->args[i]);
+						if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
+							g_terminal.env = sync_env_adding(g_terminal.env, cmd->args[i]);
+					}
+					i++;
+				}
+				exit(0);
 			}
-			if (flag != 0 && flag != -2)
-				if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
-					g_terminal.env = synchronize_env(cmd->args[i]);
-			if (flag == 0 && flag != -2)
-			{
-				insert_end_list(&g_terminal.expo, cmd->args[i]);
-				if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
-					g_terminal.env = synchronize_env_adding(g_terminal.env, cmd->args[i]);
-			}
-			i++;
+
 		}
+		else
+		{
+			while (cmd->args[i])
+			{
+				if (env_variable_replaced(cmd->args[i], &flag) == 1)
+				{
+					cmd->status = STATUS_ERROR;
+				}
+				if (flag != 0 && flag != -2)
+					if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
+						g_terminal.env = synchronize_env(cmd->args[i], -1, 0);
+				if (flag == 0 && flag != -2)
+				{
+					insert_end_list(&g_terminal.expo, cmd->args[i]);
+					if (cmd->args[i][ft_strlen(cmd->args[i], '=')] == '=')
+						g_terminal.env = sync_env_adding(g_terminal.env, cmd->args[i]);
+				}
+				i++;
+			}
+		}
+
 	}
 	return (cmd->status);
 }

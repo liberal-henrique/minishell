@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 18:24:12 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 18:00:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ struct s_terminal
 	int				heredoc;
 	int				stopheredoc;
 	int				in_cmd;
+	int				agoravai;
 };
 
 struct s_cmd
@@ -61,12 +62,13 @@ struct s_cmd
 	t_token			*tokens;
 	char			**args;
 	char			*gpath;
-	int				is_type; //0 for nothing, 1 for dir, 2 for file
+	int				is_type;
 	int				fd_master[2];
 	int				fd[2];
 	int				pid;
 	int				status;
 	int				(*execute)(t_cmd *cmd, int in);
+	int				stop;
 	t_cmd			*next;
 };
 
@@ -89,10 +91,12 @@ void					sighandler();
 int						ft_phrases(const char *line);
 t_cmd					*create_list_tokens(char **arr);
 void					cmd_redirect(t_cmd *cmd);
+void					clean_tokens(t_token *list);
 void					clean_redirect_tokens(t_token **list);
 char					*putraska(char *str);
 char					*ft_strjoin_expansion(char *line, char *buf);
 char					*ft_strjoin_char(char *line, char c);
+int						check_sintaxe(const char *s, int spa, int i, int j);
 
 //path
 char					*path_join(char *s1, char *s2);
@@ -146,6 +150,7 @@ int						ft_isnum(char c);
 
 //----------linked_list----------//
 int						cnt_rec(t_token *node);
+int						cnt_here(t_cmd *node);
 void					deallocate(t_cmd *curr);
 void					*get_function(char *name);
 t_cmd					*insert_end(t_cmd **root, t_cmd *end);
@@ -201,8 +206,8 @@ void					bubblesort(t_expo *root);
 t_expo					*insert_end_expo_list(t_expo **root, \
 char *s, t_expo **end);
 t_expo					*create_expo(char **env);
-char					**synchronize_env(char *cmd);
-char					**synchronize_env_adding(char **env, char *cmd);
+char					**synchronize_env(char *cmd, int i, int fu);
+char					**sync_env_adding(char **env, char *cmd);
 char					*remove_quotes(char *str);
 char					*put_quotes(char *str);
 int						env_variable_replaced(char *cmd, int *flag);

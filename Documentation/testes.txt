@@ -131,7 +131,7 @@ testes para dia 31 de maio
 
 --> cat << "$HOME" --> funciona bem (CHECK)
 --> cat << '$HOME' --> funciona bem (CHECK)
---> cat << $HOME --> estava detetar um leak de memoria pois o line fazia a expansao (CHECK)
+--> cat << $HOME$ --> estava detetar um leak de memoria pois o line fazia a expansao (CHECK)
 e o strncmp fazia o break. COntudo, o free(line) nao era alcancado. Portanto,
 coloquei um free(line) dentro do ft_strncmp. Assim nao esta mais a detetar os leaks.
 
@@ -153,4 +153,10 @@ para comparar
 terei de analisa
 
 ---> export a n atualiza no env
+
+
+
+Tasks dia 03 de JUNHO
+
+--> unset esta com memories leaks
 

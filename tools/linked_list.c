@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 18:10:07 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 11:54:10 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	deallocate(t_cmd *curr)
 	}
 	curr = NULL;
 }
+
+/* void	remove_cmd_node(t_cmd **list, t_cmd *node) */
 
 void	*get_function(char *name)
 {

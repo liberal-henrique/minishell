@@ -296,11 +296,6 @@ int	check_sintaxe(const char *s, char set, int i, int j)
 				j = 0;
 		}
 	}
-	// if (j == 1 && !s[i])
-	// {
-	// 	printf("OLA\n");
-	// 	return (1);
-	// }
 	return (0);
 }
 

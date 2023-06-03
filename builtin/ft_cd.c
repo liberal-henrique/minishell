@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 15:04:43 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:06:28 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	update_oldpwd(char *new)
 	flag = 0;
 	str = str_join("OLDPWD", new, '=');
 	env_variable_replaced(str, &flag);
-	g_terminal.env = synchronize_env(str);
+	g_terminal.env = synchronize_env(str, -1, 0);
 	free(str);
 }
 
@@ -48,7 +48,7 @@ void	update_pwd(char *new)
 	else
 		str = str_join("PWD", new, '=');
 	env_variable_replaced(str, &flag);
-	g_terminal.env = synchronize_env(str);
+	g_terminal.env = synchronize_env(str, -1, 0);
 	free(str);
 	free(new);
 }

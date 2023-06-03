@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 12:43:37 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 14:57:19 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 15:17:35 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_strlen_2d(char **a)
 	return (i);
 }
 
-char	**synchronize_env_adding(char **env, char *cmd)
+char	**sync_env_adding(char **env, char *cmd)
 {
 	char	**new_env;
 	int		i;
@@ -45,15 +45,13 @@ char	**synchronize_env_adding(char **env, char *cmd)
 	return (new_env);
 }
 
-char	**synchronize_env(char *cmd)
+char	**synchronize_env(char *cmd, int i, int fu)
 {
 	char	*tmp;
 	char	**new;
-	int		i;
 	size_t	length;
 	int		len;
 
-	i = -1;
 	len = 0;
 	length = ft_strlen(cmd, '=');
 	new = clone_env(g_terminal.env);
@@ -66,8 +64,11 @@ char	**synchronize_env(char *cmd)
 			tmp = new[i];
 			new[i] = ft_replace(new[i], new[i], cmd);
 			free(tmp);
+			fu = 1;
 		}
 	}
+	if (fu == 0)
+		new = sync_env_adding(new, cmd);
 	return (new);
 }
 
@@ -106,13 +107,10 @@ char	*find_var(char *var)
 	len_var = 0;
 	while (tmp)
 	{
-
 		len_var = ft_strlen(tmp->variable, '=');
-		if (ft_strlen(var, 0) == len_var && ft_strncmp(tmp->variable, var, len_var) == 0)
-		{
-			// printf("OK: %s\n", tmp->value);
+		if (ft_strlen(var, 0) == len_var \
+		&& ft_strncmp(tmp->variable, var, len_var) == 0)
 			return (tmp->value);
-		}
 		tmp = tmp->next;
 	}
 	return ("");

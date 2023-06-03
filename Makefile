@@ -15,7 +15,6 @@ SRCS		=	main.c \
 				builtin/ft_export.c \
 				builtin/ft_pwd.c \
 				builtin/ft_unset.c \
-				builtin/ft_dollar.c \
 				builtin/ft_exit.c \
 				execute/execute_redirections.c \
 				execute/execute.c \
@@ -57,6 +56,6 @@ r:
 # --track-fds=yes --tool=memcheck --leak-check=full --show-leak-kinds=all
 
 v:
-	make re && clear && valgrind -s --leak-check=full --show-leak-kinds=all --suppressions=.ignore_readline --trace-children=yes ./minishell
+	make re && clear && valgrind -s --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=.ignore_readline --trace-children=yes ./minishell
 
 .PHONY: all re clean fclean m

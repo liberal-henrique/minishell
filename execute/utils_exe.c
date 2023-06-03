@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:57:00 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 11:38:39 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 11:35:29 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,7 @@ char	**clone_env(char **env)
 		return (NULL);
 	i = -1;
 	while (env[++i])
-	{
 		clone[i_c++] = ft_strdup(env[i]);
-		//free(env[i]);
-	}
-	//free_2d(env);
 	return (clone);
 }
 

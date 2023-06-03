@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/02 16:14:16 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:58:54 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,13 @@ int	check(char c)
 	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') \
 	|| (c >= '0' && c <= '9') || (c == '_'));
 }
-// echo $?hello
-// echo he$?llo
 
 char	*find_needle(char *stack, char *needle)
 {
-	int	i;
-	int	k;
-	char *new;
-	char *itoa;
+	int		i;
+	int		k;
+	char	*new;
+	char	*itoa;
 
 	i = -1;
 	if (!stack || !needle)
@@ -94,7 +92,6 @@ char	*expander(char *str, char sep)
 	return (expander(new, 0));
 }
 
-//echo "   $USE'R'"'$USER'''
 char	*remove_quotes(char *str)
 {
 	char	*new;

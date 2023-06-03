@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 17:49:48 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/01 16:36:12 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/03 14:43:17 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,12 @@ char	**destroy_row(char **env, char *str)
 	int		i_c;
 	int		k;
 
-	new = malloc_ob(sizeof(char *) * (ft_strlen_2d(env)));
+	new = malloc_ob(sizeof(char *) * (ft_strlen_2d(env) + 1));
 	i = 0;
 	i_c = 0;
 	k = ft_strlen_2d(env);
 	while (i_c < k && env[i])
 	{
-		/* if (ft_strncmp(env[i], str, (ft_strlen(env[i], '='))) != 0)
-		{
-			new[i_c] = ft_strdup(env[i]);
-			i_c++;
-			i++;
-		} */
 		if (!(ft_strncmp(env[i], str, ft_strlen(env[i], '=')) == 0 && ft_strlen(str, 0) == ft_strlen(env[i], '=')))
 		{
 			new[i_c] = ft_strdup(env[i]);
@@ -90,53 +84,12 @@ void	destroy_node(t_expo **list, char *str)
 	}
 }
 
-		/* if (ft_strncmp(tmp->next->variable, str, len) == 0)
-		{
-			aux = tmp->next;
-			if (tmp->next)
-				tmp->next = tmp->next->next;
-			free(aux->variable);
-			free(aux->value);
-			free(aux);
-			aux = NULL;
-			return ;
-		} */
-
 int	cnt(t_expo *node)
 {
 	if (node == NULL)
 		return (0);
 	return (1 + cnt(node->next));
 }
-/*
-int	execute_unset(t_cmd *cmd)
-{
-	int		len_variable;
-	int		length;
-	int		i;
-
-	i = 1;
-	length = -1;
-	len_variable = 0;
-	while (g_terminal.env[++length] && cmd->args[i])
-	{
-		if (ft_strncmp(g_terminal.env[length], cmd->args[i], ft_strlen(g_terminal.env[length], '=')) == 0 && ft_strlen(cmd->args[i], 0) == ft_strlen(g_terminal.env[length], '='))
-		{
-			g_terminal.env = destroy_row(g_terminal.env, cmd->args[i]);
-			destroy_node(&g_terminal.expo, cmd->args[i]);
-			if (cmd->args[i + 1])
-			{
-				length = -1;
-				i++;
-			}
-			else
-				break ;
-			length = -1;
-		}
-	}
-	g_terminal.status = STATUS_SUCCESS;
-	return (g_terminal.status);
-} */
 
 int	execute_unset(t_cmd *cmd)
 {
@@ -156,13 +109,11 @@ int	execute_unset(t_cmd *cmd)
 			if (cmd->args[i + 1])
 			{
 				tmp = g_terminal.expo;
-				//length = -1;
 				i++;
 			}
 			else
 				break ;
 			tmp = g_terminal.expo;
-			//length = -1;
 		}
 		tmp = tmp->next;
 	}
