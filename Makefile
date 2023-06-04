@@ -1,5 +1,5 @@
 CC			=	cc -fsanitize=address
-#CC			=	cc
+# CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
 LDFLAGS		=	-lreadline
 RM			=	/bin/rm -f
@@ -27,6 +27,7 @@ SRCS		=	main.c \
 				parse/expander.c \
 				parse/expander2.c \
 				parse/parsing.c \
+				parse/parsing2.c \
 				parse/path.c \
 				tools/calloc.c \
 				tools/comands.c \
@@ -34,9 +35,11 @@ SRCS		=	main.c \
 				tools/ft_replace.c \
 				tools/ft_split.c \
 				tools/helpers.c \
+				tools/helpers2.c \
 				tools/linked_list.c \
 				tools/tokens.c \
 				tools/util.c \
+				tools/util2.c \
 
 OBJS		=	$(SRCS:.c=.o)
 

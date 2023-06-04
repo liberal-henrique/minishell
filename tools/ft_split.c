@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:58:39 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/28 23:07:15 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 10:14:02 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ char	**ft_split(char const *s, char c)
 {
 	return (split_rec(0, (char *)s, 0, c));
 } */
-
-
 int	string_counter(char const *str, char c)
 {
 	int	i;

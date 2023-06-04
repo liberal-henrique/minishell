@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 22:35:23 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 10:52:47 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include<sys/types.h>
 # include<sys/stat.h>
 
-# define STATUS_ERROR 1 //tmp
+# define STATUS_ERROR 1
 # define STATUS_SUCCESS 0
 # define STATUS_SYNTAX_ERROR 3
 # define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
@@ -84,37 +84,47 @@ struct s_token
 	t_token			*next;
 };
 
-void					sighandler();
-
+void					signals_call(void);
 //-----------parsing----------------------//
+int						check_sintaxe(const char *s, int spa, int i, int j);
 int						ft_phrases(const char *line);
-t_cmd					*create_list_tokens(char **arr);
-// void					cmd_redirect(t_cmd *cmd);
-void					clean_tokens(t_token *list);
-void					clean_redirect_tokens(t_token **list);
+
+void					create_str(char *new, char *s, int i, char set);
+void					separator_cmd(char **new, char **s, int *i, int j);
+int						is_separator_here(const char *s, int *j);
 char					*ft_strjoin_expansion(char *line, char *buf);
 char					*ft_strjoin_char(char *line, char c);
 int						check_sintaxe(const char *s, int spa, int i, int j);
 
-//path
-char					*path_join(char *s1, char *s2);
-char					*get_path(char **env, char *str);
-char					*get_gpath(char **env, char **args);
-
-int						find_env(char **env);
-
-//-----------expander--------------------//
-int						check(char c);
-char					*expander(char *str, char sep);
-char					*dollar(char *str);
-void					expander_args(t_cmd *list);
-
 //-----------tokens----------------------//
+t_cmd					*create_list_tokens(char **arr);
 void					token_add_back(t_token **root, char *str);
 void					token_remove(t_token **root, t_token *elem);
 void					ft_tokens(t_token **token, char *phrase, int i);
 t_cmd					*insert_end_tokens(t_cmd **root, char *s, t_cmd *end);
 void					token_print(t_token *curr);
+void					clean_tokens(t_token *list);
+void					clean_redirect_tokens(t_token **list);
+
+
+//-----------path------------------------------//
+char					*path_join(char *s1, char *s2);
+char					*get_path(char **env, char *str);
+char					*get_gpath(char **env, char **args);
+
+//-----------expander--------------------//
+int						check(char c);
+char					*expander(char *str, char sep);
+char					*dollar(char *str, int *flag);
+void					expander_args(t_cmd *list, int flag);
+char					*find_needle(char *stack, char *needle, char set);
+
+//-----------expander2--------------------//
+int						check(char c);
+char					*dollar(char *str, int *flag);
+char					*remove_quotes(char *str);
+char					*find_needle2(char *stack, char *l, char set, int i);
+char					*find_needle(char *stack, char *needle, char set);
 
 //----------calloc-----//
 void					*malloc_ob(size_t length);
@@ -205,8 +215,7 @@ void					print_list2(t_expo *node, t_cmd *cmd);
 int						ft_strcmp(const char *s1, const char *s2);
 void					swap_content(char **node, char **node1);
 void					bubblesort(t_expo *root);
-t_expo					*insert_end_expo_list(t_expo **root, \
-char *s, t_expo **end);
+t_expo					*insert_end_expo_list(t_expo **t, char *s, t_expo **l);
 t_expo					*create_expo(char **env);
 char					**sync_e(char *cmd, int i, int fu);
 char					**syncadd(char **env, char *cmd);

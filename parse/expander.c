@@ -6,46 +6,11 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 00:21:21 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 11:01:49 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*find_needle2(char *stack, char *needle, char set, int i)
-{
-	int		k;
-	char	*new;
-	char	*itoa;
-
-	while (stack[++i])
-	{
-		k = 0;
-		if (stack[i] == '\'' && set == 0)
-			set = 1;
-		else if (stack[i] == '\'' && set == 1)
-			set = 0;
-		while (stack[i + k] == needle[k] && needle[k] != '\0')
-			k++;
-		if (k == (int)ft_strlen(needle, 0) && set == 0)
-		{
-			new = ft_strdup(stack);
-			free(stack);
-			itoa = ft_itoa(g_terminal.status);
-			stack = ft_replace(new, needle, itoa);
-			free(itoa);
-			free(new);
-		}
-	}
-	return (stack);
-}
-
-char	*find_needle(char *stack, char *needle, char set)
-{
-	if (!stack || !needle)
-		return (stack);
-	return (find_needle2(stack, needle, set, -1));
-}
 
 void	expander3(char *str, char *sep, int index)
 {
@@ -104,7 +69,7 @@ char	*expander(char *str, char sep)
 	return (expander(new, 0));
 }
 
-void	expander_args(t_cmd *list)
+void	expander_args(t_cmd *list, int flag)
 {
 	t_token	*temp;
 	char	*tmp_str;
@@ -116,11 +81,12 @@ void	expander_args(t_cmd *list)
 		while (temp)
 		{
 			if (temp->str[0] == '$')
-				temp->str = dollar(temp->str);
+				temp->str = dollar(temp->str, &flag);
 			s = temp->str;
-			if (!ft_strcmp(temp->str, "$") || !ft_strcmp(temp->str, "\"$\""))
+			if (!flag && (!ft_strcmp(temp->str, "$") \
+			|| !ft_strcmp(temp->str, "\"$\"")))
 				temp->str = remove_quotes(temp->str);
-			else
+			else if (!flag)
 			{
 				tmp_str = expander(s, 0);
 				temp->str = remove_quotes(tmp_str);

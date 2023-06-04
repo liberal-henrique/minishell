@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:14:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 20:01:35 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 10:13:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ void	deallocate(t_cmd *curr)
 	curr = NULL;
 }
 
-/* void	remove_cmd_node(t_cmd **list, t_cmd *node) */
-
 void	*get_function(char *name)
 {
 	(void) name;
@@ -68,17 +66,12 @@ void	print_linked(t_cmd *curr)
 {
 	int	i;
 
-	// printf("+++++++++++++++++++++++++++++++++++++++\n");
 	while (curr)
 	{
-		// printf("------------------------------------\n");
 		i = -1;
 		token_print(curr->tokens);
 		while (curr->args[++i])
 			printf("Argumento: %i, %s\n", i, curr->args[i]);
-		// printf("path: %s\n", curr->gpath);
-		// printf("fd_master[0]: %i\n", curr->fd_master[0]);
-		// printf("fd_master[1]: %i\n", curr->fd_master[1]);
 		curr = curr->next;
 	}
 }

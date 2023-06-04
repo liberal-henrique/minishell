@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:05:45 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 23:58:24 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 10:29:52 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,40 +62,4 @@ char	*ft_strcat(char *dest, char *src)
 		dest[i_dest + i_src] = src[i_src];
 	dest[i_dest + i_src] = '\0';
 	return (tmp);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	length;
-	char	*dest;
-
-	if (!s1 || !s2)
-		return (0);
-	length = (ft_strlen(s1, 0) + ft_strlen(s2, 0));
-	dest = malloc(length + 1);
-	if (!dest)
-		return (0);
-	ft_strcpy(dest, (char *)s1);
-	ft_strcat(dest, (char *)s2);
-	return (dest);
-}
-
-char	*ft_strdup(const char	*s1)
-{
-	char			*str1;
-	char			*dup;
-	size_t			size_s1;
-	unsigned int	i;
-
-	if (!s1)
-		return (NULL);
-	str1 = (char *)s1;
-	i = -1;
-	size_s1 = ft_strlen(str1, 0) + 1;
-	dup = malloc_ob(size_s1);
-	if (!dup)
-		return (NULL);
-	while (str1[++i])
-		dup[i] = s1[i];
-	return (dup);
 }

@@ -6,16 +6,18 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 20:08:27 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 10:47:21 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
 t_terminal	g_terminal;
+// void	sighandler();
 
-void	sighandler()
+void	sighandler(int signal)
 {
+	(void) signal;
 	g_terminal.status = 130;
 	if (g_terminal.in_cmd == 1)
 	{
@@ -33,51 +35,6 @@ void	sighandler()
 		write(1, "\n", 1);
 		exit (130);
 	}
-}
-
-unsigned int	nb_size(long int n)
-{
-	int	len;
-
-	len = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-		len++;
-	while (n != 0)
-	{
-		len++;
-		n /= 10;
-	}
-	return (len);
-}
-
-char	*ft_itoa(int n)
-{
-	char		*str;
-	int			len;
-	long int	ln;
-
-	ln = n;
-	len = nb_size(ln);
-	str = malloc_ob((len + 1));
-	if (!str)
-		return (NULL);
-	if (ln == 0)
-		str[0] = '0';
-	if (ln < 0)
-	{
-		str[0] = '-';
-		ln *= -1;
-	}
-	len--;
-	while (ln != 0)
-	{
-		str[len] = ln % 10 + 48;
-		ln /= 10;
-		len--;
-	}
-	return (str);
 }
 
 char	**invent_env(void)
@@ -112,11 +69,17 @@ t_expo	*invent_expo(char **env)
 	return (begin);
 }
 
-void	ft_here_macros()
+void	ft_here_macros(void)
 {
 	g_terminal.heredoc = 0;
 	g_terminal.stopheredoc = 0;
 	g_terminal.in_cmd = 1;
+}
+
+void	signals_call(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sighandler);
 }
 
 int	main(int ac, char **av, char **env)
@@ -138,8 +101,7 @@ int	main(int ac, char **av, char **env)
 		g_terminal.env = invent_env();
 		g_terminal.expo = invent_expo(g_terminal.env);
 	}
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, sighandler);
+	signals_call();
 	while (1)
 	{
 		g_terminal.in_cmd = 1;

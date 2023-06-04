@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 22:28:55 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 22:44:34 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 11:01:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,29 @@ int	check(char c)
 	|| (c >= '0' && c <= '9') || (c == '_'));
 }
 
-char	*dollar(char *str)
+char	*dollar(char *str, int *flag)
 {
-	if (!ft_strcmp(str, "$EMPTY") || !ft_strcmp(str, "$!"))
+	*flag = 0;
+	if ((!ft_strcmp(str, "$EMPTY") || !ft_strcmp(str, "$!") \
+	|| !ft_strcmp(str, "$;")) && ++*flag)
 	{
 		free(str);
 		str = ft_strdup("");
-		return (str);
 	}
-	if (!ft_strcmp(str, "$?"))
+	else if (!ft_strcmp(str, "$?") && ++*flag)
 	{
 		free(str);
 		str = ft_itoa(g_terminal.status);
-		return (str);
 	}
-	if (!ft_strcmp(str, "$;"))
+	else if (str[0] == '$' && str[1] && !check(str[1]) && ++*flag)
 	{
 		free(str);
 		str = ft_strdup("");
-		return (str);
+	}
+	else if (str[0] == '$' && !str[1] && ++*flag)
+	{
+		free(str);
+		str = ft_strdup("$");
 	}
 	return (str);
 }
@@ -66,4 +70,39 @@ char	*remove_quotes(char *str)
 	}
 	free(temp);
 	return (new);
+}
+
+char	*find_needle2(char *stack, char *needle, char set, int i)
+{
+	int		k;
+	char	*new;
+	char	*itoa;
+
+	while (stack[++i])
+	{
+		k = 0;
+		if (stack[i] == '\'' && set == 0)
+			set = 1;
+		else if (stack[i] == '\'' && set == 1)
+			set = 0;
+		while (stack[i + k] == needle[k] && needle[k] != '\0')
+			k++;
+		if (k == (int)ft_strlen(needle, 0) && set == 0)
+		{
+			new = ft_strdup(stack);
+			free(stack);
+			itoa = ft_itoa(g_terminal.status);
+			stack = ft_replace(new, needle, itoa);
+			free(itoa);
+			free(new);
+		}
+	}
+	return (stack);
+}
+
+char	*find_needle(char *stack, char *needle, char set)
+{
+	if (!stack || !needle)
+		return (stack);
+	return (find_needle2(stack, needle, set, -1));
 }

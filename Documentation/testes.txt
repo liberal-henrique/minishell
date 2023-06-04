@@ -160,3 +160,31 @@ Tasks dia 03 de JUNHO
 
 --> unset esta com memories leaks
 
+
+
+Testes to avaliar
+--> echo ola
+--> echo $HOME
+--> echo $HOME$
+--> echo $EMPTY
+--> echo $.
+--> echo $?
+--> echo $!
+--> echo $=
+--> echo $)
+--> echo $HOME $ $. $? $!
+
+
+
+
+falta fazer
+norminette das seguintes funcoes:
+Parsing
+	- check_sintaxe()
+	- ft_phrases()
+Comands
+	- cmd_redirect()
+- Main.c
+
+
+

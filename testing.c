@@ -301,19 +301,33 @@ int	check_sintaxe(const char *s, char set, int i, int j)
 	return (0);
 }
 
-int	main(void)
+// int	main(void)
+// {
+// 	printf("1 check: %d\n", check_sintaxe("echo ola << |oi | asdf", 0, -1, 0));
+// 	printf("2 check: %d\n", check_sintaxe("echo ola << oi | asdf", 0, -1, 0));
+// 	printf("3 check: %d\n", check_sintaxe("echo ola |oi | asdf | asdf", 0, -1, 0));
+// 	printf("4 check: %d\n", check_sintaxe("echo ola << < oi | asdf ", 0, -1, 0));
+// 	printf("5 check: %d\n", check_sintaxe("echo ola <<<<<< |oi | asdf", 0, -1, 0));
+// 	printf("6 check: %d\n", check_sintaxe("echo ola <<  > |oi | asdf", 0, -1, 0));
+// 	printf("7 check: %d\n", check_sintaxe("echo ola << >> |oi | asdf", 0, -1, 0));
+// 	printf("8 check: %d\n", check_sintaxe("echo ola << |oi | asdf >", 0, -1, 0));
+// 	printf("9 check: %d\n", check_sintaxe("oi | a >", 0, -1, 0));
+// 	printf("10 check: %d\n", check_sintaxe("asdf | asdf > a", 0, -1, 0));
+// 	printf("11 check: %d\n", check_sintaxe("asdf < asdf < asdf < > asfd |", 0, -1, 0));
+
+
+// }
+
+int	check(char c)
 {
-	printf("1 check: %d\n", check_sintaxe("echo ola << |oi | asdf", 0, -1, 0));
-	printf("2 check: %d\n", check_sintaxe("echo ola << oi | asdf", 0, -1, 0));
-	printf("3 check: %d\n", check_sintaxe("echo ola |oi | asdf | asdf", 0, -1, 0));
-	printf("4 check: %d\n", check_sintaxe("echo ola << < oi | asdf ", 0, -1, 0));
-	printf("5 check: %d\n", check_sintaxe("echo ola <<<<<< |oi | asdf", 0, -1, 0));
-	printf("6 check: %d\n", check_sintaxe("echo ola <<  > |oi | asdf", 0, -1, 0));
-	printf("7 check: %d\n", check_sintaxe("echo ola << >> |oi | asdf", 0, -1, 0));
-	printf("8 check: %d\n", check_sintaxe("echo ola << |oi | asdf >", 0, -1, 0));
-	printf("9 check: %d\n", check_sintaxe("oi | a >", 0, -1, 0));
-	printf("10 check: %d\n", check_sintaxe("asdf | asdf > a", 0, -1, 0));
-	printf("11 check: %d\n", check_sintaxe("asdf < asdf < asdf < > asfd |", 0, -1, 0));
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') \
+	|| (c >= '0' && c <= '9') || (c == '_'));
+}
 
-
+int main(void)
+{
+	printf("!%i\n", check('!'));
+	printf("a%i\n", check('a'));
+	printf("1%i\n", check('1'));
+	printf("_%i\n", check('_'));
 }

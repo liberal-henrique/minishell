@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 10:49:49 by lliberal          #+#    #+#             */
-/*   Updated: 2023/05/29 13:42:29 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 10:30:33 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	ft_tokens(t_token **token, char *phrase, int i)
 	char	**tokens;
 
 	tokens = ft_split(phrase, 2);
-	// free(phrase);
 	while (tokens[++i])
 		token_add_back(token, tokens[i]);
 	free(tokens);
