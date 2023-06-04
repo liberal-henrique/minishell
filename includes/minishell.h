@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 15:27:20 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:31:46 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ struct s_cmd
 	int				status;
 	int				(*execute)(t_cmd *cmd, int in);
 	int				stop;
+	int				here_fd[2];
 	t_cmd			*next;
 };
 
@@ -217,6 +218,7 @@ char					*str_join(char *old, char *seg, char c);
 int						ft_strlen_2d(char **a);
 char					*find_var(char *var);
 int						ft_atoi(const char *str, int res, int i, int sign);
+int						especial_case(const char *s);
 
 void					print_list(t_expo *node);
 void					print_list2(t_expo *node, t_cmd *cmd);
@@ -233,6 +235,7 @@ int						env_variable_replaced(char *cmd, int *flag);
 char					*ft_itoa(int n);
 void					close_shit(t_cmd *cmd);
 int						export_variable_name(char *cmd);
+int						execute_directory(t_cmd *cmd, int fd);
 
 int						status(t_cmd *cmd, int status);
 void					*free_ob(void *p, void *resul);

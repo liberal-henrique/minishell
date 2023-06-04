@@ -6,13 +6,12 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:01:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 22:24:48 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:56:20 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <sys/wait.h>
-#include <fcntl.h>
 
 void	execute_main_2(t_cmd *cmd, int in, int out, int len_cmd)
 {
@@ -92,6 +91,8 @@ int	execute_default(t_cmd *cmd)
 {
 	if (execve(cmd->gpath, cmd->args, g_terminal.env) == -1)
 	{
+		if (execute_directory(cmd, 0))
+			exit (g_terminal.status);
 		write(2, "command not found: ", 19);
 		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
 		write(2, "\n", 1);

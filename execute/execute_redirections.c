@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 13:29:13 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:37:20 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,11 @@ void	ft_heredoc2(char *delimiter, char *buf, int *fd, char sep)
 
 int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 {
-	int		fd[2];
 	char	sep;
 
 	g_terminal.heredoc = 1;
 	g_terminal.in_cmd = 0;
-	pipe(fd);
+	pipe(cmd->here_fd);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
@@ -123,14 +122,14 @@ int	ft_heredoc(t_cmd *cmd, char *delimiter, char *buf, int len)
 		if (sep == 0)
 			delimiter = expander(delimiter, 0);
 		len = ft_strlen(delimiter, 0);
-		ft_heredoc2(delimiter, buf, fd, sep);
+		ft_heredoc2(delimiter, buf, cmd->here_fd, sep);
 		free(delimiter);
 		exit (0);
 	}
 	g_terminal.heredoc = 0;
 	waitpid(cmd->pid, 0, 0);
 	cmd->pid = -1;
-	close(fd[1]);
-	cmd->fd_master[0] = fd[0];
+	close(cmd->here_fd[1]);
+	cmd->fd_master[0] = cmd->here_fd[0];
 	return (g_terminal.status);
 }

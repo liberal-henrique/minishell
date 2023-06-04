@@ -6,11 +6,12 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 15:25:59 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:40:05 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <fcntl.h>
 
 void	update_oldpwd(char *new)
 {
@@ -115,7 +116,6 @@ int	execute_cd(t_cmd *cmd)
 	}
 	else if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
 	{
-		printf("%s\n", cmd->args[1]);
 		if (chdir(cmd->args[1]) != 0)
 			return (status(cmd, STATUS_ERROR));
 		update_paths(cwd, cmd->args[1], 1);

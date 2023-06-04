@@ -6,11 +6,12 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 12:53:13 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:01:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <fcntl.h>
 
 char	*path_join(char *s1, char *s2)
 {
@@ -86,4 +87,33 @@ int	check_interrogation(char *str)
 	else
 		len = ft_strlen("$?", 0);
 	return (len);
+}
+
+int	execute_directory(t_cmd *cmd, int fd)
+{
+	DIR	*dir;
+
+	dir = opendir(cmd->args[0]);
+	fd = open(cmd->args[0], O_RDONLY, 0777);
+	if (dir != NULL)
+	{
+		closedir(dir);
+		g_terminal.status = 126 + (write(2, "bash: ", 6) == 0);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		return (write(2, ": Is a directory\n", 17));
+	}
+	else if (fd != -1)
+	{
+		close(fd);
+		g_terminal.status = 126 + (write(2, "bash: ", 6) == 0);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		return (write(2, ": Permission denied\n", 20));
+	}
+	else if (cmd->gpath && *cmd->gpath == '/')
+	{
+		g_terminal.status = 127 + (write(2, "bash: ", 6) == 0);
+		write(2, cmd->args[0], ft_strlen(cmd->args[0], 0));
+		return (write(2, ": No such file or directory\n", 28));
+	}
+	return (0);
 }

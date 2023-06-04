@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 12:42:16 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:26:16 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	execute_exit(t_cmd *cmd, int len_cmd)
 		rl_clear_history();
 	else
 		exit_pipe(cmd, g_terminal.status);
+	close_shit(g_terminal.list);
 	cleanall(g_terminal.list, 0);
 	clean_expo(g_terminal.expo);
 	free_2d(g_terminal.env);

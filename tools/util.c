@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:05:45 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 10:29:52 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:17:12 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,27 @@ char	*ft_strcat(char *dest, char *src)
 		dest[i_dest + i_src] = src[i_src];
 	dest[i_dest + i_src] = '\0';
 	return (tmp);
+}
+
+int	especial_case(const char *s)
+{
+	int		i;
+	char	set;
+
+	i = 0;
+	set = 0;
+	while (is_space(s[i]))
+		i++;
+	if (s[i] == '\0')
+		return (2);
+	if (s[i] == '>' || s[i] == '<')
+		set = 1;
+	i++;
+	while (is_space(s[i]))
+		i++;
+	if (s[i] != '\0')
+		set = 0;
+	if (set == 1 && !s[i])
+		return (1);
+	return (0);
 }

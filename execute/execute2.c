@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 22:07:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 22:23:24 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:36:00 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void	close_shit(t_cmd *cmd)
 			close(temp->fd_master[0]);
 		if (temp->fd_master[1] > 2)
 			close(temp->fd_master[1]);
+		if (temp->here_fd[0] > 2)
+			close(temp->here_fd[0]);
+		if (temp->here_fd[1] > 2)
+			close(temp->here_fd[1]);
 		temp = temp->next;
 	}
 	cmd = temp;

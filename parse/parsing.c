@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 15:20:13 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:18:33 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,13 @@ int	check_sintaxe2(const char *s, int spa, int i, int j)
 
 int	check_sintaxe(const char *s, int spa, int i, int j)
 {
+	int	k;
+
 	while (is_space(s[++i]))
 		;
+	k = especial_case(s);
+	if (k == 1 || k == 2)
+		return (k);
 	if (s[i] == '|')
 		return (1);
 	return (check_sintaxe2(s, spa, i, j));
@@ -81,11 +86,15 @@ int	ft_phrases(const char *line)
 {
 	char	*new2;
 	char	**arr;
+	int		k;
 
 	if (!line)
 		return (STATUS_ERROR);
-	if (check_sintaxe(line, 0, -1, 0) != 0)
+	k = check_sintaxe(line, 0, -1, 0);
+	if (k == 1)
 		return (macro_phrases());
+	else if (k == 2)
+		return (STATUS_SUCCESS);
 	g_terminal.agoravai = 0;
 	new2 = malloc_ob(ft_strlen(line, 0) * 10);
 	create_str(new2, (char *)line, 0, 0);

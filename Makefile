@@ -1,5 +1,5 @@
-CC			=	cc -fsanitize=address
-# CC			=	cc
+# CC			=	cc -fsanitize=address
+CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
 LDFLAGS		=	-lreadline
 RM			=	/bin/rm -f
