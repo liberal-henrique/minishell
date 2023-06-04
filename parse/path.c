@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 10:35:00 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 12:53:13 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,15 @@ char	*get_gpath(char **env, char **args)
 	}
 	free_2d(path);
 	return (ft_strdup(args[0]));
+}
+
+int	check_interrogation(char *str)
+{
+	int	len;
+
+	if (ft_strlen(str, 0) > 2)
+		len = ft_strlen(str, 0);
+	else
+		len = ft_strlen("$?", 0);
+	return (len);
 }

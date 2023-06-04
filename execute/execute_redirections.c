@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:05:01 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 21:59:18 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 13:29:13 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,12 @@ int	execute_redirection_out(t_cmd *cmd)
 
 int	last_quote(char *s, char **set)
 {
-	if (s[ft_strlen(s, '\'')] == '\'')
+	if ((s[ft_strlen(s, '\'')] == '\'') || (s[ft_strlen(s, '\"')] == '\"'))
 	{
 		**set = 1;
 		return (1);
 	}
-	else if (s[ft_strlen(s, '\"')] == '\"')
-	{
-		**set = 1;
-		return (1);
-	}
-	else
-		return (0);
+	return (0);
 }
 
 char	*check_delimiter(char *delimiter, char *set, int start, int i)

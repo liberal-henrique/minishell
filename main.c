@@ -6,14 +6,13 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:55:52 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 10:47:21 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:40:58 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
 t_terminal	g_terminal;
-// void	sighandler();
 
 void	sighandler(int signal)
 {
@@ -69,23 +68,8 @@ t_expo	*invent_expo(char **env)
 	return (begin);
 }
 
-void	ft_here_macros(void)
+void	main_2(int ac, char **av, char **env)
 {
-	g_terminal.heredoc = 0;
-	g_terminal.stopheredoc = 0;
-	g_terminal.in_cmd = 1;
-}
-
-void	signals_call(void)
-{
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, sighandler);
-}
-
-int	main(int ac, char **av, char **env)
-{
-	char	*line;
-
 	(void) ac;
 	(void) av;
 	g_terminal.heredoc = 0;
@@ -101,7 +85,15 @@ int	main(int ac, char **av, char **env)
 		g_terminal.env = invent_env();
 		g_terminal.expo = invent_expo(g_terminal.env);
 	}
-	signals_call();
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sighandler);
+}
+
+int	main(int ac, char **av, char **env)
+{
+	char	*line;
+
+	main_2(ac, av, env);
 	while (1)
 	{
 		g_terminal.in_cmd = 1;

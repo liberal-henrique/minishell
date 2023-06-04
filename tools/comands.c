@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/19 13:34:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 20:25:52 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:51:44 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,70 +64,33 @@ void	build_cmds_list(t_cmd **list, t_cmd	*tmp)
 	}
 }
 
-void	cmd_redirect(t_cmd *cmd, int f, int i, int fd)
+void	cmd_redirect(t_cmd *cmd, int f, int fd)
 {
 	t_token	*tmp;
 
 	tmp = cmd->tokens;
-	i = 0;
-	fd = 0;
 	while (tmp)
 	{
 		f = is_redirect(tmp->str);
+		if (f == 1 || f == 2 || f == 4)
+			tmp->next->str = remove_quotes(tmp->next->str);
 		if (f == 1)
-		{
-			tmp->next->str = remove_quotes(tmp->next->str);
 			fd = open(tmp->next->str, O_RDONLY, 0444);
-			if (fd == -1)
-			{
-				write(2, "bash: ", 6);
-				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
-				write(2, ": No such file or directory\n", 28);
-				cmd->status = 1;
-				cmd->stop = 1;
-				close(fd);
-				return ;
-			}
-			cmd->fd_master[0] = fd;
-		}
 		else if (f == 2)
-		{
-			tmp->next->str = remove_quotes(tmp->next->str);
 			fd = open(tmp->next->str, O_CREAT | O_TRUNC | O_RDWR, 0644);
-			if (fd == -1)
-			{
-				write(2, "bash: ", 6);
-				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
-				write(2, ": No such file or directory\n", 28);
-				cmd->status = 1;
-				cmd->stop = 1;
-				close(fd);
-				return ;
-			}
-			cmd->fd_master[1] = fd;
-		}
 		else if (f == 4)
-		{
-			tmp->next->str = remove_quotes(tmp->next->str);
 			fd = open(tmp->next->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd == -1)
-			{
-				write(2, "bash: ", 6);
-				write(2, tmp->next->str, ft_strlen(tmp->next->str, 0));
-				write(2, ": No such file or directory\n", 28);
-				cmd->status = 1;
-				cmd->stop = 1;
-				close(fd);
-				return ;
-			}
-			cmd->fd_master[1] = fd;
-		}
 		else if (f == 3)
 			ft_heredoc(cmd, tmp->next->str, NULL, 0);
+		if (fd == -1 && redirect_pai(tmp, cmd, fd, f))
+			return ;
+		if (f == 1)
+			cmd->fd_master[0] = fd;
+		if (f == 2 || f == 4)
+			cmd->fd_master[1] = fd;
 		tmp = tmp->next;
-		i++;
 	}
-	clean_redirect_tokens(&cmd->tokens);
+	clean_redirect_tokens (&cmd->tokens);
 }
 
 void	clean_redirect_tokens(t_token **list)

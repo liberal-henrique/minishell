@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/03 22:28:55 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 11:01:43 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 12:53:05 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,21 @@ char	*dollar(char *str, int *flag)
 		free(str);
 		str = ft_strdup("");
 	}
-	else if (!ft_strcmp(str, "$?") && ++*flag)
+	else if (!ft_strncmp(str, "$?", check_interrogation(str)) && ++*flag)
 	{
 		free(str);
 		str = ft_itoa(g_terminal.status);
-	}
-	else if (str[0] == '$' && str[1] && !check(str[1]) && ++*flag)
-	{
-		free(str);
-		str = ft_strdup("");
 	}
 	else if (str[0] == '$' && !str[1] && ++*flag)
 	{
 		free(str);
 		str = ft_strdup("$");
+	}
+	else if (str[0] == '$' && str[1] && str[1] != '?' \
+	&& check_group(str[1]) && ++*flag)
+	{
+		free(str);
+		str = ft_strdup("");
 	}
 	return (str);
 }

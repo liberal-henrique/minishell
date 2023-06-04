@@ -31,6 +31,7 @@ SRCS		=	main.c \
 				parse/path.c \
 				tools/calloc.c \
 				tools/comands.c \
+				tools/comands2.c \
 				tools/ft_substring.c \
 				tools/ft_replace.c \
 				tools/ft_split.c \
@@ -63,6 +64,9 @@ a:	make re && clear
 
 r:
 	make re && clear && ./minishell
+
+t:
+	make re && clear && cd minishell_tester && ./tester
 # --track-fds=yes --tool=memcheck --leak-check=full --show-leak-kinds=all
 
 v:

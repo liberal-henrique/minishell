@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 11:39:12 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 21:17:03 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:25:59 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,21 @@ int	execute_cd_2(t_cmd *cmd, char *cwd)
 {
 	char	*str;
 
-	str = str_join(cwd, cmd->args[1], '/');
-	if (chdir(str) != 0)
+	if (chdir(cmd->args[1]) == 0)
+		str = ft_strdup(cmd->args[1]);
+	else
 	{
-		free(str);
-		write(2, "bash: cd: ", 10);
-		write(2, cmd->args[1], ft_strlen(cmd->args[1], 0));
-		write(2, ": No such file or directory\n", 28);
-		free(cwd);
-		cmd->status = STATUS_ERROR;
-		return (cmd->status);
+		str = str_join(cwd, cmd->args[1], '/');
+		if (chdir(str) != 0)
+		{
+			free(str);
+			write(2, "bash: cd: ", 10);
+			write(2, cmd->args[1], ft_strlen(cmd->args[1], 0));
+			write(2, ": No such file or directory\n", 28);
+			free(cwd);
+			cmd->status = STATUS_ERROR;
+			return (cmd->status);
+		}
 	}
 	update_paths(cwd, cmd->args[1], 2);
 	free(str);
@@ -110,6 +115,7 @@ int	execute_cd(t_cmd *cmd)
 	}
 	else if (!ft_strncmp(cmd->args[1], cwd, ft_strlen(cwd, 0)))
 	{
+		printf("%s\n", cmd->args[1]);
 		if (chdir(cmd->args[1]) != 0)
 			return (status(cmd, STATUS_ERROR));
 		update_paths(cwd, cmd->args[1], 1);

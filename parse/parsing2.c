@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:04:07 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 10:26:38 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:20:35 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,42 @@ int	is_separator_here(const char *s, int *j)
 	else
 		*j = 0;
 	return (*j);
+}
+
+t_cmd	*create_list_tokens(char **arr)
+{
+	t_cmd	*begin;
+	t_cmd	*end;
+	t_cmd	*tmp;
+	int		i;
+
+	begin = NULL;
+	end = NULL;
+	i = -1;
+	while (arr[++i])
+		end = insert_end_tokens(&begin, arr[i], end);
+	tmp = begin;
+	while (tmp)
+	{
+		cmd_redirect(tmp, 0, 0);
+		tmp = tmp->next;
+	}
+	return (begin);
+}
+
+t_cmd	*insert_end_tokens(t_cmd **root, char *s, t_cmd *end)
+{
+	t_cmd	*new_node;
+
+	new_node = malloc_ob(sizeof(t_cmd));
+	if (!new_node)
+		return (NULL);
+	new_node->next = NULL;
+	new_node->pid = -1;
+	ft_tokens(&new_node->tokens, s, -1);
+	if (!(*root))
+		*root = new_node;
+	else
+		end->next = new_node;
+	return (new_node);
 }

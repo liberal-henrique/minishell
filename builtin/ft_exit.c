@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 19:45:17 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 12:40:50 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,12 @@ int	ft_atoi(const char *str, int res, int i, int sign)
 	return (res * sign);
 }
 
-long long	ft_atoi_long(const char *str, long long res, int i, int sign)
+long long	ft_atoi_long(const char *str, unsigned long \
+res, int *error, long sign)
 {
+	int	i;
+
+	i = 0;
 	if (!str)
 		return (0);
 	while (is_space(str[i]))
@@ -87,9 +91,11 @@ long long	ft_atoi_long(const char *str, long long res, int i, int sign)
 			sign *= -1;
 		i++;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (*error == 0 && str[i] >= '0' && str[i] <= '9')
 	{
-		res = res * 10 + str[i] - '0';
+		res = (res * 10LU) + (str[i] - '0');
+		if ((sign == 1 && res > LONG_MAX) || res > 9223372036854775808LU)
+			*error = (1 + (sign == 1));
 		i++;
 	}
 	return (res * sign);

@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 13:31:20 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 11:01:49 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:18:45 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,10 @@ char	*expander2(char *str, char *name, int *start, char sep)
 		if (sep != '\'' && *start == -1 && str[index] == '$')
 		{
 			if (!str[index + 1] || str[index + 1] == '.')
-			{
-				free(name);
-				return (str);
-			}
+				return (free_ob(name, str));
 			*start = index;
+			if (str[index] == '$' && str[index + 1] == '?')
+				return (free_ob(name, ft_strdup("$?")));
 		}
 		else if (*start >= 0 && !check(str[index]) && ++end)
 			name[index] = 0;
@@ -52,9 +51,9 @@ char	*expander(char *str, char sep)
 	char	*name;
 	int		start;
 	char	*new;
+	char	*value;
 
 	start = -1;
-	str = find_needle(str, "$?", 0);
 	name = malloc_ob(1024);
 	name = expander2(str, name, &start, sep);
 	if (start == -1)
@@ -63,7 +62,14 @@ char	*expander(char *str, char sep)
 			free(name);
 		return (str);
 	}
-	new = ft_replace(str, name, find_var(&name[1]));
+	if (ft_strlen(name, 0) == 2 && ft_strcmp(name, "$?") == 0)
+	{
+		value = ft_itoa(g_terminal.status);
+		new = ft_replace(str, name, value);
+		free(value);
+	}
+	else
+		new = ft_replace(str, name, find_var(&name[1]));
 	free(str);
 	free(name);
 	return (expander(new, 0));

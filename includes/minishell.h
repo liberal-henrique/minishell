@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:54:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 10:52:47 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:27:20 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include<stdio.h>
 # include<string.h>
 # include<stddef.h>
+# include<limits.h>
 # include<readline/readline.h>
 # include<readline/history.h>
 
@@ -32,8 +33,8 @@
 # define STATUS_SUCCESS 0
 # define STATUS_SYNTAX_ERROR 3
 # define UNEXPECTED_TOKEN "bash: syntax error near unexpected token `|'"
-# define H printf("HERE\n")
-# define T printf("THERE\n")
+//# define H printf("HERE\n")
+// # define T printf("THERE\n")
 
 typedef struct s_cmd		t_cmd;
 typedef struct s_env		t_env;
@@ -106,7 +107,6 @@ void					token_print(t_token *curr);
 void					clean_tokens(t_token *list);
 void					clean_redirect_tokens(t_token **list);
 
-
 //-----------path------------------------------//
 char					*path_join(char *s1, char *s2);
 char					*get_path(char **env, char *str);
@@ -125,6 +125,7 @@ char					*dollar(char *str, int *flag);
 char					*remove_quotes(char *str);
 char					*find_needle2(char *stack, char *l, char set, int i);
 char					*find_needle(char *stack, char *needle, char set);
+int						check_interrogation(char *str);
 
 //----------calloc-----//
 void					*malloc_ob(size_t length);
@@ -132,8 +133,14 @@ void					*malloc_ob(size_t length);
 //---------comands-----//
 char					**create_array_cmds(t_token *list);
 void					build_cmds_list(t_cmd **list, t_cmd	*tmp);
-void					cmd_redirect(t_cmd *cmd, int f, int i, int fd);
+void					cmd_redirect(t_cmd *cmd, int f, int fd);
 void					clean_redirect_tokens(t_token **list);
+
+//---------comands2-----//
+int						redirect_pai(t_token *tmp, t_cmd *cmd, int fd, int f);
+int						redirect_1(t_token *tmp, t_cmd *cmd, int fd);
+int						redirect_2(t_token *tmp, t_cmd *cmd, int fd);
+int						redirect_4(t_token *tmp, t_cmd *cmd, int fd);
 
 //---------clean-------//
 void					clean_expo(t_expo *list);
@@ -159,6 +166,7 @@ int						is_space(char c);
 void					put_str(char *s);
 int						ft_isalpha(char c);
 int						ft_isnum(char c);
+int						check_group(char c);
 
 //----------linked_list----------//
 int						cnt_rec(t_token *node);
@@ -227,6 +235,7 @@ void					close_shit(t_cmd *cmd);
 int						export_variable_name(char *cmd);
 
 int						status(t_cmd *cmd, int status);
+void					*free_ob(void *p, void *resul);
 
 extern t_terminal			g_terminal;
 

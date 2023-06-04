@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:05:45 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/04 10:39:58 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:16:48 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,10 @@ char	*ft_strdup(const char	*s1)
 	while (str1[++i])
 		dup[i] = s1[i];
 	return (dup);
+}
+
+void	*free_ob(void *p, void *resul)
+{
+	free(p);
+	return (resul);
 }

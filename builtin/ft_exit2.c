@@ -6,14 +6,15 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/28 12:38:42 by lliberal          #+#    #+#             */
-/*   Updated: 2023/06/03 20:16:46 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/06/04 12:42:16 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 int			is_all_num(char *str, int i);
-long long	ft_atoi_long(const char *str, long long res, int i, int sign);
+long long	ft_atoi_long(const char *str, unsigned long \
+res, int *error, long sign);
 char		*ft_itoa_long(long long n);
 
 int	exit_pipe(t_cmd *cmd, int status)
@@ -29,16 +30,19 @@ int	exit_pipe(t_cmd *cmd, int status)
 
 int	check_args(int n, t_cmd *cmd)
 {
+	int	error;
+
+	error = 0;
 	while (cmd->args[++n])
 		;
 	if (n == 2)
-		g_terminal.status = ft_atoi_long(cmd->args[1], 0, 0, 1);
-	else if (n >= 3)
 	{
-		write(2, "exit: too many arguments\n", 25);
-		g_terminal.status = 1;
-		return (1);
+		g_terminal.status = ft_atoi_long(cmd->args[1], 0, &error, 1);
+		if (error && write(2, ": numeric argument required\n", 28))
+			g_terminal.status = 2;
 	}
+	else if (n >= 3 && write(2, "too many arguments\n", 19))
+		return (status(cmd, 1));
 	if (cmd->args[1] && !is_all_num(cmd->args[1], 0))
 	{
 		write(2, "bash: exit: ", 12);
@@ -51,9 +55,9 @@ int	check_args(int n, t_cmd *cmd)
 
 int	execute_exit(t_cmd *cmd, int len_cmd)
 {
-	write(2, "exit\n", 5);
 	if (check_args(-1, cmd))
 		return (g_terminal.status);
+	write(2, "exit\n", 5);
 	if (len_cmd < 2)
 		rl_clear_history();
 	else
